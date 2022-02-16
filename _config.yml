@@ -7,13 +7,13 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Your Name / Site Title"
+title                    : "Pascal Tikeng Notsawo"
 title_separator          : "-"
-name                     : &name "Your Name"
-description              : &description "personal description"
-url                      : https://academicpages.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+name                     : &name "Tikeng Notsawo Pascal Junior"
+description              : &description "I'm a machine learning research assistant at MILA, Quebec Artificial Intelligence Institute. I worked under the supervision of professor Yoshua Bengio and his postdoctoral fellow Dianbo Liu on detecting and mitigating racist and sexist discrimination in online texts and language models, from January 2021 to January 2022. Currently I am working under the supervision of professor Irina Rish and professor Guillaume Dumas on scaling and phase transitions in natural language processing algorithms. I hold a master's of engineering in computer science."
+url                      : https://tikquuss.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "academicpages/academicpages.github.io"
+repository               : "tikquuss.github.io"
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
@@ -80,14 +80,14 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Sidebar Name"
-  avatar           : "profile.png"
-  bio              : "Your biography for the left-hand sidebar"
-  location         : "Location"
-  employer         :
-  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
-  googlescholar    : "http://yourfullgooglescholarurl.com"
-  email            :
+  name             : "Pascal Junior Tikeng Notsawo"
+  avatar           :  "profile.png" # "avatar.png"
+  bio              : "MEng in CS, Visiting Student researcher at UdeM-Université de Montréal, Machine Learning Research Assistant at MILA-Quebec Artificial Intelligence Institute"
+  location         : "Montréal, Canada"
+  employer         : "MILA"
+  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=Pascal+Notsawo"
+  googlescholar    : "https://scholar.google.com/citations?user=vUerGI8AAAAJ"
+  email            : "pascalnotsawo.gmail.com"
   researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
@@ -96,20 +96,20 @@ author:
   flickr           :
   facebook         :
   foursquare       :
-  github           : "academicpages"
+  github           : "Tikquuss"
   google_plus      :
   keybase          :
   instagram        :
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
-  linkedin         :
-  orcid            : "http://orcid.org/yourorcidurl"
+  linkedin         : "tikeng/"
+  orcid            : "http://orcid.org/0000-0003-2419-7533"
   pinterest        :
   soundcloud       :
-  stackoverflow    : # http://stackoverflow.com/users/123456/username
+  stackoverflow    : "11814682/tikquuss"
   steam            :
   tumblr           :
-  twitter          : "replacethistwitterhandle"
+  twitter          : "@PTikeng"
   vine             :
   weibo            :
   xing             :
