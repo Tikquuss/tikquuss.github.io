@@ -7,16 +7,9 @@ redirect_from:
   - /resume
 ---
 
-{% include base_path %}
+{% include base_path %} [Download (resume.pdf)]( https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing)
 
-Education
-======
-* Visiting Student researcher, Université de Montréal (UdeM), October 2021 - Now
-* Master's of Engineering in Computer Science, National Advanced School of Engineering Yaounde, Cameroon, September 2018 - July 2021
-* Mathematics and Physical Sciences, National Advanced School of Engineering Yaounde, Cameroon, September 2016 - June 2018
-* Scientific Baccalaureate, Bilingual High School Bangang, September 2009 - June 2016
-
-Work experience
+PROFESSIONAL EXPERIENCE
 ======
 * February 2022 - September 2022 : Research Assistant
   * MILA, Quebec Artificial Intelligence Institute
@@ -43,6 +36,19 @@ Work experience
   * Stabilization of databases and automation of test programs
   * Supervisor: Ibrahim Moukouop Nguena
 
+RECENTS RESEARCH WORKS
+======
+*  Text style transfert and Style-controlled language generation with [Generative Flow Network](https://arxiv.org/abs/2111.09266) (<em>progress</em>)
+* Phase transition in large-scale language models (<em>progress</em>)
+* Transformers with Independent Mechanisms ([<em>paper, 1st version</em>](https://arxiv.org/abs/2103.00336), the version of the paper in which I am co-author is under review : I have made contributions on the model and experiments)
+* Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization ([<em>preprint</em>](https://arxiv.org/abs/2202.01334), under review)
+* Biasly : a ML based platform for automatic racial discrimination detection in online texts (<em>under review</em>)
+* Text style transfer for racist text debiasing : sentence embedding debiasing with auxiliary target (<em>progress</em>)
+* On the use of linguistic similarities to improve Neural Machine Translation for African Languages ([<em>paper</em>](https://openreview.net/pdf?id=Q5ZxoD2LqcI), accepted at the 5th Black in AI Workshop @ NeurIPS 2021)
+* Blending Dependency Tree and Plain Text  Representation Learning for Natural Language Inference (<em>Thanks to graph neural networks, we have reached the SOTA in text entailment, paper still under review</em>)
+* K-armed Bandits Reward-based Optimization for Language Generation (<em>progress</em>)
+* $\epsilon$-greedy policy for language modelling regularized with the minimization of the uniform information density of the utterances generated : A Cognitive Regularizer for Language Modeling (<em>progress</em>)
+
 <!--- 
 Skills
 ======
@@ -52,12 +58,36 @@ Skills
   * Sub-skill 2.2
 --->
 
-Publications
+<!--- 
+PUBLICATIONS
 ======
   <ul>{% for post in site.publications %}
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
-  
+--->
+
+EDUCATION
+======
+* Visiting Student researcher, Université de Montréal (UdeM), October 2021 - Now
+* Master's of Engineering in Computer Science, National Advanced School of Engineering Yaounde, Cameroon, September 2018 - July 2021
+* Mathematics and Physical Sciences, National Advanced School of Engineering Yaounde, Cameroon, September 2016 - June 2018
+* Scientific Baccalaureate, Bilingual High School Bangang, September 2009 - June 2016
+
+PROFESSIONAL SERVICES
+======
+* Machine Translation of local African languages
+  * I am one of the first people to have tackled machine translation of Cameroonian local languages : we have released a dataset of 22 Cameroonian local languages, trained and put into production unsupervised (denoising auto-encoder + online back-translation) multilingual (XLM) machine translation models (adapted to low-resource languages such as those of Africa)
+  * Ongoing Related Projects : tools (BLEU, tokenizer..) for morphologically complex languages such as those of Africa and speech2speech (train a model to translate a speech from one language to another).
+* Reviewer : 5th Black in AI Workshop (co-located with NeurIPS 2021)
+* Member & Mentor : AI-Mentoring-ENSPY, a group that aims to guide our cadets at ENSPY in their learning of Artificial Intelligence, mainly the reading of scientific articles
+
+
+LANGUAGES
+======
+* French : Native
+* English : Intermediate (Professional)
+
+<!--- 
 Talks
 ======
   <ul>{% for post in site.talks %}
@@ -73,3 +103,4 @@ Teaching
 Service and leadership
 ======
 * Reviewer : 5th Black in AI Workshop (co-located with NeurIPS 2021)
+--->

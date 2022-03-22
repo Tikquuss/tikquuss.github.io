@@ -15,3 +15,8 @@ gem 'jekyll-gist'
 gem 'jekyll-feed'
 gem 'jekyll-redirect-from'
 ```
+
+How to run :
+```
+bundle exec jekyll serve
+```
