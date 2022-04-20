@@ -81,10 +81,10 @@ analytics:
 # Site Author
 author:
   name             : "Pascal Junior Tikeng Notsawo"
-  avatar           :  "profile.png" # "avatar.png"
-  bio              : "MEng in CS, Visiting Student researcher at UdeM-Université de Montréal, Machine Learning Research Assistant at MILA-Quebec Artificial Intelligence Institute"
-  location         : "Montréal, Canada"
-  employer         : "MILA"
+  avatar           : "pascal.jpg" # "profile.png" # "avatar.png", "pascal.jpg"
+  bio              : "MEng in CS, Visiting Student Researcher & Machine Learning Research Assistant & PhD Candidat, Université de Montréal, Mila - Quebec Artificial Intelligence Institute"
+  location         : #"Montréal, Canada"
+  employer         : #"MILA"
   pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=Pascal+Notsawo"
   googlescholar    : "https://scholar.google.com/citations?user=vUerGI8AAAAJ"
   email            : "pascalnotsawo.gmail.com"

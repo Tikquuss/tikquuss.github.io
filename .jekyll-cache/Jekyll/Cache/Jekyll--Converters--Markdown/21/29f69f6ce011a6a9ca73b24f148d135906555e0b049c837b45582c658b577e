@@ -1,0 +1,12 @@
+I"�	
+<p>I’m a Visiting Student researcher at <a href="https://www.umontreal.ca/">Université de Montréal (UdeM)</a>, Department of Computer Science and Operations Research (DIRO); and a machine learning research assistant at <a href="https://mila.quebec/">MILA</a>, Quebec Artificial Intelligence Institute. I worked under the supervision of professor <a href="https://yoshuabengio.org/en/">Yoshua Bengio</a> and his postdoctoral fellow <a href="https://scholar.google.com/citations?user=kGSzBpMAAAAJ&amp;hl=en">Dianbo Liu</a> on <a href="https://mila.quebec/projet/biasly/">Biasly</a> (detecting and mitigating racist and sexist discrimination in online texts), from January 2021 to January 2022. Currently I am working under the supervision of professor <a href="https://sites.google.com/site/irinarish/">Irina Rish</a> and professor <a href="http://www.extrospection.eu/">Guillaume Dumas</a> on  scaling and phase transitions in natural language processing algorithms, multi-agent reinforcement learning, and <a href="https://arxiv.org/abs/2111.09266">Generative Flow Networks</a> (with professor Yoshua Bengio). I hold a master’s of engineering in computer science from the <a href="https://polytechnique.cm/">National Advanced School of Engineering Yaounde, Cameroon</a>.</p>
+
+<p>🔭 In the past, my research was focused on attention mechanism, transform-based models, neural language modeling and neural machine translation. Currently I am working on predicting phase transitions in large scale language models (you will find <a href="https://github.com/Tikquuss/lm_grokking">here</a> my tutorial on how to pre-train a causal &amp; mask language model with the huggingface transformers library), and on GflowNets (here is a tutorial I wrote about <a href="https://github.com/Tikquuss/GflowNets_Tutorial">GflowNets</a>). For my master and PhD project at UdeM and MILA, I will work on the use of global workspace space theory and attention schema theory (social and cognitive neuroscience) to enable coordination among neural agents in a multi-agent environment.</p>
+
+<p>🌱 I am very passionate about philosophy (I’m a stoic, in the sense of Marcus Aurelius) and physics (theoretical, especially quantum physics, gravitation theory and cosmology).</p>
+
+<p>⚡ As a sport, I do body building, muay thai (Thailang boxing) and MMA (Mixed Martial Arts).</p>
+
+<p>💬 If you have an interesting book to recommend, don’t hesitate.</p>
+
+:ET

@@ -1,13 +1,4 @@
----
-layout: archive
-title: "CV"
-permalink: /cv/
-author_profile: true
-redirect_from:
-  - /resume
----
-
-{% include base_path %} [Download (resume.pdf)]( https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing)
+I"X<p><a href="https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing">Download (resume.pdf)</a></p>
 
 <!--- 
 PROFESSIONAL EXPERIENCE
@@ -63,9 +54,53 @@ Skills
 <!--- 
 PUBLICATIONS
 ======
-  <ul>{% for post in site.publications %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
+  <ul>
+    
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <li>
+    
+    <h3 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2021-12-15-paper-at" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h3>
+    
+    <p class="archive__item-excerpt" itemprop="description">Pascal Junior Tikeng Notsawo, Brice Nanda, James Assiene. (2021). &quot;On the use of linguistic similarities to improve Neural Machine Translation for African Languages.&quot; <i>5th Black in AI Workshop @ NeurIPS 2021</i>. 1(1).</p> 
+    </li>
+ </article>
+</div>
+
+  
+    
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <li>
+    
+    <h3 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2022-02-02-paper-at" rel="permalink">Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization
+</a>
+      
+    </h3>
+    
+    <p class="archive__item-excerpt" itemprop="description">Dianbo Liu, Alex Lamb, Xu Ji, Pascal Notsawo, Mike Mozer, Yoshua Bengio, Kenji Kawaguchi</p> 
+    </li>
+ </article>
+</div>
+
+  </ul>
 --->
 
 <!--- 
@@ -94,17 +129,84 @@ LANGUAGES
 <!--- 
 Talks
 ======
-  <ul>{% for post in site.talks %}
-    {% include archive-single-talk-cv.html %}
-  {% endfor %}</ul>
+  <ul>
+    
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <li>
+    
+    <h3 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/2013-03-01-tutorial-1" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h3>
+    <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> December 15, 2022</p>
+    <p class="archive__item-excerpt" itemprop="description">Poster at 5th Black in AI Workshop @ NeurIPS 2021,  online</p>
+    </li>
+  </article>
+</div>
+
+
+  </ul>
   
 Teaching
 ======
-  <ul>{% for post in site.teaching %}
-    {% include archive-single-cv.html %}
-  {% endfor %}</ul>
+  <ul>
+    
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <li>
+    
+    <h3 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/teaching/repetitions" rel="permalink">Group and home rehearsal courses
+</a>
+      
+    </h3>
+    
+    <p class="archive__item-excerpt" itemprop="description"></p> 
+    </li>
+ </article>
+</div>
+
+  
+    
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <li>
+    
+    <h3 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/teaching/prepas" rel="permalink">Preparatory classes
+</a>
+      
+    </h3>
+    
+    <p class="archive__item-excerpt" itemprop="description"></p> 
+    </li>
+ </article>
+</div>
+
+  </ul>
   
 Service and leadership
 ======
 * Reviewer : 5th Black in AI Workshop (co-located with NeurIPS 2021)
 --->
+:ET
