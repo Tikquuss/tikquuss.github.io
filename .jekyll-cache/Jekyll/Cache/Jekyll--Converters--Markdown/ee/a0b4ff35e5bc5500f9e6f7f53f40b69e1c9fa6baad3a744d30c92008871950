@@ -1,0 +1,1096 @@
+I"8[
+<p>A list of all the posts and pages found on the site. For you robots out there is an <a href="http://localhost:4000/sitemap.xml">XML version</a> available for digesting as well.</p>
+
+<h2>Pages</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/404.html" rel="permalink">Page Not Found</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>Page not found. Your pixels are in another canvas.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This website is still under development, please refer to my <a href="https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing">CV</a> for more information about me</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/archive-layout-with-content/" rel="permalink">Archive Layout with Content</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/categories/" rel="permalink">Posts by Category</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/collection-archive/" rel="permalink">Posts by Collection</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/cv/" rel="permalink">CV</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/assets/css/main.css" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/markdown/" rel="permalink">Markdown</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/non-menu-page/" rel="permalink">Page not in menu</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a page not in th emain menu</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/page-archive/" rel="permalink">Page Archive</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/portfolio/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publications/" rel="permalink">Publications</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/sitemap/" rel="permalink">Sitemap</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/tags/" rel="permalink">Posts by Tags</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talkmap.html" rel="permalink">Talk map</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/" rel="permalink">Talks and presentations</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/teaching/" rel="permalink">Teaching</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/terms/" rel="permalink">Terms and Privacy Policy</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/year-archive/" rel="permalink">Blog posts</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/about/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/about.html" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/resume" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/md/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/markdown.html" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/nmp/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/nmp.html" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/wordpress/blog-posts/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/redirects.json" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/feed.xml" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/sitemap.xml" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/robots.txt" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/assets/css/main.css.map" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<h2>Posts</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2012/08/blog-post-4/" rel="permalink">Future Blog Post
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2199-01-01T00:00:00+00:00">January 01, 2199</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This post will show up by default. To disable scheduling of future posts, edit <code class="language-plaintext highlighter-rouge">config.yml</code> and set <code class="language-plaintext highlighter-rouge">future: false</code>.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2012/08/blog-post-4/" rel="permalink">Blog Post number 4
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2015-08-14T00:00:00+00:00">August 14, 2015</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2014/08/blog-post-3/" rel="permalink">Blog Post number 3
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2014-08-14T00:00:00+00:00">August 14, 2014</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2013/08/blog-post-2/" rel="permalink">Blog Post number 2
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2013-08-14T00:00:00+00:00">August 14, 2013</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2012/08/blog-post-1/" rel="permalink">Blog Post number 1
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2012-08-14T00:00:00+00:00">August 14, 2012</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<h2>portfolio</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/portfolio/portfolio-1/" rel="permalink">Pre-train and Fine-tune a Language Model with 🤗 Transformers
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-03-01T00:00:00+00:00">March 01, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/huggingfacetransformer.png" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/portfolio/portfolio-3/" rel="permalink">Intrinsic Dimension Estimation
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-03-01T00:00:00+00:00">March 01, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/tutorials/intrinsic_dim.png" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/portfolio/portfolio-2/" rel="permalink">Generative Flow Networks, MCMC, Inverse Transform Sampling, Acceptance-Rejection Method and Important Sampling
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-04-14T00:00:00+00:00">April 14, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/tutorials/gflownet_anim.gif" align="center" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<h2>publications</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2021-12-15-paper-at" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>5th Black in AI Workshop @ NeurIPS 2021</i>, 2021 </p> --->
+          <p><i>5th Black in AI Workshop @ NeurIPS 2021</i>, 2021 </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <!--- <p>Recommended citation: Pascal Junior Tikeng Notsawo, Brice Nanda, James Assiene. (2021). &quot;On the use of linguistic similarities to improve Neural Machine Translation for African Languages.&quot; <i>5th Black in AI Workshop @ NeurIPS 2021</i>. 1(1). <a href="https://openreview.net/pdf?id=Q5ZxoD2LqcI"><u>https://openreview.net/pdf?id=Q5ZxoD2LqcI</u></a></p> --->
+      <p>Pascal Junior Tikeng Notsawo, Brice Nanda, James Assiene. (2021). &quot;On the use of linguistic similarities to improve Neural Machine Translation for African Languages.&quot; <i>5th Black in AI Workshop @ NeurIPS 2021</i>. 1(1). <a href="https://openreview.net/pdf?id=Q5ZxoD2LqcI"><u>https://openreview.net/pdf?id=Q5ZxoD2LqcI</u></a></p>
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2022-02-02-paper-at" rel="permalink">Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>preprint by the authors</i>, 2022 </p> --->
+          <p><i>preprint by the authors</i>, 2022 </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <!--- <p>Recommended citation: Dianbo Liu, Alex Lamb, Xu Ji, Pascal Notsawo, Mike Mozer, Yoshua Bengio, Kenji Kawaguchi <a href="https://arxiv.org/pdf/2202.01334.pdf"><u>https://arxiv.org/pdf/2202.01334.pdf</u></a></p> --->
+      <p>Dianbo Liu, Alex Lamb, Xu Ji, Pascal Notsawo, Mike Mozer, Yoshua Bengio, Kenji Kawaguchi <a href="https://arxiv.org/pdf/2202.01334.pdf"><u>https://arxiv.org/pdf/2202.01334.pdf</u></a></p>
+    
+
+  </article>
+</div>
+
+<h2>talks</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/2013-03-01-tutorial-1" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-12-15T00:00:00+00:00">December 15, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><a href="https://drive.google.com/file/d/1mM_7-VNWQLdDhoK8XCuKluiIVu3x7g9o/view?usp=sharing">More information here</a></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<h2>teaching</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/teaching/repetitions" rel="permalink">Group and home rehearsal courses
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <p> Yaounde, <i>Cameroon, 2016</i>, 2017 </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>During my engineering training, I gave tutoring in mathematics, physics and chemistry to college students, at home (private) and in group.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/teaching/prepas" rel="permalink">Preparatory classes
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <p> Yaounde, <i>Cameroon, 2017</i>, 2018 </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>During my training as an engineer, I prepared many students in mathematics and physical sciences (in short MSP, French system) for the entrance exams of the Grandes Ecoles in Cameroon.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+:ET

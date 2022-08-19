@@ -82,10 +82,11 @@ analytics:
 author:
   name             : "Pascal Junior Tikeng Notsawo"
   avatar           : "pascal.jpg" # "profile.png" # "avatar.png", "pascal.jpg"
-  bio              : "MEng in CS, Visiting Student Researcher & Machine Learning Research Assistant & PhD Candidat, Université de Montréal, Mila - Quebec Artificial Intelligence Institute"
+  bio              : "MEng in CS, MSc Student at UdeM & Mila"
+  #bio              : "MEng in CS, MSc Student at UdeM & Machine Learning Research Assistant at Mila"
   location         : #"Montréal, Canada"
   employer         : #"MILA"
-  pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=Pascal+Notsawo"
+  #pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=Pascal+Notsawo"
   googlescholar    : "https://scholar.google.com/citations?user=vUerGI8AAAAJ"
   email            : "pascalnotsawo.gmail.com"
   researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
@@ -103,7 +104,7 @@ author:
   impactstory      : #"https://profiles.impactstory.org/u/xxxx-xxxx-xxxx-xxxx"
   lastfm           :
   linkedin         : "tikeng/"
-  orcid            : "http://orcid.org/0000-0003-2419-7533"
+  #orcid            : "http://orcid.org/0000-0003-2419-7533"
   pinterest        :
   soundcloud       :
   stackoverflow    : "11814682/tikquuss"

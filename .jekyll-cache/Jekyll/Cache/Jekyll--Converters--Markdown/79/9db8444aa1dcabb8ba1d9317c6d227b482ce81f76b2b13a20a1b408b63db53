@@ -1,4 +1,4 @@
-I"dX
+I"~X
 <p>A list of all the posts and pages found on the site. For you robots out there is an <a href="http://localhost:4000/sitemap.xml">XML version</a> available for digesting as well.</p>
 
 <h2>Pages</h2>
@@ -228,7 +228,7 @@
 
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="http://localhost:4000/portfolio/" rel="permalink">Portfolio</a>
+        <a href="http://localhost:4000/portfolio/" rel="permalink"></a>
       
     </h2>
     
@@ -877,11 +877,11 @@
     
 
         
-         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-05-31T03:34:54+00:00">May 31, 2022</time></p>
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-08-19T22:17:38+00:00">August 19, 2022</time></p>
         
 
     
-    <p class="archive__item-excerpt" itemprop="description"><p>Short description of portfolio item number 1<br /><img src="/images/huggingfacetransformer.png" /></p>
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/huggingfacetransformer.png" /></p>
 </p>
     
     
@@ -896,7 +896,7 @@
 
     <h2 class="archive__item-title" itemprop="headline">
       
-        <a href="http://localhost:4000/portfolio/portfolio-2/" rel="permalink">Portfolio item number 2
+        <a href="http://localhost:4000/portfolio/portfolio-2/" rel="permalink">Generative Flow Networks, MCMC, Inverse Transform Sampling, Acceptance-Rejection Method and Important Sampling
 </a>
       
     </h2>
@@ -904,11 +904,11 @@
     
 
         
-         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-05-31T03:34:54+00:00">May 31, 2022</time></p>
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-08-19T22:17:38+00:00">August 19, 2022</time></p>
         
 
     
-    <p class="archive__item-excerpt" itemprop="description"><p>Short description of portfolio item number 2 <br /><img src="/images/500x300.png" /></p>
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/tutorials/gflownet_anim.gif" align="center" /></p>
 </p>
     
     
