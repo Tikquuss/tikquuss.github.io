@@ -8,4 +8,4 @@ collection: portfolio
 
 [comment]: <> This is an item in your portfolio. It can be have images or nice text. If you name the file .md, it will be parsed as markdown. If you name the file .html, it will be parsed as HTML. 
 
-[Here](https://github.com/Tikquuss/lm_grokking) my tutorial on how to pre-train a causal & mask language model with the huggingface transformers library.
+[Here](https://github.com/Tikquuss/lm_hf) my tutorial on how to pre-train a causal & mask language model with the huggingface transformers library.
