@@ -11,7 +11,7 @@ redirect_from:
 [comment]: <> !#About me
 [comment]: <> !========
 
-I'm a MSc Student at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and  [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute.
+I'm a MSc Student at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and  [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute. IRIna
 
 [comment]: <> !I'm a Visiting Student researcher at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and a machine learning research assistant at [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute. 
 

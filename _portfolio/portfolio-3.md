@@ -7,6 +7,8 @@ collection: portfolio
 
 # Tensorized (and parallelizable) pytorch implementation of the algorithm for intrinsic dimension estimation
 
+Code : [https://github.com/Tikquuss/intrinsics_dimension](https://github.com/Tikquuss/intrinsics_dimension)
+
 ## 1. Maximum Likelihood Estimation appoach
 
 Calculates intrinsic dimension of the provided data points with the Maximum Likelihood Estimation appoach.
