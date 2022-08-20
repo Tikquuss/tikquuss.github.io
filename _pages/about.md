@@ -11,11 +11,11 @@ redirect_from:
 [comment]: <> !#About me
 [comment]: <> !========
 
-I'm a MSc Student at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and  [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute. IRIna
+I'm a MSc Student at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and  [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute. I am supervised by [Irina Rish](https://irina-rish.com/) and [Guillaume Dumas](http://www.extrospection.eu/).
 
 [comment]: <> !I'm a Visiting Student researcher at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and a machine learning research assistant at [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute. 
 
-Before that I was a Visiting Student researcher at UdeM and a Reseach Intern at Mila : I worked under the supervision of professor [Yoshua Bengio](https://yoshuabengio.org/en/) and his postdoctoral fellow [Dianbo Liu](https://scholar.google.com/citations?user=kGSzBpMAAAAJ&hl=en) on [Biasly](https://mila.quebec/projet/biasly/) (detecting and mitigating racist and sexist discrimination in online texts), and under the supervision of professor [Irina Rish](https://sites.google.com/site/irinarish/) and professor [Guillaume Dumas](http://www.extrospection.eu/) on Phase Transitions and Emergent Behaviors in Deep Learning.
+Before that I was a Visiting Student researcher at UdeM and a Reseach Intern at Mila : I worked under the supervision of professor [Yoshua Bengio](https://yoshuabengio.org/en/) and his postdoctoral fellow [Dianbo Liu](https://scholar.google.com/citations?user=kGSzBpMAAAAJ&hl=en) on [Biasly](https://mila.quebec/projet/biasly/) (detecting and mitigating racist and sexist discrimination in online texts), and under the supervision of professor [Irina Rish](https://irina-rish.com/) and professor [Guillaume Dumas](http://www.extrospection.eu/) on Phase Transitions and Emergent Behaviors in Deep Learning.
 
 [comment]: <> ! on  scaling and phase transitions in natural language processing algorithms, multi-agent reinforcement learning, and [Generative Flow Networks](https://arxiv.org/abs/2111.09266) (with professor Yoshua Bengio). 
 
