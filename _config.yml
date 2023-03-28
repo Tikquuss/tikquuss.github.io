@@ -88,7 +88,7 @@ author:
   employer         : #"MILA"
   #pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=Pascal+Notsawo"
   googlescholar    : "https://scholar.google.com/citations?user=vUerGI8AAAAJ"
-  email            : "pascalnotsawo.gmail.com"
+  #email            : "pascalnotsawo.gmail.com"
   researchgate     :  # example: "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :

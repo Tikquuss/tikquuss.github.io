@@ -11,21 +11,26 @@ redirect_from:
 [comment]: <> !#About me
 [comment]: <> !========
 
-I'm a MSc Student at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and  [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute; supervised by [Irina Rish](https://irina-rish.com/) and [Guillaume Dumas](http://www.extrospection.eu/). I am interested in understanding generalization and optimization in deep learning from a dynamical system perspective.
+
+I'm a MSc Student at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and  [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute; supervised by [Irina Rish](https://irina-rish.com/) and [Guillaume Dumas](http://www.extrospection.eu/). I am interested in understanding generalization and optimization in deep learning.
 
 [comment]: <> !I'm a Visiting Student researcher at [Université de Montréal (UdeM)](https://www.umontreal.ca/), Department of Computer Science and Operations Research (DIRO); and a machine learning research assistant at [Mila](https://mila.quebec/), Quebec Artificial Intelligence Institute. 
+
+<br/><br/>
 
 Before that I was a Visiting Student researcher at UdeM and a Reseach Intern at Mila : I worked under the supervision of professor [Yoshua Bengio](https://yoshuabengio.org/en/) and his postdoctoral fellow [Dianbo Liu](https://scholar.google.com/citations?user=kGSzBpMAAAAJ&hl=en) on [Biasly](https://mila.quebec/projet/biasly/) (detecting and mitigating racist and sexist discrimination in online texts).
 
 [comment]: <> ! on  scaling and phase transitions in natural language processing algorithms, multi-agent reinforcement learning, and [Generative Flow Networks](https://arxiv.org/abs/2111.09266) (with professor Yoshua Bengio). 
 
+<br/><br/>
+
 I hold a master's of engineering in computer science from the [National Advanced School of Engineering Yaounde, Cameroon](https://polytechnique.cm/).
 
-🔭 In the past, my research was focused on neural language modeling and neural machine translation. 
+[comment]: <> ! 🔭 In the past, my research was focused on neural language modeling and neural machine translation. 
 
 [comment]: <> !multimodal and mutitask learning, meta learning and curriculum learning, automatic speech recognition and speech synthesis. I am also interested in (but not directly working on) computer vision, reinforcement learning, graph neural network, systemic generalization, federated learning, robustness in machine learning ...
 
-🌱 I am very passionate about philosophy (I'm a stoic, in the sense of Marcus Aurelius), physics (quantum physics, gravitation theory and cosmology) and sport. I do body building, muay thai (Thailang boxing) and MMA (Mixed Martial Arts).
+[comment]: <> !🌱 I am very passionate about philosophy (I'm a stoic, in the sense of Marcus Aurelius), physics (quantum physics, gravitation theory and cosmology) and sport. I do body building, muay thai (Thailang boxing) and MMA (Mixed Martial Arts).
 
 [comment]: <> !💬 If you have an interesting book to recommend, don't hesitate.
 
