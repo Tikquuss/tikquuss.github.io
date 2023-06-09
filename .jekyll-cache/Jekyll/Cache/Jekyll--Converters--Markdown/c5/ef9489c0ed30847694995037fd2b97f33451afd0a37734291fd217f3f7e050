@@ -1,4 +1,4 @@
-I"X<p><a href="https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing">Download (resume.pdf)</a></p>
+I"H<p><a href="https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing">Download (resume.pdf)</a></p>
 
 <!--- 
 PROFESSIONAL EXPERIENCE
@@ -72,7 +72,7 @@ PUBLICATIONS
       
     </h3>
     
-    <p class="archive__item-excerpt" itemprop="description">Pascal Junior Tikeng Notsawo, Brice Nanda, James Assiene. (2021). &quot;On the use of linguistic similarities to improve Neural Machine Translation for African Languages.&quot; <i>5th Black in AI Workshop @ NeurIPS 2021</i>. 1(1).</p> 
+    <p class="archive__item-excerpt" itemprop="description"></p> 
     </li>
  </article>
 </div>
@@ -90,12 +90,12 @@ PUBLICATIONS
     
     <h3 class="archive__item-title" itemprop="headline">
       
-        <a href="http://localhost:4000/publication/2022-02-02-paper-at" rel="permalink">Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization
+        <a href="http://localhost:4000/publication/2022-02-02-paper-at" rel="permalink">Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization for Heterogeneous Representational Coarseness
 </a>
       
     </h3>
     
-    <p class="archive__item-excerpt" itemprop="description">Dianbo Liu, Alex Lamb, Xu Ji, Pascal Notsawo, Mike Mozer, Yoshua Bengio, Kenji Kawaguchi</p> 
+    <p class="archive__item-excerpt" itemprop="description"></p> 
     </li>
  </article>
 </div>
