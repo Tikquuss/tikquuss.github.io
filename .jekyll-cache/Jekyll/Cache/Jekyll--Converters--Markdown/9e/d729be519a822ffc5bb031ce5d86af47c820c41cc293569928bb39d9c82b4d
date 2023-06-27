@@ -1,4 +1,4 @@
-I"H<p><a href="https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing">Download (resume.pdf)</a></p>
+I"E<p><a href="https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing">Download (resume.pdf)</a></p>
 
 <!--- 
 PROFESSIONAL EXPERIENCE
@@ -91,6 +91,29 @@ PUBLICATIONS
     <h3 class="archive__item-title" itemprop="headline">
       
         <a href="http://localhost:4000/publication/2022-02-02-paper-at" rel="permalink">Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization for Heterogeneous Representational Coarseness
+</a>
+      
+    </h3>
+    
+    <p class="archive__item-excerpt" itemprop="description"></p> 
+    </li>
+ </article>
+</div>
+
+  
+    
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <li>
+    
+    <h3 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2023-06-23-paper-at" rel="permalink">Predicting Grokking Long Before it Happens: A look into the loss landscape of models which grok
 </a>
       
     </h3>
