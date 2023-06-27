@@ -17,7 +17,7 @@ I'm a PhD Student at [Université de Montréal (UdeM)](https://www.umontreal.ca/
 I am interested in understanding generalization and optimization in deep learning, both from dynamical systems and neuroscience perspectives. My main interest is to understand what causes the triplet (model, optimization, data properties) to generalize beyond the training set.
 
 <br/>
-Before starting a master, I was a visiting student researcher at UdeM and a Reseach Intern at Mila. I worked under the supervision of professor [Yoshua Bengio](https://yoshuabengio.org/en/) and his postdoctoral fellow [Dianbo Liu](https://scholar.google.com/citations?user=kGSzBpMAAAAJ&hl=en) on [Biasly](https://mila.quebec/projet/biasly/) (detecting and mitigating racist and sexist discrimination in online texts). $^{\text{September 2021 – September 2022}}$
+Before starting a master, I was a visiting student researcher at UdeM and a reseach intern at Mila. I worked under the supervision of professor [Yoshua Bengio](https://yoshuabengio.org/en/) and his postdoctoral fellow [Dianbo Liu](https://scholar.google.com/citations?user=kGSzBpMAAAAJ&hl=en) on [Biasly](https://mila.quebec/projet/biasly/) (detecting and mitigating racist and sexist discrimination in online texts). $^{\text{September 2021 – September 2022}}$
 
 <br/>
 I hold a master's of engineering in computer science from the National Advanced School of Engineering Yaounde, Cameroon. $^{\text{September 2016 – July 2021}}$
