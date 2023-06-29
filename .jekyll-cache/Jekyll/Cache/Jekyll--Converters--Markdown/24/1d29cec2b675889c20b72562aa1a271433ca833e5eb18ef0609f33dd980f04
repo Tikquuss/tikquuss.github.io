@@ -1,0 +1,92 @@
+I"=	
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2023-06-23-paper-at" rel="permalink">Predicting Grokking Long Before it Happens: A look into the loss landscape of models which grok
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>preprint</i>, 2023 </p> --->
+          <p><i>preprint</i>, 2023 ,  </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <p>Download <a href=" https://arxiv.org/abs/2306.13253 "><u>here</u></a></p>
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2022-02-02-paper-at" rel="permalink">Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization for Heterogeneous Representational Coarseness
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>AAAI</i>, 2023 </p> --->
+          <p><i>AAAI</i>, 2023 , Dianbo Liu, Alex Lamb, Xu Ji, Pascal Jr. Tikeng Notsawo, Mike Mozer, Yoshua Bengio, Kenji Kawaguchi </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <p>Download <a href=" https://arxiv.org/pdf/2202.01334.pdf "><u>here</u></a></p>
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2021-12-15-paper-at" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>5th Black in AI Workshop @ NeurIPS 2021</i>, 2021 </p> --->
+          <p><i>5th Black in AI Workshop @ NeurIPS 2021</i>, 2021 ,  </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <p>Download <a href=" https://openreview.net/pdf?id=Q5ZxoD2LqcI "><u>here</u></a></p>
+    
+
+  </article>
+</div>
+
+:ET
