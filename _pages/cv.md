@@ -7,9 +7,10 @@ redirect_from:
   - /resume
 ---
 
+<!--- 
 {% include base_path %} [Download (resume.pdf)]( https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing)
 
-<!--- 
+
 PROFESSIONAL EXPERIENCE
 ======
 * February 2022 - September 2022 : Research Assistant
