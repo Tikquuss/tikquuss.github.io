@@ -82,7 +82,8 @@ analytics:
 author:
   name             : "Pascal Jr. Tikeng Notsawo"
   avatar           : "bio-photo.jpg" # "profile.png" # "avatar.png", "pascal.jpg"
-  bio              : "MEng in CS, MSc, PhD Student at UdeM & Mila"
+  bio              : "Student at UdeM & Mila"
+  #bio              : "MEng in CS, MSc, PhD Student at UdeM & Mila"
   #bio              : "MEng in CS, MSc Student at UdeM & Machine Learning Research Assistant at Mila"
   location         : #"Montréal, Canada"
   employer         : #"MILA"
