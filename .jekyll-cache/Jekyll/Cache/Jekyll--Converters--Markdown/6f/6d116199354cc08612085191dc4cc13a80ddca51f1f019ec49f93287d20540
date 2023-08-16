@@ -1,0 +1,5 @@
+I"=<p>While neural loss functions live in a very high-dimensional space, visualizations are only possible using low-dimensional 1D (line) or 2D (surface) plots. Several methods exist for closing this dimensionality gap. The idea is to choose a linear subspace that maximally preserves the optimization trajectory’s shape, in order to observe patterns that are meaningful in the full parameter space.</p>
+
+<p>See the <a href="https://hackmd.io/@6LQ4mvRtS4Sc3LHkNEvDXQ/SkT-VIxyj">hackmd version</a>. I’ll copy it, format it in markdow and put it here as soon as I can.</p>
+
+:ET
