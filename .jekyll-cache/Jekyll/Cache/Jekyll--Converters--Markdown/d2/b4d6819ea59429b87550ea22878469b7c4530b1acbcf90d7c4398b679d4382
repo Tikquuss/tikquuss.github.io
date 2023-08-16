@@ -1,4 +1,4 @@
-I"{&<p>I’m a PhD Student at <a href="https://www.umontreal.ca/">Université de Montréal (UdeM)</a> and <a href="https://mila.quebec/">Mila</a> (Quebec Artificial Intelligence Institute); supervised by <a href="https://irina-rish.com/">Irina Rish</a> and <a href="http://www.extrospection.eu/">Guillaume Dumas</a>. I fast-tracked from master’s to PhD. $^{\text{September 2022 – September 2023}}$</p>
+I")<p>I’m a PhD Student at <a href="https://www.umontreal.ca/">Université de Montréal (UdeM)</a> and <a href="https://mila.quebec/">Mila</a> (Quebec Artificial Intelligence Institute); supervised by <a href="https://irina-rish.com/">Irina Rish</a> and <a href="http://www.extrospection.eu/">Guillaume Dumas</a>. I fast-tracked from master’s to PhD. $^{\text{August 2022 – August 2023}}$</p>
 
 <p>I am interested in understanding generalization and optimization in deep learning, both from dynamical systems and neuroscience perspectives. My main interest is to understand what causes the triplet (model, optimization, data properties) to generalize beyond the training set; what functional metrics differentiate a neuronal network before and after learning …</p>
 
@@ -200,6 +200,30 @@ Talks
     <h3 class="archive__item-title" itemprop="headline">
       
         <a href="http://localhost:4000/talks/2013-03-01-tutorial-1" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h3>
+    <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> December 15, 2022</p>
+    <p class="archive__item-excerpt" itemprop="description">Poster at 5th Black in AI Workshop @ NeurIPS 2021,  online</p>
+    </li>
+  </article>
+</div>
+
+
+  
+    
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    <li>
+    
+    <h3 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/2013-03-01-tutorial-1" rel="permalink">Predicting Grokking Long Before it Happens: A look into the loss landscape of models which grok
 </a>
       
     </h3>

@@ -1,4 +1,4 @@
-I"f
+I"Wi
 <p>A list of all the posts and pages found on the site. For you robots out there is an <a href="http://localhost:4000/sitemap.xml">XML version</a> available for digesting as well.</p>
 
 <h2>Pages</h2>
@@ -807,7 +807,7 @@
 
 
   
-	  1 minute read
+	  2 minute read
 	
 </p>
     
@@ -842,7 +842,7 @@
 
 
   
-	  8 minute read
+	  6 minute read
 	
 </p>
     
@@ -1067,6 +1067,33 @@
 </div>
 
 <h2>talks</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/2013-03-01-tutorial-1" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-12-15T00:00:00+00:00">December 15, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><a href="https://drive.google.com/file/d/1mM_7-VNWQLdDhoK8XCuKluiIVu3x7g9o/view?usp=sharing">More information here</a></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
 
 <div class="list__item">
   <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">

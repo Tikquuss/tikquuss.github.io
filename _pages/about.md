@@ -18,3 +18,10 @@ redirect_from:
 [comment]: <> !<center> <b>I learn stuff !</b> </center>
 <br/><br/><br/><br/><br/>
 
+<center> 
+If I were a mathematician like <a href="https://darsakthi.github.io/">DALTON A R SAKTHIVADIVEL</a>, I would have written this on my website: 
+"Enter this website if and only if your personal model of mathematics is consistent with <a href="https://fardila.com/">Ardila’s axioms</a>."
+</center>
+
+
+

@@ -5,9 +5,11 @@ date: 2020-08-07
 collection: portfolio
 ---
 
+I wrote this in 2020, in my early days in machine learning. I prefer to leave the words and the tutorial as I wrote them back then. You can read [here](/posts/2020/08/blog-post-1/) what led me to machine learning research: and my story.
+
 Code : [https://github.com/Tikquuss/word_embeddings](https://github.com/Tikquuss/word_embeddings)
 
-## 1) **GloVe**
+## **GloVe**
 
 GloVe, coined from Global Vectors, is a model for distributed word representation. The model is an unsupervised learning algorithm for obtaining vector representations for words. The GloVe model learns word vectors by examining word co-occurrences within a text corpus.  
 
@@ -16,7 +18,7 @@ in the context of word $i$. Finally, let $P_{ij} = X_{ij}/X_i$ be the probabilit
 
 The relationship between two words $i$ and $j$ can be examined by studying the ratio of their co-occurrence probabilities with various probe words, $k$. For words $k$ related to $i$ but not $j$, we expect the ratio $P_{ik}/P_{jk}$ will be large. Similarly, for words $k$ related to $j$ but not $i$, the ratio should be small. For words $k$ that are either related to both $i$ and $j$, or to neither, the ratio should be close to one. 
 
-An example relating to the concepts of thermodinamics is given in the original paper with $i = ice$, $j = steam$ and $k \in \{solid, gas, water, fashion\}$
+An example relating to the concepts of thermodinamics is given in the original paper with $i = ice$, $j = steam$ and $$k \in \ \{solid, gas, water, fashion\ \}$$
 
 The above argument suggests that the appropriate starting point for word vector learning should be with ratios of co-occurrence probabilities rather than the probabilities themselves. Noting that the ratio $P_{ik}/P_{jk}$ depends on three words $i$, $j$, and $k$, the most general model takes the form $F(w_i, w_j,\tilde{w_{k}}) = P_{ik}/P_{jk}$ where $w \in \mathbb{R}^d$ are word vectors and $\tilde{w} \in \mathbb{R}^d$ are separate context word vectors.
 
@@ -60,7 +62,7 @@ When we encounter extremely common word pairs (where $X_{ij} \gt x_{max}$) this 
 
 The authors use $x_{max} = 100 \text{ and } \alpha = 3/4$
 
-## 2) **Word2Vec**
+## **Word2Vec**
 
 Word2vec is a group of related models that are used to produce word embeddings. Word2vec takes as its input a large corpus of text and produces a vector space, typically of several hundred dimensions, with each unique word in the corpus being assigned a corresponding vector in the space. Word vectors are positioned in the vector space such that words that share common contexts in the corpus are located close to one another in the space.
 
@@ -96,7 +98,7 @@ Hence, for a center word $c$ and a context word $o$ :
 
 $P_{\theta} (o \| c) = \frac{e^{u_o^Tv_c}}{\sum_{w \in V} e^{u_w^Tv_c}}$
 
-## **3) Bag of words**   
+## **Bag of words**   
 
 1. Find *N* most popular words in train corpus and numerate them. Now we have a dictionary of the most popular words.
 2. For each title in the corpora create a zero vector with the dimension equals to *N*.
@@ -135,7 +137,7 @@ The resulting vector will be
 
     [1, 1, 0, 1]
 
-## 4) **TF-IDF (Term Frequency-Inverse Document Frequency)**
+## **TF-IDF (Term Frequency-Inverse Document Frequency)**
 
 TF-IDF is a numerical statistic that is intended to reflect how important a word is to a document in a collection or corpus.	
 
