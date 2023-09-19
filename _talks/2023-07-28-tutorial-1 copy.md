@@ -7,3 +7,17 @@ venue: "5th workshop on Neural Scaling Laws: Emergence and Phase Transitions, Co
 date: 2023-07-28
 location: "Honolulu, USA"
 ---
+
+<center>
+<img src="/images/talks/ICML.png" alt="ICML">
+</center>
+
+<br/>
+<center>
+  <object 
+    type="application/pdf"
+    data="/images/talks/predicting_grokking.pdf" 
+    width="1000"
+    height="800">
+  </object>
+</center>

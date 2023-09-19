@@ -1,0 +1,1214 @@
+I"�k
+<p>A list of all the posts and pages found on the site. For you robots out there is an <a href="http://localhost:4000/sitemap.xml">XML version</a> available for digesting as well.</p>
+
+<h2>Pages</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/404.html" rel="permalink">Page Not Found</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>Page not found. Your pixels are in another canvas.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This website is still under development, please refer to my <a href="https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing">CV</a> for more information about me</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/archive-layout-with-content/" rel="permalink">Archive Layout with Content</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/categories/" rel="permalink">Posts by Category</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/collection-archive/" rel="permalink">Posts by Collection</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/cv/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/assets/css/main.css" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/markdown/" rel="permalink">Markdown</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/non-menu-page/" rel="permalink">Page not in menu</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a page not in th emain menu</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/page-archive/" rel="permalink">Page Archive</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/portfolio/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publications/" rel="permalink">Publications</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/sitemap/" rel="permalink">Sitemap</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/tags/" rel="permalink">Posts by Tags</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talkmap.html" rel="permalink">Talk map</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/" rel="permalink">Talks and presentations</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/teaching/" rel="permalink">Teaching</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/terms/" rel="permalink">Terms and Privacy Policy</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/year-archive/" rel="permalink">Blog posts</a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/about/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/about.html" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/resume" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/md/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/markdown.html" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/nmp/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/nmp.html" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/wordpress/blog-posts/" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/redirects.json" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/feed.xml" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/sitemap.xml" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/robots.txt" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/assets/css/main.css.map" rel="permalink"></a>
+      
+    </h2>
+    
+    
+
+        
+
+    
+    
+    
+
+  </article>
+</div>
+
+<h2>Posts</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2023/07/blog-post-1/" rel="permalink">Predicting Grokking Long Before it Happens: A look into the loss landscape of models which grok
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  14 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2023-07-25T00:00:00+00:00">July 25, 2023</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>A common practice in deep learning is to stop training a model as soon as a sign of overfitting is observed, or when the model’s generalization capabilities have not improved over a long training period (<em>early stopping</em>). The limits of this practice are now well-known today, since (i) a model’s performance can improve, deteriorate and then improve again during training (<em>epoch-wise double descent</em>) (ii) a model can generalize several steps after severe overfitting (<em>grokking</em>). Epoch-wise double descent and grokking open the way to new studies concerning the structure of the minimum found by Stochastic Gradient Descent (SGD), and how networks behave in the neighbourhood of SGD training convergence. These phenomena also lead us to rethink our knowledge about the relationship between the model size, data size, initialization, hyperparameters and generalization of neural networks. Beyond just rethinking this relationship, there appears to be a need to be able to identify measures that are easy and cheaper to obtain and that are strongly correlated with generalization since phenomena such as multiple descents can occur at model sizes that are difficult to experiment with, just as grokking often requires models to be trained for a very large number of epochs, making it difficult to construct a phase diagram of generalization covering all the hyperparameters. With these issues in mind, we’ve been looking at grokking recently [1]. This blog post summarizes some of the observations we’ve made.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2023/05/blog-post-1/" rel="permalink">Epoch-wise bias-variance decomposition
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  14 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2023-05-01T00:00:00+00:00">May 01, 2023</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>Let’s suppose we’re training a model parameterized by $\theta$, and let’s denote by $\theta_t$ the parameter $\theta$ at step $t$ given by the optimization algorithm of our choice. In machine learning, it is often helpful to be able to decompose the error $E(\theta)$ as $B^2(\theta)+V(\theta)+N(\theta)$, where $B$ represents the bias, $V$ the variance, and $N$ the noise (irreducible error). In most cases, the decomposition is performed on an optimal solution $\theta^*$ (for instance, $\lim_{t \rightarrow \infty} \theta_t$, or its early stopping version), for example, in order to understand how the bias and variance change with the complexity of the function implementing $\theta$, the size of this function, etc. This has helped explain phenomena such as model-wise double descent. On the other hand, it can also be interesting to visualize how $B(\theta_t)$ and $V(\theta_t)$ evolve with $t$ (which can help explain phenomena like epoch-wise double descent): that’s what we’ll be doing in this blog post.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2022/05/blog-post-1/" rel="permalink">Visualization of the loss landscape and optimization path of a neural network
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-05-01T00:00:00+00:00">May 01, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/tutorials/loss_landscape.png" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2022/04/blog-post-1/" rel="permalink">Generating Random Variables and Stochastic Processes, Generative Flow Networks (GFlowNets)
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  2 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-04-14T00:00:00+00:00">April 14, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/tutorials/gflownet_anim.gif" align="center" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/posts/2020/08/blog-post-1/" rel="permalink">Word embeddings
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  6 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2020-08-07T00:00:00+00:00">August 07, 2020</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/tutorials/word_embeddings.png" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<h2>portfolio</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/portfolio/portfolio-1/" rel="permalink">Word embeddings
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2020-08-07T00:00:00+00:00">August 07, 2020</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/tutorials/word_embeddings.png" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/portfolio/portfolio-2/" rel="permalink">Pre-train and Fine-tune a Language Model with 🤗 Transformers
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-03-01T00:00:00+00:00">March 01, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/huggingfacetransformer.png" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/portfolio/portfolio-4/" rel="permalink">Intrinsic Dimension Estimation
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-04-29T00:00:00+00:00">April 29, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p><br /><img src="/images/tutorials/intrinsic_dim.png" /></p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<h2>publications</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2021-12-15-paper-at" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>5th Black in AI Workshop @ NeurIPS</i>, 2021 </p> --->
+          <p>Pascal Jr. Tikeng Notsawo, Brice Nanda, James Assiene, <i>5th Black in AI Workshop @ NeurIPS</i>, 2021.</p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <!--- <p>Download <a href=" https://openreview.net/pdf?id=Q5ZxoD2LqcI "><u>here</u></a></p> --->
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2023-01-31-paper-at" rel="permalink">Stochastic Average Gradient : A Simple Empirical Investigation
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>IFT6512, Stochastic programming, Université de Montréal</i>, 2023 </p> --->
+          <p>Pascal Junior Tikeng Notsawo, <i>IFT6512, Stochastic programming, Université de Montréal</i>, 2023.</p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <!--- <p>Download <a href=" https://hal.science/hal-03966263/document "><u>here</u></a></p> --->
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2023-02-02-paper-at" rel="permalink">Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization for Heterogeneous Representational Coarseness
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>In Thirthy-Seventh AAAI Conference on Artificial Intelligence</i>, 2023 </p> --->
+          <p>Dianbo Liu, Alex Lamb, Xu Ji, Pascal Jr. Tikeng Notsawo, Mike Mozer, Yoshua Bengio, Kenji Kawaguchi, <i>In Thirthy-Seventh AAAI Conference on Artificial Intelligence</i>, 2023.</p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <!--- <p>Download <a href=" https://arxiv.org/pdf/2202.01334.pdf "><u>here</u></a></p> --->
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/publication/2023-06-23-paper-at" rel="permalink">Predicting Grokking Long Before it Happens: A look into the loss landscape of models which grok
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <!--- <p>Published in <i>preprint</i>, 2023 </p> --->
+          <p>Pascal Jr. Tikeng Notsawo, Hattie Zhou, Mohammad Pezeshki, Irina Rish, Guillaume Dumas, <i>preprint</i>, 2023.</p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description">
+</p>
+    
+    
+    
+      <!--- <p>Download <a href=" https://arxiv.org/abs/2306.13253 "><u>here</u></a></p> --->
+    
+
+  </article>
+</div>
+
+<h2>talks</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/2022-12-15-tutorial-1" rel="permalink">On the use of linguistic similarities to improve Neural Machine Translation for African Languages
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-12-15T00:00:00+00:00">December 15, 2022</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><center>
+<img src="/images/talks/NeurIPS.png" alt="NeurIPS" />
+</center>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/2023-07-28-tutorial-1" rel="permalink">Predicting Grokking Long Before it Happens: A look into the loss landscape of models which grok
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2023-07-28T00:00:00+00:00">July 28, 2023</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><center>
+<img src="/images/talks/ICML.png" alt="ICML" />
+</center>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/talks/2023-09-14-tutorial-1" rel="permalink">Rethinking Generalization in Deep Learning: Double descent and grokking
+</a>
+      
+    </h2>
+    
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2023-09-14T00:00:00+00:00">September 14, 2023</time></p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><center>
+<img src="/images/talks/DL_Indaba.png" alt="Deep Learning Indaba" />
+</center>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<h2>teaching</h2>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/teaching/repetitions" rel="permalink">Group and home rehearsal courses
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <p> Yaounde, <i>Cameroon, 2016</i>, 2017 </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>During my engineering training, I gave tutoring in mathematics, physics and chemistry to college students, at home (private) and in group.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+<div class="list__item">
+  <article class="archive__item" itemscope="" itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://localhost:4000/teaching/prepas" rel="permalink">Preparatory classes
+</a>
+      
+    </h2>
+    
+    
+
+        
+          <p> Yaounde, <i>Cameroon, 2017</i>, 2018 </p>
+        
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>During my training as an engineer, I prepared many students in mathematics and physical sciences (in short MSP, French system) for the entrance exams of the Grandes Ecoles in Cameroon.</p>
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+:ET
