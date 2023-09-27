@@ -7,9 +7,9 @@ redirect_from:
   - /resume
 ---
 
-I'm a PhD Student at [Université de Montréal (UdeM)](https://www.umontreal.ca/) and [Mila](https://mila.quebec/) (Quebec Artificial Intelligence Institute); supervised by [Irina Rish](https://irina-rish.com/) and [Guillaume Dumas](http://www.extrospection.eu/). I fast-tracked from master's to PhD. $^{\text{August 2022 – August 2023}}$ 
+I'm a PhD Student in computer science at [Université de Montréal (UdeM)](https://www.umontreal.ca/) and [Mila](https://mila.quebec/) (Quebec Artificial Intelligence Institute); supervised by [Irina Rish](https://irina-rish.com/) and [Guillaume Dumas](http://www.extrospection.eu/). I fast-tracked from master's to PhD. $^{\text{August 2022 – August 2023}}$ 
 
-I am interested in understanding generalization and optimization in deep learning, both from dynamical systems and neuroscience perspectives. My main interest is to understand what causes the triplet (model, optimization, data properties) to generalize beyond the training set; what functional metrics differentiate a neuronal network before and after learning ...
+I am interested in understanding generalization and optimization in deep learning, both from dynamical systems and neuroscience perspectives. My main interest is understanding what causes the triplet (model, optimization, data properties) to generalize beyond the training set, the causal relationship between complexity measures, initialization, hyperparameters and generalization, the functional metrics (progression measures) that differentiate a neuronal network before and after learning, etc.
 
 Before starting a master, I was a visiting student researcher at UdeM and a reseach intern at Mila. I worked under the supervision of professor [Yoshua Bengio](https://yoshuabengio.org/en/) and his postdoctoral fellow [Dianbo Liu](https://scholar.google.com/citations?user=kGSzBpMAAAAJ&hl=en) on [Biasly](https://mila.quebec/projet/biasly/) (detecting and mitigating racist and sexist discrimination in online texts). $^{\text{September 2021 – September 2022}}$
 
