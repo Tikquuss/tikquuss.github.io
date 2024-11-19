@@ -7,7 +7,7 @@ redirect_from:
   - /resume
 ---
 
-I'm a PhD Student in computer science at [Université de Montréal (UdeM)](https://www.umontreal.ca/) and [Mila](https://mila.quebec/) (Quebec Artificial Intelligence Institute); supervised by [Guillaume Rabusseau](https://www-labs.iro.umontreal.ca/~grabus/) and [Guillaume Dumas](http://www.extrospection.eu/). I fast-tracked from master's to PhD. $^{\text{August 2022 – August 2023}}$ 
+I'm a 2nd year PhD Student in computer science at [Université de Montréal (UdeM)](https://www.umontreal.ca/) and [Mila](https://mila.quebec/) (Quebec Artificial Intelligence Institute); supervised by [Guillaume Rabusseau](https://www-labs.iro.umontreal.ca/~grabus/) and [Guillaume Dumas](http://www.extrospection.eu/). I fast-tracked from master's to PhD. $^{\text{August 2022 – August 2023}}$ 
 
 I am interested in understanding generalization and optimization in deep learning, both from dynamical systems and neuroscience perspectives. My main interest is understanding what causes the triplet (model, optimization, data properties) to generalize beyond the training set, the causal relationship between complexity measures, initialization, hyperparameters and generalization, the functional metrics (progression measures) that differentiate a neuronal network before and after learning.
 
