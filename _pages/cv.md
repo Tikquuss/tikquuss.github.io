@@ -7,7 +7,7 @@ redirect_from:
   - /resume
 ---
 
-I'm a 2nd year PhD Student in computer science at [Université de Montréal (UdeM)](https://www.umontreal.ca/) and [Mila](https://mila.quebec/) (Quebec Artificial Intelligence Institute); supervised by [Guillaume Rabusseau](https://www-labs.iro.umontreal.ca/~grabus/) and [Guillaume Dumas](http://www.extrospection.eu/). 
+I'm a 2nd year PhD Student in computer science at [Université de Montréal (UdeM)](https://www.umontreal.ca/) and [Mila](https://mila.quebec/) (Quebec Artificial Intelligence Institute); supervised by [Guillaume Rabusseau](https://www-labs.iro.umontreal.ca/~grabus/), [Irina Rish](https://sites.google.com/view/irinarish/) and [Guillaume Dumas](http://www.extrospection.eu/). 
 
 [comment]: <> I fast-tracked from master's to PhD. $^{\text{August 2022 – August 2023}}$ 
 
