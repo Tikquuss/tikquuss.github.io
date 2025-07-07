@@ -1,0 +1,84 @@
+I"|<p>Grokking refers to a delayed generalization following overfitting when optimizing artificial neural networks with gradient-based methods. We show that the dynamic of grokking goes beyond the $\ell_2$ norm, that is: If there exists a model with a property $P$ (e.g., sparse or low-rank weights) that fits the data, then GD with a small (explicit or implicit) regularization of $P$ (e.g., $\ell_1$ or nuclear norm regularization) will also result in grokking, provided the number of training samples is large enough. Moreover, the $\ell_2$ norm of the parameters is no longer guaranteed to decrease with generalization when it is not the property sought.</p>
+
+<p>Paper : Grokking Beyond the Euclidean Norm of Model Parameters, Pascal Jr. Tikeng Notsawo, Guillaume Dumas, Guillaume Rabusseau, Forty-Second International Conference on Machine Learning (ICML), 2025. https://arxiv.org/abs/2506.05718</p>
+
+<h1 id="what-is-grokking">What is Grokking?</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td>For a prime integer $p=97$, let consider $\mathcal{S} = \mathbb{Z}/p\mathbb{Z}$ endowed with modular addition, and let split the dataset $\mathcal{D} = { (\mathbf{x}, (x_1 + x_2)\%p \</td>
+      <td>\  \mathbf{x} = (x_1, x_2)  \in \mathcal{S}^2 }$ in two non empty and disjoint subsets  $\mathcal{D}<em>{\text{train}}$ and $\mathcal{D}</em>{\text{validation}}$ according to a ratio  $r_{\text{train}} :=</td>
+      <td>\mathcal{D}_{\text{train}}</td>
+      <td>/</td>
+      <td>\mathcal{D}</td>
+      <td>=40\%$.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Now, consider a multilayer perceptron (MLP) for which the logits are given by $\mathbf{y}<em>{\theta}(x_1, x_2) = \mathbf{b}^{(2)} + \mathbf{W}^{(2)} \phi\left(\mathbf{b}^{(1)} + \mathbf{W}^{(1)} \left( \mathbf{E}</em>{\langle x_1 \rangle} \circ \mathbf{E}_{\langle x_2 \rangle} \right) \right)$ where</p>
+<ul>
+  <li>$\phi(z) = \max(z, 0)$ is the ReLU activation function</li>
+  <li>$\langle x \rangle \in {0, …, p-1}$ stands for the index of the token corresponding to $x \in \mathcal{S}$</li>
+  <li>$\mathbf{E} \in \mathbb{R}^{p \times d_1}$ (embedding matrix for all the symbols in $\mathcal{S}$), $\mathbf{W}^{(1)} \in \mathbb{R}^{d_2 \times d_1}$, $\mathbf{b}^{(1)} \in \mathbb{R}^{d_2}$, $\mathbf{W}^{(2)} \in \mathbb{R}^{p \times d_2}$, and $\mathbf{b}^{(2)} \in \mathbb{R}^{p}$ are the learnable parameters : $\theta$.</li>
+</ul>
+
+<p>Let’s train this model using gradient descent with:</p>
+<ul>
+  <li>
+    <p>as objective $f(\theta) = g(\theta) + \beta h(\theta)$, where $h(\theta) = | \theta |<em>2^2$ and $g(\theta)$ is the average of the cross-entropy error on $\mathcal{D}</em>{\text{train}}$, 
+\(g(\theta) = \frac{1}{|\mathcal{D}_{\text{train}}|} \sum_{(\mathbf{x}, y) \in \mathcal{D}_{\text{train}}} \ell \left( \mathbf{y}_{\theta}(\mathbf{x}), y \right)\)
+\(\ell \left( \mathbf{y}, i \right)  = - \log \frac{ \exp\left( \mathbf{y}_i \right) }{ \sum_{j} \exp\left( \mathbf{y}_j \right)} \quad \forall \mathbf{y} \in \mathbb{R}^p,  \quad \forall i \in \{0, ..., p-1\}\)</p>
+  </li>
+  <li>
+    <p>as optimizer, Adam, with <em>learning rate</em> $\alpha=10^{-3}$ and a <em>regularization strength</em> $\beta = 10^{-6}$.</p>
+  </li>
+</ul>
+
+<p><img src="/images/posts/2025-07-06-grokking_beyong_l2/mlp_l2_alpha=0.001_beta=1e-6.pdf" alt="Grokking MLP modular addition" title="This is the title" /></p>
+
+<p>We can observe from the figure above that the training accuracy becomes perfect after $t_1 \approx 540$, while it takes $t_2 \approx 9150$ steps for the validation accuracy to achieve the same level. This is basically what we call grokking, i.e., a generalization (often sudden) after a long period of overfitting (usually severe). It was first studied by [4], who trained Transformers on binary operations on S (addition, division, etc.).</p>
+
+<p>Now that we agree on what grokking is, let’s see how we can explain it. We will provide two previous explanations related to ours, highlight their limitations, and offer a more general explanation of the phenomenon based on regularization.</p>
+
+<h1 id="why-grokking">Why Grokking?</h1>
+
+<h2 id="goldilocks-zone">Goldilocks zone</h2>
+
+<p><img src="/images/posts/2025-07-06-grokking_beyong_l2/LU.png" alt="LU Mechanism" title="LU Mechanism" /></p>
+
+<p>Why this work</p>
+<p float="left">
+ <img src="https://i.imgur.com/Uq0ryrp.png" width="350" />
+</p>
+<p>and this not?</p>
+<p float="left">
+  <img src="/images/posts/2025-07-06-grokking_beyong_l2/LU.png" width="350" />
+</p>
+
+<center>The linear interpolation curves for a decoder-only Transformer model train on modular addition, A = [-2, 2]. Left) at the minimizer, Right) When the model starts to converge. Image from me.</center>
+
+<h2 id="from-kernel-to-rich-regime">From kernel to rich regime</h2>
+
+<h1 id="todo">TODO</h1>
+
+\[\begin{equation*}
+\begin{split}
+y^*(x) &amp;= \arg\min_y \ p_x\mathbb{I}[y\ne 1] + (1-p_x)\mathbb{I}[y\ne 0]
+\\ &amp;= \mathbb{I}[p_x\ge 1-p_x]
+\\ &amp;= \mathbb{I}[p_x\ge 1/2]
+\end{split}
+\end{equation*}\]
+
+<h1 id="references">References</h1>
+
+<p>[1] Ziming Liu et al. “Omnigrok: Grokking Beyond Algorithmic Data”. In:
+The Eleventh International Conference on Learning Representations. 2023. url: https://openreview.net/forum?id=zDiHoIWa0q1.</p>
+
+<p>[2] Kaifeng Lyu et al. Dichotomy of Early and Late Phase Implicit Biases Can Provably Induce Grokking. 2024. arXiv: 2311.18817 [cs.LG]. url: https://arxiv.org/abs/2311.18817.</p>
+
+<p>[3] Pascal Jr Tikeng Notsawo et al. Grokking Beyond the Euclidean Norm of Model Parameters. 2025. arXiv: 2506.05718 [cs.LG]. url:https://arxiv.org/abs/2506.05718.</p>
+
+<p>[4] Alethea Power et al. “Grokking: Generalization beyond overfitting on small algorithmic datasets”. In: arXiv preprint arXiv:2201.02177 (2022).</p>
+:ET
