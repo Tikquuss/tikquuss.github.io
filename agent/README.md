@@ -167,10 +167,10 @@ https://tikquuss.github.io
 
 Build output is fully static and can be deployed to GitHub Pages.
 
-This folder includes a workflow template at:
+Deployment is handled by the repository-root workflow:
 
 ```text
-.github/workflows/deploy.yml
+../.github/workflows/deploy.yml
 ```
 
-GitHub Actions only runs workflows from the repository root. The legacy root was left untouched, so when you are ready to publish this new site, copy or move that workflow to the root `.github/workflows/` directory, or configure GitHub Pages to publish the generated `agent/dist` artifact through your preferred root-level workflow.
+That workflow installs dependencies in `agent/`, builds this Astro project, uploads `agent/dist`, and deploys it with GitHub Pages. In the GitHub repository settings, set Pages source to `GitHub Actions`.
