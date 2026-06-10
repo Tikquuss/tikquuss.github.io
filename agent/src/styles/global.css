@@ -395,6 +395,19 @@ main.wide {
   font-size: 0.88rem;
 }
 
+.site-note {
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--surface-soft) 68%, var(--surface));
+  color: var(--muted);
+  margin: 0 0 2.4rem;
+  padding: 0.9rem 1rem;
+  font-size: 0.94rem;
+}
+
+.site-note strong {
+  color: var(--ink);
+}
+
 .news-section {
   margin: 2.4rem 0 3rem;
 }

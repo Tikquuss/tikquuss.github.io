@@ -4,10 +4,10 @@ import NewsSection from '../components/NewsSection.astro';
 import { SITE, withBase } from '../lib/site';
 
 const news = [
+  { date: 'May 2026', text: 'Recognized as an <strong>ICML 2026 Gold Reviewer</strong> (top 25%) and awarded complimentary registration.' },
   { date: 'Apr 2026', text: 'New preprint: <a href="https://arxiv.org/abs/2604.01329">Model Merging via Data-Free Covariance Estimation</a>.' },
   { date: 'Feb 2026', text: `New paper: <a href="${withBase('/publications/grokking-finite-dimensional-algebra/')}">Grokking Finite-Dimensional Algebra</a> accepted at <strong>ICML 2026</strong>.` },
   { date: 'Jul 2025', text: '<em>Grokking Beyond the Euclidean Norm of Model Parameters</em> accepted at <strong>ICML 2025</strong>.' },
-  { date: 'Sep 2023', text: 'Invited talk at <strong>DL IndabaX Cameroon 2023</strong>.' },
   { date: 'Dec 2021', text: 'Poster at the <strong>Black in AI Workshop at NeurIPS 2021</strong>.' },
 ];
 ---
@@ -32,30 +32,50 @@ const news = [
 
     <div class="prose">
       <p>
-        I am a PhD student in Machine Learning Theory at
+        I am a third-year PhD candidate at
         <a href="https://mila.quebec" target="_blank" rel="noopener">Mila</a> and
-        <a href="https://www.umontreal.ca" target="_blank" rel="noopener">Université de Montréal</a>.
-        My work studies how learning systems move from memorization to structure: when they generalize,
-        why grokking happens, and which regularities optimization discovers along the way.
+        <a href="https://www.umontreal.ca" target="_blank" rel="noopener">Université de Montréal</a>,
+        working on machine learning theory and language models. My previous research focused on
+        generalization, optimization dynamics, and representation learning in neural networks, including
+        theoretical and empirical studies of grokking and implicit bias in deep learning.
       </p>
 
       <p>
-        I am especially interested in grokking, generalization, implicit and explicit regularization,
-        representation learning, model merging, AI safety and alignment, LLM unlearning, and the links
-        between machine learning, mathematics, physics, and neuroscience.
+        More recently, my research has shifted toward AI safety and alignment, with a focus on LLM
+        unlearning and model behavior. I am currently collaborating with Tommaso Tosato from
+        <a href="https://tararesearch.org/" target="_blank" rel="noopener">Tara Research</a>.
       </p>
 
       <p>
-        Before the PhD, I was a visiting student researcher at Université de Montréal and a research
-        intern at Mila. I also worked on language technology for African languages and on detecting and
-        mitigating discriminatory language in online text.
+        My work combines theoretical and experimental machine learning, especially around
+        generalization, optimization, representation learning, and language models. Before the PhD, I was
+        a visiting student researcher at Université de Montréal and a research intern at Mila. I also
+        worked on language technology for African languages and on detecting and mitigating
+        discriminatory language in online text.
+      </p>
+
+      <h2>Research Interests</h2>
+      <p>
+        My primary research interests are AI alignment, LLM unlearning, robustness, interpretability,
+        and model behavior evaluation.
+      </p>
+
+      <p>
+        More broadly, I am interested in connecting empirical alignment work with theoretical
+        understanding of learning dynamics and representation formation in neural networks.
+      </p>
+
+      <h2>Goals</h2>
+      <p>
+        I would like to better understand the current frontier of alignment research, learn from
+        researchers working on practical alignment problems, and build connections with people
+        interested in robust and trustworthy AI systems.
       </p>
 
       <h2>Background</h2>
       <ul>
         <li><strong>PhD, Machine Learning Theory</strong> - Université de Montréal and Mila.</li>
         <li><strong>Master of Engineering, Computer Science</strong> - National Advanced School of Engineering, Yaoundé.</li>
-        <li><strong>Scientific preparatory training</strong> - mathematics, physics, and computer science.</li>
       </ul>
 
       <h2>Research Taste</h2>
