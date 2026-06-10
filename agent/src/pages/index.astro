@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsSection from '../components/NewsSection.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import { getCollection } from 'astro:content';
+import { SITE, withBase } from '../lib/site';
+
+const publications = await getCollection('publications');
+const sortedPubs = publications
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
+
+const news = [
+  { date: 'Apr 2026', text: 'New preprint: <a href="https://arxiv.org/abs/2604.01329">Model Merging via Data-Free Covariance Estimation</a>.' },
+  { date: 'Feb 2026', text: `New paper: <a href="${withBase('/publications/grokking-finite-dimensional-algebra/')}">Grokking Finite-Dimensional Algebra</a>.` },
+  { date: 'Jul 2025', text: '<em>Grokking Beyond the Euclidean Norm</em> accepted at <strong>ICML 2025</strong>.' },
+  { date: 'Sep 2023', text: 'Invited talk at <strong>DL IndabaX Cameroon 2023</strong> on double descent and grokking.' },
+  { date: 'Jul 2023', text: 'Talk at the <strong>ICML 2023</strong> Workshop on Neural Scaling Laws.' },
+];
+---
+
+<BaseLayout
+  title="Home"
+  description="Pascal Jr. Tikeng Notsawo - PhD student in Machine Learning Theory at Mila and Université de Montréal."
+  wide={true}
+>
+  <section class="home-hero">
+    <div class="hero-photo-wrap">
+      <img class="hero-photo" src={withBase('/images/people/pascal.jpg')} alt="Pascal Jr. Tikeng Notsawo" />
+    </div>
+
+    <div class="hero-content">
+      <p class="eyebrow">Machine Learning Theory · Mila · Université de Montréal</p>
+      <h1 class="hero-tagline">I learn stuff.</h1>
+      <p class="hero-sub">
+        I am <strong>Pascal Jr. Tikeng Notsawo</strong>, a PhD student working on generalization,
+        grokking, optimization, representation learning, and the mathematical structure behind deep learning.
+      </p>
+
+      <div class="hero-links">
+        <a href={SITE.cvUrl} class="hero-link primary" target="_blank" rel="noopener">CV</a>
+        <a href={withBase('/publications')} class="hero-link secondary">Publications</a>
+        <a href={SITE.scholarUrl} class="hero-link secondary" target="_blank" rel="noopener">Google Scholar</a>
+        <a href={SITE.githubUrl} class="hero-link secondary" target="_blank" rel="noopener">GitHub</a>
+        <a href={withBase('/blog')} class="hero-link secondary">Blog</a>
+      </div>
+
+      <div class="research-interests">
+        <h2>Research Interests</h2>
+        <div class="interest-chips">
+          <span class="interest-chip">Machine Learning Theory</span>
+          <span class="interest-chip">Grokking</span>
+          <span class="interest-chip">Generalization</span>
+          <span class="interest-chip">Optimization</span>
+          <span class="interest-chip">Representation Learning</span>
+          <span class="interest-chip">AI Alignment</span>
+          <span class="interest-chip">LLM Unlearning</span>
+          <span class="interest-chip">Mathematics</span>
+          <span class="interest-chip">Physics</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NewsSection items={news} />
+
+  <section>
+    <div class="section-header">
+      <div class="section-label">Selected Publications</div>
+      <h2>Recent Work</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="stack">
+      {sortedPubs.map((pub) => (
+        <PublicationCard
+          href={withBase(`/publications/${pub.slug}`)}
+          title={pub.data.title}
+          authors={pub.data.authors}
+          venue={pub.data.venue}
+          date={pub.data.date}
+          tags={pub.data.tags}
+          image={pub.data.image}
+        />
+      ))}
+    </div>
+
+    <p class="section-link">
+      <a href={withBase('/publications')}>View all publications →</a>
+    </p>
+  </section>
+</BaseLayout>

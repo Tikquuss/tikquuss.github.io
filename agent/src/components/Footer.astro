@@ -1,0 +1,14 @@
+---
+import { SITE } from '../lib/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <p>
+    {SITE.name} - PhD Student, <a href="https://mila.quebec" target="_blank" rel="noopener">Mila</a> &amp; <a href="https://www.umontreal.ca" target="_blank" rel="noopener">Université de Montréal</a>
+  </p>
+  <p style="margin-top: 0.25rem; font-size: 0.8rem; opacity: 0.7;">
+    Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> · © {year}
+  </p>
+</footer>

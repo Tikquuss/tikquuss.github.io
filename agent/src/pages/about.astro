@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsSection from '../components/NewsSection.astro';
+import { SITE, withBase } from '../lib/site';
+
+const news = [
+  { date: 'Apr 2026', text: 'New preprint: <a href="https://arxiv.org/abs/2604.01329">Model Merging via Data-Free Covariance Estimation</a>.' },
+  { date: 'Feb 2026', text: `New paper: <a href="${withBase('/publications/grokking-finite-dimensional-algebra/')}">Grokking Finite-Dimensional Algebra</a>.` },
+  { date: 'Jul 2025', text: '<em>Grokking Beyond the Euclidean Norm of Model Parameters</em> accepted at <strong>ICML 2025</strong>.' },
+  { date: 'Sep 2023', text: 'Invited talk at <strong>DL IndabaX Cameroon 2023</strong>.' },
+  { date: 'Dec 2021', text: 'Poster at the <strong>Black in AI Workshop at NeurIPS 2021</strong>.' },
+];
+---
+
+<BaseLayout title="About" description="About Pascal Jr. Tikeng Notsawo.">
+  <div class="section-header">
+    <div class="section-label">About</div>
+    <h1>Pascal Jr. Tikeng Notsawo</h1>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="about-grid">
+    <aside class="profile-aside">
+      <img class="profile-photo" src={withBase('/images/people/pascal.jpg')} alt="Pascal Jr. Tikeng Notsawo" />
+      <div class="profile-links">
+        <a href={SITE.cvUrl} class="btn btn-primary" target="_blank" rel="noopener">CV</a>
+        <a href={SITE.scholarUrl} class="btn btn-secondary" target="_blank" rel="noopener">Scholar</a>
+        <a href={SITE.githubUrl} class="btn btn-secondary" target="_blank" rel="noopener">GitHub</a>
+        <a href={`mailto:${SITE.authorEmail}`} class="btn btn-secondary">Email</a>
+      </div>
+    </aside>
+
+    <div class="prose">
+      <p>
+        I am a PhD student in Machine Learning Theory at
+        <a href="https://mila.quebec" target="_blank" rel="noopener">Mila</a> and
+        <a href="https://www.umontreal.ca" target="_blank" rel="noopener">Université de Montréal</a>.
+        My work studies how learning systems move from memorization to structure: when they generalize,
+        why grokking happens, and which regularities optimization discovers along the way.
+      </p>
+
+      <p>
+        I am especially interested in grokking, generalization, implicit and explicit regularization,
+        representation learning, model merging, AI safety and alignment, LLM unlearning, and the links
+        between machine learning, mathematics, physics, and neuroscience.
+      </p>
+
+      <p>
+        Before the PhD, I was a visiting student researcher at Université de Montréal and a research
+        intern at Mila. I also worked on language technology for African languages and on detecting and
+        mitigating discriminatory language in online text.
+      </p>
+
+      <h2>Background</h2>
+      <ul>
+        <li><strong>PhD, Machine Learning Theory</strong> - Université de Montréal and Mila.</li>
+        <li><strong>Master of Engineering, Computer Science</strong> - National Advanced School of Engineering, Yaoundé.</li>
+        <li><strong>Scientific preparatory training</strong> - mathematics, physics, and computer science.</li>
+      </ul>
+
+      <h2>Research Taste</h2>
+      <p>
+        I like questions where a simple experiment hides a mathematical mechanism. Grokking is a good
+        example: the empirical curve looks almost theatrical, but the deeper question is about data,
+        optimization, representation, and the geometry of the solution set.
+      </p>
+
+      <p>
+        The site is meant to collect papers, notes, tutorials, talks, and small interactive demos as the
+        work evolves.
+      </p>
+
+      <NewsSection items={news} />
+    </div>
+  </div>
+</BaseLayout>

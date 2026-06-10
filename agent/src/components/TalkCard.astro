@@ -1,0 +1,25 @@
+---
+import { formatMonthYear, resolveUrl } from '../lib/site';
+
+interface Props {
+  href: string;
+  title: string;
+  type: string;
+  venue: string;
+  date: string;
+  location?: string;
+  image?: string;
+}
+
+const { href, title, type, venue, date, location, image } = Astro.props;
+---
+
+<a href={href} class="talk-card">
+  {image && <img src={resolveUrl(image)} alt="" loading="lazy" />}
+  <div>
+    <span class="talk-type-badge">{type}</span>
+    <div class="talk-title">{title}</div>
+    <div class="talk-venue">{venue}</div>
+    <div class="talk-location">{formatMonthYear(date)}{location ? ` · ${location}` : ''}</div>
+  </div>
+</a>

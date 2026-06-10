@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../lib/site';
+
+const tutorials = await getCollection('tutorials');
+const sortedTutorials = tutorials.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const teaching = await getCollection('teaching');
+const sortedTeaching = teaching.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const teachingAreas = [
+  {
+    title: 'Machine Learning Theory',
+    text: 'Generalization, optimization, implicit bias, grokking, and statistical learning foundations.',
+  },
+  {
+    title: 'Mathematical Tools',
+    text: 'Probability, linear algebra, stochastic processes, sampling, and dynamical systems viewpoints.',
+  },
+  {
+    title: 'Deep Learning Practice',
+    text: 'Representation learning, language models, embeddings, vector quantization, and research code habits.',
+  },
+];
+---
+
+<BaseLayout title="Teaching" description="Teaching notes and tutorial material by Pascal Jr. Tikeng Notsawo.">
+  <div class="section-header">
+    <div class="section-label">Teaching</div>
+    <h1>Teaching</h1>
+    <div class="section-divider"></div>
+    <p>Tutorials, reading notes, and course-style material.</p>
+  </div>
+
+  <section class="teaching-bands" aria-label="Teaching areas">
+    {teachingAreas.map((area) => (
+      <article class="teaching-band">
+        <h2>{area.title}</h2>
+        <p>{area.text}</p>
+      </article>
+    ))}
+  </section>
+
+  <section>
+    <div class="section-header compact">
+      <div class="section-label">Past Teaching</div>
+      <h2>Mentoring &amp; Tutoring</h2>
+    </div>
+
+    <div class="stack">
+      {sortedTeaching.map((item) => (
+        <article class="teaching-record">
+          <div>
+            <span class="talk-type-badge">{item.data.type}</span>
+            <h3>{item.data.title}</h3>
+            <p>{item.data.summary}</p>
+          </div>
+          <div class="teaching-meta">
+            <span>{item.data.venue}</span>
+            <span>{new Date(item.data.date).getFullYear()}</span>
+            {item.data.location && <span>{item.data.location}</span>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section>
+    <div class="section-header compact">
+      <div class="section-label">Tutorial Repository</div>
+      <h2>Current Notes</h2>
+    </div>
+
+    <div class="stack">
+      {sortedTutorials.map((tutorial) => (
+        <PostCard
+          href={withBase(`/tutorials/${tutorial.slug}`)}
+          title={tutorial.data.title}
+          date={tutorial.data.date}
+          excerpt={tutorial.data.excerpt}
+          tags={tutorial.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

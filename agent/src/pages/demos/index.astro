@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../lib/site';
+
+const demos = [
+  {
+    title: 'Modular Addition Structure',
+    status: 'Live',
+    href: withBase('/demos/modular-addition'),
+    text: 'A small visual playground for modular arithmetic, train/test splits, and delayed generalization.',
+  },
+  {
+    title: 'Representation Learning Visualizer',
+    status: 'Sketch',
+    href: '',
+    text: 'A planned embedding geometry demo for inspecting how clusters and linear probes evolve.',
+  },
+  {
+    title: 'Optimization Dynamics Playground',
+    status: 'Sketch',
+    href: '',
+    text: 'A planned phase-portrait demo for comparing gradient descent, momentum, and regularization.',
+  },
+];
+---
+
+<BaseLayout title="Demos" description="Interactive research demos by Pascal Jr. Tikeng Notsawo." wide={true}>
+  <div class="section-header">
+    <div class="section-label">Interactive Research</div>
+    <h1>Demos</h1>
+    <div class="section-divider"></div>
+    <p>Small frontend experiments for papers, tutorials, and talks.</p>
+  </div>
+
+  <div class="demo-grid">
+    {demos.map((demo) => (
+      demo.href ? (
+        <a class="demo-card live" href={demo.href}>
+          <span class="demo-status">{demo.status}</span>
+          <h2>{demo.title}</h2>
+          <p>{demo.text}</p>
+        </a>
+      ) : (
+        <article class="demo-card">
+          <span class="demo-status muted">{demo.status}</span>
+          <h2>{demo.title}</h2>
+          <p>{demo.text}</p>
+        </article>
+      )
+    ))}
+  </div>
+</BaseLayout>

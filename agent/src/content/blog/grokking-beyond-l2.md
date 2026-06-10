@@ -1,0 +1,23 @@
+---
+title: "Grokking Beyond the Euclidean Norm of Model Parameters"
+date: "2025-07-06"
+category: "Research Notes"
+image: "/images/publications/grokking-beyond-l2.png"
+tags:
+  - Deep Learning
+  - Grokking
+  - Delayed Generalization
+  - Regularization
+  - Sparsity
+  - Low-Rank
+  - Overparameterization
+  - Gradient Descent
+  - Implicit Regularization
+excerpt: "Grokking refers to a delayed generalization following overfitting when optimizing artificial neural networks with gradient-based methods."
+---
+
+Grokking refers to a delayed generalization following overfitting when optimizing artificial neural networks with gradient-based methods. We show that the dynamic of grokking goes beyond the $\ell_2$ norm, that is: If there exists a model with a property $P$ (e.g., sparse or low-rank weights) that fits the data, then GD with a small (explicit or implicit) regularization of $P$ (e.g., $\ell_1$ or nuclear norm regularization) will also result in grokking, provided the number of training samples is large enough. Moreover, the $\ell_2$ norm of the parameters is no longer guaranteed to decrease with generalization when it is not the property sought.
+
+Paper : Grokking Beyond the Euclidean Norm of Model Parameters, Pascal Jr. Tikeng Notsawo, Guillaume Dumas, Guillaume Rabusseau, Forty-Second International Conference on Machine Learning (ICML), 2025. [https://arxiv.org/abs/2506.05718](https://arxiv.org/abs/2506.05718)
+
+Blog post : [https://hackmd.io/@6LQ4mvRtS4Sc3LHkNEvDXQ/BytCby2Ugl](https://hackmd.io/@6LQ4mvRtS4Sc3LHkNEvDXQ/BytCby2Ugl)

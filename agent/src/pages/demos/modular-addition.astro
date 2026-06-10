@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../lib/site';
+---
+
+<BaseLayout title="Modular Addition Structure" description="Interactive modular addition visualization." wide={true}>
+  <a href={withBase('/demos')} class="back-link">← Demos</a>
+
+  <section class="demo-workbench">
+    <header class="demo-header">
+      <div>
+        <div class="section-label">Interactive Demo</div>
+        <h1>Modular Addition Structure</h1>
+      </div>
+      <p>
+        Explore the table $(a + b) \bmod p$ while a toy prediction field moves from memorized training
+        cells toward the global modular rule.
+      </p>
+    </header>
+
+    <div class="demo-surface">
+      <div class="demo-canvas-wrap">
+        <canvas id="modular-canvas" width="720" height="720" aria-label="Modular addition heatmap"></canvas>
+      </div>
+
+      <form class="demo-controls" id="modular-controls">
+        <label>
+          <span>Modulus <strong id="modulus-value">17</strong></span>
+          <input id="modulus" type="range" min="5" max="31" step="2" value="17" />
+        </label>
+
+        <label>
+          <span>Training coverage <strong id="coverage-value">35%</strong></span>
+          <input id="coverage" type="range" min="10" max="90" step="5" value="35" />
+        </label>
+
+        <label>
+          <span>Training time <strong id="time-value">42%</strong></span>
+          <input id="time" type="range" min="0" max="100" step="1" value="42" />
+        </label>
+
+        <div class="demo-actions">
+          <button type="button" id="play">Play</button>
+          <button type="button" id="reset">Reset split</button>
+        </div>
+
+        <dl class="demo-stats">
+          <div>
+            <dt>Train accuracy</dt>
+            <dd id="train-acc">100%</dd>
+          </div>
+          <div>
+            <dt>Test accuracy</dt>
+            <dd id="test-acc">12%</dd>
+          </div>
+          <div>
+            <dt>Visible rule strength</dt>
+            <dd id="rule-strength">0.18</dd>
+          </div>
+        </dl>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    const canvas = document.getElementById('modular-canvas');
+    const ctx = canvas.getContext('2d');
+    const modulusInput = document.getElementById('modulus');
+    const coverageInput = document.getElementById('coverage');
+    const timeInput = document.getElementById('time');
+    const modulusValue = document.getElementById('modulus-value');
+    const coverageValue = document.getElementById('coverage-value');
+    const timeValue = document.getElementById('time-value');
+    const trainAcc = document.getElementById('train-acc');
+    const testAcc = document.getElementById('test-acc');
+    const ruleStrength = document.getElementById('rule-strength');
+    const playButton = document.getElementById('play');
+    const resetButton = document.getElementById('reset');
+
+    let seed = 11;
+    let raf = 0;
+    let playing = false;
+
+    function hash(a, b, p) {
+      let x = (a + 1) * 73856093 ^ (b + 1) * 19349663 ^ p * 83492791 ^ seed * 2654435761;
+      x = Math.imul(x ^ (x >>> 16), 2246822507);
+      x = Math.imul(x ^ (x >>> 13), 3266489909);
+      return ((x ^ (x >>> 16)) >>> 0) / 4294967295;
+    }
+
+    function colorFor(value, p, alpha = 1) {
+      const hue = (value / p) * 300 + 20;
+      return `hsla(${hue}, 68%, 48%, ${alpha})`;
+    }
+
+    function sigmoid(x) {
+      return 1 / (1 + Math.exp(-x));
+    }
+
+    function render() {
+      const p = Number(modulusInput.value);
+      const coverage = Number(coverageInput.value) / 100;
+      const time = Number(timeInput.value) / 100;
+      const dpr = window.devicePixelRatio || 1;
+      const cssSize = Math.min(canvas.parentElement.clientWidth, 720);
+      canvas.style.width = `${cssSize}px`;
+      canvas.style.height = `${cssSize}px`;
+      canvas.width = Math.floor(cssSize * dpr);
+      canvas.height = Math.floor(cssSize * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const size = cssSize;
+      const pad = 28;
+      const gridSize = size - pad * 2;
+      const cell = gridSize / p;
+      const strength = sigmoid((time - 0.58) * 15);
+      let trainCount = 0;
+      let testCount = 0;
+      let testCorrect = 0;
+
+      ctx.clearRect(0, 0, size, size);
+      ctx.fillStyle = '#f7f8f5';
+      ctx.fillRect(0, 0, size, size);
+
+      for (let a = 0; a < p; a += 1) {
+        for (let b = 0; b < p; b += 1) {
+          const target = (a + b) % p;
+          const isTrain = hash(a, b, p) < coverage;
+          const noise = Math.floor(hash(b, a, p) * p);
+          const predicted = isTrain || hash(a + 3, b + 7, p) < strength ? target : noise;
+
+          if (isTrain) {
+            trainCount += 1;
+          } else {
+            testCount += 1;
+            if (predicted === target) testCorrect += 1;
+          }
+
+          ctx.fillStyle = colorFor(predicted, p, isTrain ? 0.95 : 0.25 + strength * 0.7);
+          ctx.fillRect(pad + a * cell, pad + b * cell, Math.ceil(cell), Math.ceil(cell));
+
+          if (isTrain) {
+            ctx.strokeStyle = 'rgba(20, 26, 24, 0.42)';
+            ctx.lineWidth = Math.max(1, cell * 0.045);
+            ctx.strokeRect(pad + a * cell + 0.5, pad + b * cell + 0.5, Math.max(1, cell - 1), Math.max(1, cell - 1));
+          }
+        }
+      }
+
+      ctx.strokeStyle = '#16211d';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(pad, pad, gridSize, gridSize);
+
+      ctx.fillStyle = '#26312d';
+      ctx.font = '12px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      for (let i = 0; i < p; i += Math.max(1, Math.floor(p / 8))) {
+        const pos = pad + i * cell + cell / 2;
+        ctx.fillText(String(i), pos, pad - 9);
+        ctx.fillText(String(i), pad - 12, pos + 4);
+      }
+
+      modulusValue.textContent = String(p);
+      coverageValue.textContent = `${Math.round(coverage * 100)}%`;
+      timeValue.textContent = `${Math.round(time * 100)}%`;
+      trainAcc.textContent = trainCount > 0 ? '100%' : '0%';
+      testAcc.textContent = `${Math.round((testCorrect / Math.max(1, testCount)) * 100)}%`;
+      ruleStrength.textContent = strength.toFixed(2);
+    }
+
+    function tick() {
+      const value = Number(timeInput.value);
+      timeInput.value = String(value >= 100 ? 0 : value + 1);
+      render();
+      if (playing) raf = requestAnimationFrame(tick);
+    }
+
+    [modulusInput, coverageInput, timeInput].forEach((input) => input.addEventListener('input', render));
+
+    playButton.addEventListener('click', () => {
+      playing = !playing;
+      playButton.textContent = playing ? 'Pause' : 'Play';
+      if (playing) tick();
+      else cancelAnimationFrame(raf);
+    });
+
+    resetButton.addEventListener('click', () => {
+      seed += 1;
+      render();
+    });
+
+    window.addEventListener('resize', render);
+    render();
+  </script>
+</BaseLayout>

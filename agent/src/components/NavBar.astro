@@ -1,0 +1,48 @@
+---
+import { withBase } from '../lib/site';
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string) {
+  if (href === withBase('/')) return currentPath === withBase('/');
+  return currentPath.startsWith(href);
+}
+
+const links = [
+  { href: withBase('/'), label: 'Home' },
+  { href: withBase('/about'), label: 'About' },
+  { href: withBase('/publications'), label: 'Publications' },
+  { href: withBase('/blog'), label: 'Blog' },
+  { href: withBase('/tutorials'), label: 'Tutorials' },
+  { href: withBase('/teaching'), label: 'Teaching' },
+  { href: withBase('/talks'), label: 'Talks' },
+  { href: withBase('/demos'), label: 'Demos' },
+];
+---
+
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href={withBase('/')} class="nav-logo">
+      <span class="initials">PT</span>
+      Pascal Tikeng
+    </a>
+
+    <ul class="nav-links" role="list">
+      {links.map(link => (
+        <li>
+          <a href={link.href} class={isActive(link.href) ? 'active' : ''}>
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>

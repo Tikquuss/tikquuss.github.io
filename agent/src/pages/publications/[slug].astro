@@ -1,0 +1,35 @@
+---
+import PubDetailLayout from '../../layouts/PubDetailLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const publications = await getCollection('publications');
+  return publications.map(pub => ({
+    params: { slug: pub.slug },
+    props: { pub },
+  }));
+}
+
+const { pub } = Astro.props;
+const { Content } = await pub.render();
+---
+
+<PubDetailLayout
+  title={pub.data.title}
+  authors={pub.data.authors}
+  venue={pub.data.venue}
+  date={pub.data.date}
+  paperUrl={pub.data.paperUrl}
+  codeUrl={pub.data.codeUrl}
+  projectUrl={pub.data.projectUrl}
+  tags={pub.data.tags}
+>
+  {pub.data.abstract && (
+    <div style="background: var(--accent-soft); border-left: 4px solid var(--accent); padding: 1rem 1.25rem; border-radius: 0 var(--radius) var(--radius) 0; margin-bottom: 2rem;">
+      <strong style="font-family: var(--font-sans); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent);">Abstract</strong>
+      <p style="margin: 0.5rem 0 0; color: var(--text-muted); font-family: var(--font-serif); font-size: 0.95rem;">{pub.data.abstract}</p>
+    </div>
+  )}
+
+  <Content />
+</PubDetailLayout>

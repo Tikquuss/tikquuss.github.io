@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatMonthYear, resolveUrl, withBase } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const talks = await getCollection('talks');
+  return talks.map(talk => ({
+    params: { slug: talk.slug },
+    props: { talk },
+  }));
+}
+
+const { talk } = Astro.props;
+const { Content } = await talk.render();
+
+const date = formatMonthYear(talk.data.date);
+---
+
+<BaseLayout title={talk.data.title}>
+  <a href={withBase('/talks')} class="back-link">← Talks</a>
+
+  <article>
+    <header class="post-header">
+      <span class="talk-type-badge" style="margin-bottom: 0.75rem; display: inline-block;">{talk.data.type}</span>
+      <h1>{talk.data.title}</h1>
+      <div class="post-meta">
+        <span>{talk.data.venue}</span>
+        <span>{date}{talk.data.location ? ` · ${talk.data.location}` : ''}</span>
+      </div>
+
+      {(talk.data.slidesUrl || talk.data.videoUrl) && (
+        <div class="pub-action-links" style="margin-top: 1rem;">
+          {talk.data.slidesUrl && (
+            <a href={resolveUrl(talk.data.slidesUrl)} class="btn btn-primary" target="_blank" rel="noopener">
+              Slides
+            </a>
+          )}
+          {talk.data.videoUrl && (
+            <a href={resolveUrl(talk.data.videoUrl)} class="btn btn-secondary" target="_blank" rel="noopener">
+              Video
+            </a>
+          )}
+        </div>
+      )}
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

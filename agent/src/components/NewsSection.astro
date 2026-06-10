@@ -1,0 +1,24 @@
+---
+interface NewsItem {
+  date: string;
+  text: string;
+}
+
+interface Props {
+  items: NewsItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="news-section">
+  <h2>News</h2>
+  <ul class="news-list">
+    {items.map((item) => (
+      <li class="news-item">
+        <span class="news-date">{item.date}</span>
+        <span class="news-text" set:html={item.text} />
+      </li>
+    ))}
+  </ul>
+</section>

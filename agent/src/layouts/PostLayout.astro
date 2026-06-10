@@ -1,0 +1,44 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Giscus from '../components/Giscus.astro';
+import { formatDate } from '../lib/site';
+
+interface Props {
+  title: string;
+  date: string;
+  tags?: string[];
+  backHref: string;
+  backLabel: string;
+  description?: string;
+}
+
+const { title, date, tags = [], backHref, backLabel, description } = Astro.props;
+
+const formattedDate = formatDate(date);
+---
+
+<BaseLayout title={title} description={description ?? title}>
+  <a href={backHref} class="back-link">← {backLabel}</a>
+
+  <article>
+    <header class="post-header">
+      <h1>{title}</h1>
+      <div class="post-meta">
+        <span>{formattedDate}</span>
+        {tags.length > 0 && (
+          <div class="tags">
+            {tags.map(tag => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    <Giscus />
+  </article>
+</BaseLayout>

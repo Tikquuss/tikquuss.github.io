@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/site';
+
+const tutorials = await getCollection('tutorials');
+const sorted = tutorials.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<BaseLayout title="Tutorials" description="Tutorials by Pascal Jr. Tikeng Notsawo.">
+  <div class="section-header">
+    <div class="section-label">Teaching</div>
+    <h1>Tutorials</h1>
+    <div class="section-divider"></div>
+    <p>Long-form notes on theory, probability, optimization, language, and deep learning.</p>
+  </div>
+
+  <div class="stack">
+    {sorted.map((tutorial) => (
+      <PostCard
+        href={withBase(`/tutorials/${tutorial.slug}`)}
+        title={tutorial.data.title}
+        date={tutorial.data.date}
+        excerpt={tutorial.data.excerpt}
+        tags={tutorial.data.tags}
+      />
+    ))}
+  </div>
+</BaseLayout>

@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TalkCard from '../../components/TalkCard.astro';
+import { getCollection } from 'astro:content';
+import { withBase } from '../../lib/site';
+
+const talks = await getCollection('talks');
+const sorted = talks.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<BaseLayout title="Talks" description="Talks, posters, and presentations by Pascal Jr. Tikeng Notsawo.">
+  <div class="section-header">
+    <div class="section-label">Presentations</div>
+    <h1>Talks &amp; Posters</h1>
+    <div class="section-divider"></div>
+    <p>Conference talks, workshop presentations, posters, and invited lectures.</p>
+  </div>
+
+  <div class="stack">
+    {sorted.map((talk) => (
+      <TalkCard
+        href={withBase(`/talks/${talk.slug}`)}
+        title={talk.data.title}
+        type={talk.data.type}
+        venue={talk.data.venue}
+        date={talk.data.date}
+        location={talk.data.location}
+        image={talk.data.image}
+      />
+    ))}
+  </div>
+</BaseLayout>

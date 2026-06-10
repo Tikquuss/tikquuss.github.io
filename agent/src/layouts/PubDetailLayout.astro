@@ -1,0 +1,62 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Giscus from '../components/Giscus.astro';
+import { withBase } from '../lib/site';
+
+interface Props {
+  title: string;
+  authors: string;
+  venue: string;
+  date: string;
+  paperUrl?: string;
+  codeUrl?: string;
+  projectUrl?: string;
+  tags?: string[];
+}
+
+const { title, authors, venue, date, paperUrl, codeUrl, projectUrl, tags = [] } = Astro.props;
+
+const year = new Date(date).getFullYear();
+---
+
+<BaseLayout title={title}>
+  <a href={withBase('/publications')} class="back-link">← Publications</a>
+
+  <article>
+    <header class="pub-detail-header">
+      <span class="pub-detail-venue">{venue} · {year}</span>
+      <h1 style="margin-bottom: 0.75rem;">{title}</h1>
+      <p class="pub-detail-authors">{authors}</p>
+
+      {tags.length > 0 && (
+        <div class="tags">
+          {tags.map(tag => <span class="tag">{tag}</span>)}
+        </div>
+      )}
+
+      <div class="pub-action-links">
+        {paperUrl && (
+          <a href={paperUrl} class="btn btn-primary" target="_blank" rel="noopener">
+            Paper
+          </a>
+        )}
+        {codeUrl && (
+          <a href={codeUrl} class="btn btn-secondary" target="_blank" rel="noopener">
+            Code
+          </a>
+        )}
+        {projectUrl && (
+          <a href={projectUrl} class="btn btn-secondary" target="_blank" rel="noopener">
+            Project page
+          </a>
+        )}
+      </div>
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    <Giscus />
+  </article>
+</BaseLayout>

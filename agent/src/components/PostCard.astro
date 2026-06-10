@@ -1,0 +1,26 @@
+---
+import { formatDate } from '../lib/site';
+
+interface Props {
+  href: string;
+  title: string;
+  date: string;
+  excerpt?: string;
+  tags?: string[];
+}
+
+const { href, title, date, excerpt, tags = [] } = Astro.props;
+---
+
+<a href={href} class="post-card">
+  <div class="post-card-date">{formatDate(date)}</div>
+  <div class="post-card-title">{title}</div>
+  {excerpt && <div class="post-card-excerpt">{excerpt}</div>}
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.map((tag) => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+  )}
+</a>

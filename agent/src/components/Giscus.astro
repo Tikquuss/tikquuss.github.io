@@ -1,0 +1,34 @@
+---
+import { SITE } from '../lib/site';
+
+const repo = import.meta.env.PUBLIC_GISCUS_REPO || SITE.repo;
+const repoId = import.meta.env.PUBLIC_GISCUS_REPO_ID || SITE.repoId;
+const category = import.meta.env.PUBLIC_GISCUS_CATEGORY;
+const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID;
+const enabled =
+  import.meta.env.PUBLIC_GISCUS_ENABLED === 'true' ||
+  Boolean(repo && repoId && category && categoryId);
+---
+
+{enabled && repo && repoId && category && categoryId && (
+  <section class="comments-section" aria-label="Discussion">
+    <h2>Discussion</h2>
+    <script
+      is:inline
+      src="https://giscus.app/client.js"
+      data-repo={repo}
+      data-repo-id={repoId}
+      data-category={category}
+      data-category-id={categoryId}
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="en"
+      crossorigin="anonymous"
+      async
+    ></script>
+  </section>
+)}
