@@ -7,7 +7,7 @@ export const SITE = {
   url: 'https://tikquuss.github.io',
   repo: 'Tikquuss/tikquuss.github.io',
   repoId: 'R_kgDOG2kYVg',
-  authorEmail: 'pascal.tikeng.notsawo@mila.quebec',
+  authorEmail: 'pascalnotsawo [at] gmail [dot] com',
   cvUrl: 'https://drive.google.com/file/d/1nyCLwQo6L4_XYxhiFiNOIEhPNYZtPAbO/view?usp=sharing',
   scholarUrl: 'https://scholar.google.com/citations?user=vUerGI8AAAAJ&hl=en',
   githubUrl: 'https://github.com/Tikquuss',
