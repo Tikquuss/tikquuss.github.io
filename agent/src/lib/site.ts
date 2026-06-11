@@ -11,6 +11,7 @@ export const SITE = {
   cvUrl: 'https://drive.google.com/file/d/1nyCLwQo6L4_XYxhiFiNOIEhPNYZtPAbO/view?usp=sharing',
   scholarUrl: 'https://scholar.google.com/citations?user=vUerGI8AAAAJ&hl=en',
   githubUrl: 'https://github.com/Tikquuss',
+  linkedinUrl: 'https://www.linkedin.com/in/tikeng/',
   twitterUrl: 'https://twitter.com/tikquuss',
 };
 
