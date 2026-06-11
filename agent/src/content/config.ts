@@ -61,6 +61,7 @@ const teaching = defineCollection({
     type: z.string(),
     venue: z.string(),
     date: z.string(),
+    period: z.string().optional(),
     location: z.string().optional(),
     summary: z.string().optional(),
     tags: z.array(z.string()).default([]),

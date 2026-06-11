@@ -14,7 +14,7 @@ const news = [
   { date: 'May 2026', text: 'Recognized as an <strong>ICML 2026 Gold Reviewer</strong> (top 25%) and awarded complimentary registration.' },
   { date: 'Apr 2026', text: 'New preprint: <a href="https://arxiv.org/abs/2604.01329">Model Merging via Data-Free Covariance Estimation</a>.' },
   { date: 'Feb 2026', text: `New paper: <a href="${withBase('/publications/grokking-finite-dimensional-algebra/')}">Grokking Finite-Dimensional Algebra</a> accepted at <strong>ICML 2026</strong>.` },
-  { date: 'Jul 2025', text: '<em>Grokking Beyond the Euclidean Norm</em> accepted at <strong>ICML 2025</strong>.' },
+  { date: 'Jul 2025', text: `<a href="${withBase('/publications/grokking-beyond-l2/')}">Grokking Beyond the Euclidean Norm</a> accepted at <strong>ICML 2025</strong>.` },
 ];
 ---
 
@@ -29,12 +29,8 @@ const news = [
     </div>
 
     <div class="hero-content">
-      <p class="eyebrow">Machine Learning Theory · Mila · Université de Montréal</p>
+      <p class="eyebrow">Optimization · Machine Learning · Machine Unlearning</p>
       <h1 class="hero-tagline">I learn stuff.</h1>
-      <p class="hero-sub">
-        I am <strong>Pascal Jr. Tikeng Notsawo</strong>, a PhD student working on generalization,
-        grokking, optimization, representation learning, and the mathematical structure behind deep learning.
-      </p>
 
       <div class="hero-links">
         <a href={SITE.cvUrl} class="hero-link primary" target="_blank" rel="noopener">CV</a>
@@ -47,27 +43,34 @@ const news = [
       <div class="research-interests">
         <h2>Research Interests</h2>
         <div class="interest-chips">
-          <span class="interest-chip">Machine Learning Theory</span>
-          <span class="interest-chip">Grokking</span>
-          <span class="interest-chip">Generalization</span>
           <span class="interest-chip">Optimization</span>
-          <span class="interest-chip">Representation Learning</span>
+          <span class="interest-chip">Generalization</span>
+          <span class="interest-chip">Deep Learning Theory</span>
+          <span class="interest-chip">Grokking</span>
           <span class="interest-chip">AI Alignment</span>
           <span class="interest-chip">LLM Unlearning</span>
-          <span class="interest-chip">Mathematics</span>
-          <span class="interest-chip">Physics</span>
         </div>
       </div>
     </div>
   </section>
+
+  <NewsSection items={news} />
+
+  <aside class="math-note" aria-label="Mathematical aside">
+    If I were a mathematician like
+    <a href="https://darsakthi.github.io/" target="_blank" rel="noopener">Dalton A. R. Sakthivadivel</a>,
+    I would have written:
+    <span class="math-quote">
+      "Enter this website if and only if your personal model of mathematics is consistent with
+      <a href="https://fardila.com/" target="_blank" rel="noopener">Ardila's axioms</a>."
+    </span>
+  </aside>
 
   <aside class="site-note" aria-label="Site note">
     <strong>Site note.</strong> This website is still being rebuilt. I am moving from an older
     Jekyll setup that became a bit painful to maintain, so some pages, links, and formatting are
     still being cleaned up as I migrate everything into this new version.
   </aside>
-
-  <NewsSection items={news} />
 
   <section>
     <div class="section-header">

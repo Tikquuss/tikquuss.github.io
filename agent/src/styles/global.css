@@ -346,12 +346,6 @@ main.wide {
   margin: 0 0 0.8rem;
 }
 
-.hero-sub {
-  color: var(--muted);
-  font-size: 1.08rem;
-  max-width: 760px;
-}
-
 .hero-links,
 .profile-links,
 .pub-action-links,
@@ -393,6 +387,18 @@ main.wide {
   color: var(--muted);
   padding: 0.28rem 0.6rem;
   font-size: 0.88rem;
+}
+
+.math-note {
+  color: var(--muted);
+  margin: 0 0 1rem;
+  font-size: 0.94rem;
+}
+
+.math-quote {
+  display: block;
+  color: var(--ink);
+  font-family: var(--font-serif);
 }
 
 .site-note {

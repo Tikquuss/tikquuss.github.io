@@ -8,8 +8,8 @@ export const SITE = {
   repo: 'Tikquuss/tikquuss.github.io',
   repoId: 'R_kgDOG2kYVg',
   authorEmail: 'pascal.tikeng.notsawo@mila.quebec',
-  cvUrl: 'https://drive.google.com/file/d/12JKD9rXqWgb5lvdUH_phhRjg37r4Vnf9/view?usp=sharing',
-  scholarUrl: 'https://scholar.google.com/citations?user=8b2sHt4AAAAJ',
+  cvUrl: 'https://drive.google.com/file/d/1nyCLwQo6L4_XYxhiFiNOIEhPNYZtPAbO/view?usp=sharing',
+  scholarUrl: 'https://scholar.google.com/citations?user=vUerGI8AAAAJ&hl=en',
   githubUrl: 'https://github.com/Tikquuss',
   twitterUrl: 'https://twitter.com/tikquuss',
 };

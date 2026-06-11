@@ -63,7 +63,7 @@ const teachingAreas = [
           </div>
           <div class="teaching-meta">
             <span>{item.data.venue}</span>
-            <span>{new Date(item.data.date).getFullYear()}</span>
+            <span>{item.data.period ?? new Date(item.data.date).getFullYear()}</span>
             {item.data.location && <span>{item.data.location}</span>}
           </div>
         </article>
