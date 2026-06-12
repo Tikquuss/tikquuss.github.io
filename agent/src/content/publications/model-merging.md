@@ -4,7 +4,7 @@ authors: "Marawan Gamal Abdel Hameed, Derek Tam, Pascal Jr Tikeng Notsawo, Colin
 venue: "Preprint"
 date: "2026-04-01"
 paperUrl: "https://arxiv.org/abs/2604.01329"
-image: "/images/publications/intrinsic-dim.png"
+image: "/images/publications/actmat/actmat.png"
 tags: ["Model Merging", "Covariance Estimation", "Transfer Learning"]
 abstract: "Model merging provides a way of cheaply combining individual models to produce a model that inherits each individual's capabilities."
 ---
