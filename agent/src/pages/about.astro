@@ -4,9 +4,9 @@ import NewsSection from '../components/NewsSection.astro';
 import { SITE, withBase } from '../lib/site';
 
 const news = [
+  { date: 'May 2026', text: 'New preprint: <a href="https://arxiv.org/abs/2604.01329">Model Merging via Data-Free Covariance Estimation</a> accepted as <strong>Oral</strong> at the <strong>CATS Workshop, ICML 2026</strong>.' },
   { date: 'May 2026', text: 'Recognized as an <strong>ICML 2026 Gold Reviewer</strong> (top 25%) and awarded complimentary registration.' },
-  { date: 'Apr 2026', text: 'New preprint: <a href="https://arxiv.org/abs/2604.01329">Model Merging via Data-Free Covariance Estimation</a>.' },
-  { date: 'Feb 2026', text: `New paper: <a href="${withBase('/publications/grokking-finite-dimensional-algebra/')}">Grokking Finite-Dimensional Algebra</a> accepted at <strong>ICML 2026</strong>.` },
+  { date: 'Apr 2026', text: `New paper: <a href="${withBase('/publications/grokking-finite-dimensional-algebra/')}">Grokking Finite-Dimensional Algebra</a> accepted at <strong>ICML 2026</strong>.` },
   { date: 'Jul 2025', text: `<a href="${withBase('/publications/grokking-beyond-l2/')}">Grokking Beyond the Euclidean Norm of Model Parameters</a> accepted at <strong>ICML 2025</strong>.` },
 ];
 ---
@@ -38,32 +38,26 @@ const news = [
         I am a third-year PhD candidate at
         <a href="https://mila.quebec" target="_blank" rel="noopener">Mila</a> and
         <a href="https://www.umontreal.ca" target="_blank" rel="noopener">Université de Montréal</a>,
-        working on machine learning theory and language models. 
-
-        I'm supervised by 
+        supervised by
         <a href="https://sites.google.com/view/irinarish/" target="_blank" rel="noopener">Irina Rish</a>,
         <a href="https://www-labs.iro.umontreal.ca/~grabus/" target="_blank" rel="noopener">Guillaume Rabusseau</a>,
         and <a href="http://www.extrospection.eu/" target="_blank" rel="noopener">Guillaume Dumas</a>.
-      </p>
-
-      <p>
+  
         My previous research focused on
         generalization, optimization dynamics, and representation learning in neural networks, including
         theoretical and empirical studies of grokking and implicit bias in deep learning.
 
         More recently, my research has shifted toward AI safety and alignment, with a focus on LLM
-        unlearning. I am currently collaborating with Tommaso Tosato from
+        unlearning, and I am currently working with
         <a href="https://tararesearch.org/" target="_blank" rel="noopener">Tara Research</a> on
-        unlearning methods for studying and improving honesty in language models.
-        I am interested in connecting empirical alignment work with theoretical
-        understanding of learning dynamics and representation formation in neural networks.
+        studying and improving honesty in language models.
       </p>
 
       <p>
         I earned a Master of Engineering in Computer Science from National Advanced 
         School of Engineering, Yaoundé, Cameroon. Before starting my PhD, I was a Visiting Student 
         Researcher at Université de Montréal and a Research Intern at Mila, where I worked 
-        with Yoshua Bengio and Dianbo Liu. I also contributed to language technology for 
+        with <a href="https://yoshuabengio.org/fr" target="_blank" rel="noopener">Yoshua Bengio</a> and <a href="https://www.asintelligence.xyz/" target="_blank" rel="noopener">Dianbo Liu</a>. I also contributed to language technology for 
         African languages and conducted research on the detection and mitigation of 
         discriminatory language in online text.
       </p> 

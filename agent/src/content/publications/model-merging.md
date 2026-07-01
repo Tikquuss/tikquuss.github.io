@@ -1,7 +1,7 @@
 ---
 title: "Model Merging via Data-Free Covariance Estimation"
 authors: "Marawan Gamal Abdel Hameed, Derek Tam, Pascal Jr Tikeng Notsawo, Colin Raffel, Guillaume Rabusseau"
-venue: "Preprint"
+venue: "CATS Workshop, ICML 2026 (Oral)"
 date: "2026-04-01"
 paperUrl: "https://arxiv.org/abs/2604.01329"
 image: "/images/publications/actmat/actmat.png"
