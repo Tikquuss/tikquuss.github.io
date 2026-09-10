@@ -5,28 +5,36 @@ interface Props {
   href: string;
   title: string;
   authors: string;
-  venue: string;
+  venues: string[];
   date: string;
   tags?: string[];
   image?: string;
 }
 
-const { href, title, authors, venue, date, tags = [], image } = Astro.props;
+const { href, title, authors, venues, date, tags = [], image } = Astro.props;
 const year = new Date(date).getFullYear();
 ---
 
 <a href={href} class="pub-card">
-  <div class="pub-thumb">
+  <div class:list={['pub-thumb', { 'pub-thumb-typographic': !image }]} aria-hidden="true">
     {image ? (
       <img src={resolveUrl(image)} alt="" loading="lazy" />
     ) : (
-      <span class="pub-thumb-mark">ML</span>
+      <div class="pub-thumb-label">
+        <span class="pub-thumb-year">{year} / Research</span>
+        <span class="pub-thumb-mark">{tags[0] ?? 'Publication'}</span>
+      </div>
     )}
   </div>
   <div class="pub-meta">
-    <div class="pub-title">{title}</div>
+    <div class="pub-card-heading">
+      <div class="pub-title">{title}</div>
+      <span class="card-arrow" aria-hidden="true">↗</span>
+    </div>
     <div class="pub-authors">{authors}</div>
-    <div class="pub-venue">{venue} · {year}</div>
+    <div class="pub-venues" aria-label={venues.length > 1 ? 'Publication venues' : 'Publication venue'}>
+      {venues.map(venue => <div class="pub-venue">{venue}</div>)}
+    </div>
     {tags.length > 0 && (
       <div class="tags">
         {tags.slice(0, 4).map((tag) => (

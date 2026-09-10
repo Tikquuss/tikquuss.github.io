@@ -33,27 +33,45 @@ To enforce $F$ to encode the information present the ratio $P_{ik}/P_{jk}$ in th
 to depend only on the difference of the two target words $i$ and $j$, since vector spaces are inherently linear structures.
 To also avoid $F$ to obfuscate the linear structure we are trying to capture as it transforms vectors into scalars, the authors passed the dot product $(w_i - w_j)^T \tilde{w}_k$ as an $F$ parameter instead of $w_i - w_j$ and $\tilde{w}_k$ themselves.
 
-$$F((w_i - w_j)^T \tilde{w}_k) = P_{ik}/P_{jk}$$
+$$
+F((w_i - w_j)^T \tilde{w}_k) = P_{ik}/P_{jk}
+$$
+
 $\text{ then }$
-$$F(w_i^T \tilde{w}_k) = P_{ik} = X_{ik}/X_i \text{ (A)}$$
+
+$$
+F(w_i^T \tilde{w}_k) = P_{ik} = X_{ik}/X_i \text{ (A)}
+$$
 
 The authors require that $F$ be a homomorphism between the groups $(\mathbb{R},+)$ and $(\mathbb{R}_{>0}, ×)$, i.e.,
 
-$$F((w_i - w_j)^T \tilde{w}_k) = F(w_i^T \tilde{w}_k - w_j^T \tilde{w}_k) = \frac{F(w_i^T \tilde{w}_k)}{F(w_j^T \tilde{w}_k)}$$
-$\text{ then }$
-$$F = exp \text{ (B)}$$
+$$
+F((w_i - w_j)^T \tilde{w}_k) = F(w_i^T \tilde{w}_k - w_j^T \tilde{w}_k) = \frac{F(w_i^T \tilde{w}_k)}{F(w_j^T \tilde{w}_k)}
+$$
 
-$$\text{(A) and (B)} \Rightarrow w_i^T \tilde{w}_k = log(P_{ik}) = log(X_{ik}) - log(X_i)$$
+$\text{ then }$
+
+$$
+F = exp \text{ (B)}
+$$
+
+$$
+\text{(A) and (B)} \Rightarrow w_i^T \tilde{w}_k = log(P_{ik}) = log(X_{ik}) - log(X_i)
+$$
 
 We will then produce vectors with a soft constraint that for each word pair of word $i$ and word $j$
 
-$$w_i^T \tilde{w}_j + b_i + \tilde{b}_j = \log X_{ij}$$
+$$
+w_i^T \tilde{w}_j + b_i + \tilde{b}_j = \log X_{ij}
+$$
 
 where $b_i$ and $\tilde{b}_j$ are scalar bias terms associated with words $i$ and $j$, respectively.
 
 We’ll do this by minimizing an objective function $J$, which evaluates the sum of all squared errors based on the above equation, weighted with a function $f$:
 
-$$J=\sum_{i=1}^{V} \sum_{j=1}^{V} f(X_{ij}) (w_i^T \tilde{w}_j + b_i + \tilde{b}_j - \log X_{ij})^2$$
+$$
+J=\sum_{i=1}^{V} \sum_{j=1}^{V} f(X_{ij}) (w_i^T \tilde{w}_j + b_i + \tilde{b}_j - \log X_{ij})^2
+$$
 
 We choose an $f$ that helps prevents common word pairs (i.e., those with large $X_{ij}$ values) from skewing our objective too much:
 $$
@@ -81,7 +99,9 @@ According to the authors, CBOW is faster while skip-gram is slower but does a be
 
 For a sentence $x = x_1 ... x_T$, we want to maximize the given likelihood :
 
-$$\mathcal{L} (\theta) = \prod_{t=1}^{T} \prod_{-m \le j \le m } f_{\theta}(w_t, w_{t+j})$$
+$$
+\mathcal{L} (\theta) = \prod_{t=1}^{T} \prod_{-m \le j \le m } f_{\theta}(w_t, w_{t+j})
+$$
 
 where :
 
@@ -95,7 +115,10 @@ f_{\theta}(w_i, w_j) = \left\{
 $$
 
 Hence, our objective function can be the average negative log likelihood :
-$$\mathcal{J} (\theta) = - \frac{1}{T} log(\mathcal{L} (\theta)) = - \frac{1}{T} \sum_{t=1}^{T} \sum_{-m \le j \le m } f_{\theta}(w_t, w_{t+j})$$
+
+$$
+\mathcal{J} (\theta) = - \frac{1}{T} log(\mathcal{L} (\theta)) = - \frac{1}{T} \sum_{t=1}^{T} \sum_{-m \le j \le m } f_{\theta}(w_t, w_{t+j})
+$$
 
 For each word $w$, we define two different vector representation $v_w$ and $u_w$ :
 - $v_w$ is used when $w$ is a center word
@@ -149,14 +172,21 @@ The resulting vector will be
 TF-IDF is a numerical statistic that is intended to reflect how important a word is to a document in a collection or corpus.
 
 - *Term Frequency (TF)* : It is a measure of how frequently a term, $t$, appears in a document, $d$:
-$$tf (t, d) = \frac{\text{number of times the term “t” appears in the document “d”}}{\text{number of terms in the document "d"}}$$
+
+$$
+tf (t, d) = \frac{\text{number of times the term “t” appears in the document “d”}}{\text{number of terms in the document "d"}}
+$$
 
 - *Inverse Document Frequency (IDF)* : IDF is a measure of how important a term is. We need the IDF value because computing just the TF alone is not sufficient to understand the importance of words.
 
-$$idf (t) = log \bigg( \frac{\text{numbers of document}}{\text{number of document with the term "t"}} \bigg)$$
+$$
+idf (t) = log \bigg( \frac{\text{numbers of document}}{\text{number of document with the term "t"}} \bigg)
+$$
 
 - We can now compute the TF-IDF score for each word in the corpus. Words with a higher score are more important, and those with a lower score are less important.
 
-$$tf\_idf(t, d) = tf (t, d) * idf (t)$$
+$$
+tf\_idf(t, d) = tf (t, d) * idf (t)
+$$
 
 TF-IDF takes into account total frequencies of words in the corpora. It helps to penalize too frequent words and provide better features space.

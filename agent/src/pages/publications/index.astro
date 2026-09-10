@@ -8,6 +8,7 @@ const publications = await getCollection('publications');
 const sorted = publications.sort((a, b) =>
   new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
+const years = [...new Set(sorted.map(pub => new Date(pub.data.date).getFullYear()))];
 ---
 
 <BaseLayout
@@ -24,17 +25,24 @@ const sorted = publications.sort((a, b) =>
     </p>
   </div>
 
-  <div class="stack">
-    {sorted.map((pub) => (
-      <PublicationCard
-        href={withBase(`/publications/${pub.slug}`)}
-        title={pub.data.title}
-        authors={pub.data.authors}
-        venue={pub.data.venue}
-        date={pub.data.date}
-        tags={pub.data.tags}
-        image={pub.data.image}
-      />
+  <div class="publication-archive">
+    {years.map(year => (
+      <section class="publication-year" aria-labelledby={`year-${year}`}>
+        <h2 id={`year-${year}`} class="year-heading">{year}</h2>
+        <div class="stack">
+          {sorted.filter(pub => new Date(pub.data.date).getFullYear() === year).map((pub) => (
+            <PublicationCard
+              href={withBase(`/publications/${pub.slug}`)}
+              title={pub.data.title}
+              authors={pub.data.authors}
+              venues={pub.data.venues}
+              date={pub.data.date}
+              tags={pub.data.tags}
+              image={pub.data.image}
+            />
+          ))}
+        </div>
+      </section>
     ))}
   </div>
 </BaseLayout>

@@ -16,9 +16,17 @@ legacy-jekyll/
 
 ## Run The New Site Locally
 
+Install dependencies once:
+
 ```powershell
 cd agent
-npm ci
+npm install
+```
+
+Then start the dev server:
+
+```powershell
+cd agent
 npm run dev
 ```
 
@@ -28,7 +36,13 @@ Astro usually serves the site at:
 http://localhost:4321/
 ```
 
-Stop the dev server with `Ctrl+C` before running `npm ci` again.
+Stop the server with `Ctrl+C` when you are done. You only need to install again when `package.json` changes.
+
+### If npm Fails With An EPERM Error
+
+On Windows, npm cannot replace files that a running server still has open. Stop every `npm run dev` and `npm run preview` server with `Ctrl+C`, then install again.
+
+Avoid `npm ci` here unless you need an exact reinstall from `package-lock.json`. It deletes `node_modules` before reinstalling, so a running server makes it fail halfway and leaves `astro` missing. If that happens, stop the servers and run `npm install`.
 
 ## Build Locally
 

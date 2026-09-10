@@ -8,16 +8,8 @@ slidesUrl: "/presentations/predicting-grokking.pdf"
 image: "/images/talks/icml.png"
 ---
 
-<center>
 <img src="/images/talks/icml.png" alt="ICML">
-</center>
 
-<br/>
-<center>
-  <object
-    type="application/pdf"
-    data="/presentations/predicting-grokking.pdf"
-    width="1000"
-    height="800">
-  </object>
-</center>
+<object type="application/pdf" data="/presentations/predicting-grokking.pdf" title="Predicting Grokking Long Before it Happens presentation" width="100%" height="800">
+  <p><a href="/presentations/predicting-grokking.pdf">Open the Predicting Grokking presentation (PDF)</a>.</p>
+</object>

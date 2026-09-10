@@ -36,8 +36,9 @@ const pageTitle = title === 'Home' ? SITE.title : `${title} - ${SITE.shortName}`
   <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
   <NavBar />
-  <main class={wide ? 'wide' : ''}>
+  <main id="main-content" tabindex="-1" class={wide ? 'wide' : ''}>
     <slot />
   </main>
   <Footer />
@@ -45,15 +46,33 @@ const pageTitle = title === 'Home' ? SITE.title : `${title} - ${SITE.shortName}`
   <script>
     const hamburger = document.querySelector('.nav-hamburger');
     const navLinks = document.querySelector('.nav-links');
+    const closeMenu = () => {
+      navLinks?.classList.remove('open');
+      hamburger?.setAttribute('aria-expanded', 'false');
+    };
     hamburger?.addEventListener('click', () => {
       const isOpen = navLinks?.classList.toggle('open') ?? false;
       hamburger.setAttribute('aria-expanded', String(isOpen));
     });
     navLinks?.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        hamburger?.setAttribute('aria-expanded', 'false');
+        closeMenu();
       });
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && navLinks?.classList.contains('open')) {
+        closeMenu();
+        (hamburger as HTMLButtonElement)?.focus();
+      }
+    });
+    document.addEventListener('click', event => {
+      if (event.target instanceof Element && !event.target.closest('.site-nav')) closeMenu();
+    });
+    document.addEventListener('focusin', event => {
+      if (event.target instanceof Element && !event.target.closest('.site-nav')) closeMenu();
+    });
+    window.matchMedia('(min-width: 921px)').addEventListener('change', event => {
+      if (event.matches) closeMenu();
     });
   </script>
 </body>

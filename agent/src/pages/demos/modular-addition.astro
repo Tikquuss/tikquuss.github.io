@@ -13,14 +13,16 @@ import { withBase } from '../../lib/site';
         <h1>Modular Addition Structure</h1>
       </div>
       <p>
-        Explore the table $(a + b) \bmod p$ while a toy prediction field moves from memorized training
+        Explore the table <span aria-label="a plus b, modulo p">(a + b) mod p</span> while a toy prediction field moves from memorized training
         cells toward the global modular rule.
       </p>
     </header>
 
     <div class="demo-surface">
       <div class="demo-canvas-wrap">
-        <canvas id="modular-canvas" width="720" height="720" aria-label="Modular addition heatmap"></canvas>
+        <canvas id="modular-canvas" width="720" height="720" role="img" aria-label="Modular addition heatmap">
+          A heatmap of modular addition predictions. Use the controls to explore training coverage and generalization; the accuracy values are shown alongside the chart.
+        </canvas>
       </div>
 
       <form class="demo-controls" id="modular-controls">
@@ -102,7 +104,11 @@ import { withBase } from '../../lib/site';
       const coverage = Number(coverageInput.value) / 100;
       const time = Number(timeInput.value) / 100;
       const dpr = window.devicePixelRatio || 1;
-      const cssSize = Math.min(canvas.parentElement.clientWidth, 720);
+      const wrapper = canvas.parentElement;
+      const wrapperStyle = getComputedStyle(wrapper);
+      const availableWidth = wrapper.clientWidth - parseFloat(wrapperStyle.paddingLeft) - parseFloat(wrapperStyle.paddingRight);
+      const cssSize = Math.max(1, Math.min(availableWidth, 720));
+      canvas.style.display = 'block';
       canvas.style.width = `${cssSize}px`;
       canvas.style.height = `${cssSize}px`;
       canvas.width = Math.floor(cssSize * dpr);

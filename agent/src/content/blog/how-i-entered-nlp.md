@@ -22,7 +22,7 @@ When James Assiene Moudie [2] launched the first edition of MLPC (Machine Learni
 
     In general, all our mathematics training was useful for understanding machine learning theory: Real Analysis, Linear Algebra, Euclidean Affine Geometry, Probability and Statistics, Series and Generalized Integrals, Multilinear Algebra-Curves and Surface, Analysis in finite-dimensional vector spaces, Numerical Analyses.
 
-    <span style="color: red;">Note</span> : NDONG NGUEMA Eugène Patrice, the teacher who taught us Series and Generalized Integrals (Fall 2017), and Numerical Analysis (Winter & Summer 2017), is the best teacher I've ever known in my life. Beyond that, he's a genius. Unfortunately, he was born and teaches in Cameroon.
+    **Note:** NDONG NGUEMA Eugène Patrice, the teacher who taught us Series and Generalized Integrals (Fall 2017), and Numerical Analysis (Winter & Summer 2017), is the best teacher I've ever known in my life. Beyond that, he's a genius. Unfortunately, he was born and teaches in Cameroon.
 
 - September (Fall) 2018 to July (Summer) 2019
     - Formal Systems and Foundations of Artificial Intelligence
@@ -46,15 +46,15 @@ When James Assiene Moudie [2] launched the first edition of MLPC (Machine Learni
     * Image processing, GIS and WebMapping
     * Data mining: unfortunately, Professor Henri Gwet, who taught us this class (a good teacher), passed away a few months after the end of the session.
 
-<span style="color: red;">Note</span> : Unlike in Montreal (UdeM), where I'm supposed to take 2 to 3 courses per session for the Fall and Winter semesters (in Summer, teachers don't usually give courses), that's 4 to 6 courses per year (I generally take 4 courses/sessions to learn fast), in Cameroon we had about 20 courses per school year, and no elective courses like here in Montreal, we did all the courses.
+**Note:** Unlike in Montreal (UdeM), where I'm supposed to take 2 to 3 courses per session for the Fall and Winter semesters (in Summer, teachers don't usually give courses), that's 4 to 6 courses per year (I generally take 4 courses/sessions to learn fast), in Cameroon we had about 20 courses per school year, and no elective courses like here in Montreal, we did all the courses.
 
-<span style="color: red;">Note</span> : I've listed the courses that were directly related to my learning of machine learning. [Here](https://hackmd.io/@6LQ4mvRtS4Sc3LHkNEvDXQ/Hy_XJZ53h) is the complete list of courses I took at NASEY [1].
+**Note:** I've listed the courses that were directly related to my learning of machine learning. [Here](https://hackmd.io/@6LQ4mvRtS4Sc3LHkNEvDXQ/Hy_XJZ53h) is the complete list of courses I took at NASEY [1].
 
 So, in 2019, I already knew how to make computers understand vectors on the field of reals (linear regression, ...), but I didn't know how to make them understand texts. That's where I got my first taste of NLP. First with GloVe, Word2Vec, Bag of words and TF-IDF; and later with BERT and its variants (BERT was released not long ago, and was creating a lot of buzz).
 
 If for the first approaches (GloVe, etc), understanding was quick, learning how *Transformer* works by myself until I could implement it was not an easy task for me.
 
-<span style="color: red;">Note</span> : I didn't like following tutorials because I found most of them ineffective. I preferred to read the papers: difficult to understand for a beginner, but once you understand by reading the paper, you've really understood (whereas you can follow 10 tutorials on a notion and never understand).
+**Note:** I didn't like following tutorials because I found most of them ineffective. I preferred to read the papers: difficult to understand for a beginner, but once you understand by reading the paper, you've really understood (whereas you can follow 10 tutorials on a notion and never understand).
 
 Faced with the difficulty of understanding how Transformer works :
 - I came back to read how the (vanilla) attention mechanism works in this paper: *NEURAL MACHINE TRANSLATION BY JOINTLY LEARNING TO ALIGN AND TRANSLATE*, Dzmitry Bahdanau, KyungHyun Cho, Yoshua Bengio, ICLR 2015.

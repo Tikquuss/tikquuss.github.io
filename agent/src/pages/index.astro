@@ -30,16 +30,28 @@ const news = [
     </div>
 
     <div class="hero-content">
-      <p class="eyebrow">Optimization · Machine Learning · Machine Unlearning</p>
       <h1 class="hero-tagline">I learn stuff.</h1>
 
-      <div class="hero-links">
-        <a href={SITE.cvUrl} class="hero-link primary" target="_blank" rel="noopener">CV</a>
-        <a href={withBase('/publications')} class="hero-link secondary">Publications</a>
-        <a href={SITE.scholarUrl} class="hero-link secondary" target="_blank" rel="noopener">Google Scholar</a>
-        <a href={SITE.githubUrl} class="hero-link secondary" target="_blank" rel="noopener">GitHub</a>
-        <a href={SITE.linkedinUrl} class="hero-link secondary" target="_blank" rel="noopener">LinkedIn</a>
-        <a href={withBase('/blog')} class="hero-link secondary">Blog</a>
+      <div class="hero-actions">
+        <div class="hero-links">
+          <a href={withBase('/about')} class="hero-link primary">About me <span aria-hidden="true">→</span></a>
+          <a href={withBase('/publications')} class="hero-link secondary">Explore my research <span aria-hidden="true">→</span></a>
+          <a href={withBase('/blog')} class="hero-link secondary">Blog <span aria-hidden="true">→</span></a>
+        </div>
+        <nav class="hero-socials" aria-label="CV and external profiles">
+          <a href={SITE.cvUrl} target="_blank" rel="noopener" aria-label="CV (opens in a new tab)">
+            CV <span class="social-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href={SITE.scholarUrl} target="_blank" rel="noopener" aria-label="Google Scholar (opens in a new tab)">
+            Google Scholar <span class="social-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href={SITE.githubUrl} target="_blank" rel="noopener" aria-label="GitHub (opens in a new tab)">
+            GitHub <span class="social-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href={SITE.linkedinUrl} target="_blank" rel="noopener" aria-label="LinkedIn (opens in a new tab)">
+            LinkedIn <span class="social-arrow" aria-hidden="true">↗</span>
+          </a>
+        </nav>
       </div>
 
       <div class="research-interests">
@@ -56,28 +68,23 @@ const news = [
     </div>
   </section>
 
-  <NewsSection items={news} />
-
   <aside class="math-note" aria-label="Mathematical aside">
-    If I were a mathematician like
-    <a href="https://darsakthi.github.io/" target="_blank" rel="noopener">Dalton A. R. Sakthivadivel</a>,
-    I would have written:
-    <span class="math-quote">
+    <p class="math-note-intro">
+      If I were a mathematician like
+      <a href="https://darsakthi.github.io/" target="_blank" rel="noopener">Dalton A. R. Sakthivadivel</a>,
+      I would have written:
+    </p>
+    <blockquote class="math-quote">
       "Enter this website if and only if your personal model of mathematics is consistent with
       <a href="https://fardila.com/" target="_blank" rel="noopener">Ardila's axioms</a>."
-    </span>
+    </blockquote>
   </aside>
 
-  <aside class="site-note" aria-label="Site note">
-    <strong>Site note.</strong> This website is still being rebuilt. I am moving from an older
-    Jekyll setup that became a bit painful to maintain, so some pages, links, and formatting are
-    still being cleaned up as I migrate everything into this new version.
-  </aside>
+  <NewsSection items={news} />
 
   <section>
     <div class="section-header">
-      <div class="section-label">Selected Publications</div>
-      <h2>Recent Work</h2>
+      <h2>Selected Publications</h2>
       <div class="section-divider"></div>
     </div>
 
@@ -87,7 +94,7 @@ const news = [
           href={withBase(`/publications/${pub.slug}`)}
           title={pub.data.title}
           authors={pub.data.authors}
-          venue={pub.data.venue}
+          venues={pub.data.venues}
           date={pub.data.date}
           tags={pub.data.tags}
           image={pub.data.image}
@@ -99,4 +106,5 @@ const news = [
       <a href={withBase('/publications')}>View all publications →</a>
     </p>
   </section>
+
 </BaseLayout>

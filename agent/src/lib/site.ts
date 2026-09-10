@@ -29,10 +29,20 @@ export function resolveUrl(url: string) {
 }
 
 export function formatDate(date: string, options: Intl.DateTimeFormatOptions = {}) {
+  if (/^\d{4}-\d{2}$/.test(date)) {
+    return new Date(`${date}-01T00:00:00Z`).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      timeZone: 'UTC',
+      ...options,
+    });
+  }
+
   return new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    timeZone: 'UTC',
     ...options,
   });
 }
@@ -41,5 +51,6 @@ export function formatMonthYear(date: string) {
   return new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
+    timeZone: 'UTC',
   });
 }

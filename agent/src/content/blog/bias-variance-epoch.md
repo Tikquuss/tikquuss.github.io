@@ -7,20 +7,20 @@ tags:
   - deep learning
   - statistical learning
   - bias-variance tradeoff
-excerpt: "Let's suppose we're training a model parameterized by theta, and let's denote by theta_t the parameter at step t."
+excerpt: "A bias–variance decomposition for tracking how bias, variance, and irreducible noise evolve throughout training."
 ---
 
 Let's suppose we're training a model parameterized by $\theta$, and let's denote by $\theta_t$ the parameter $\theta$ at step $t$ given by the optimization algorithm of our choice. In machine learning, it is often helpful to be able to decompose the error $E(\theta)$ as $B^2(\theta)+V(\theta)+N(\theta)$, where $B$ represents the bias, $V$ the variance, and $N$ the noise (irreducible error). In most cases, the decomposition is performed on an optimal solution $\theta^*$ (for instance, $\lim_{t \rightarrow \infty} \theta_t$, or its early stopping version), for example, in order to understand how the bias and variance change with the complexity of the function implementing $\theta$, the size of this function, etc. This has helped explain phenomena such as model-wise double descent. On the other hand, it can also be interesting to visualize how $B(\theta_t)$ and $V(\theta_t)$ evolve with $t$ (which can help explain phenomena like epoch-wise double descent): that's what we'll be doing in this blog post.
 
 Hackmd version : [https://hackmd.io/@6LQ4mvRtS4Sc3LHkNEvDXQ/HJl86oh__2](https://hackmd.io/@6LQ4mvRtS4Sc3LHkNEvDXQ/HJl86oh__2)
 
-# Notations
+## Notations
 
 * $\mathcal{X}$ : domain set (input space)
 * $\mathcal{Y}$ : label set (output space)
 * $\mathcal{H}$ : hypothesis class (class of possible models we can learn)
 
-# Definititions and Preliminaries
+## Definititions and Preliminaries
 
 **Definitition 1 (Loss Function)** The loss function $\ell(t, y)$ is defined as a function that takes two labels and produces a value between $0$ and some constant $M \in [0, \infty]$, and measures the
 cost of predicting $y$ when the true value is $t$.
@@ -36,14 +36,19 @@ Examples include square loss $\ell(t, y) = (t−y)^2$, absolute loss $\ell(t, y)
 
 **Definitition 2 (Training set)** Set $S$ of $\|S\|$ values $z_i = (x_i, t_i) \in \mathcal{X} \times \mathcal{Y}$, where $x_i \in \mathcal{X}$ represents a feature vector and $t_i = t_i(x) \in \mathcal{Y}$ the label of the $i^{th}$ sample. $z_i$ are assumed to be i.i.d. and sampled from an unknown data distribution $\mathcal{D}$.
 
-$$S = \{z_1, \cdots , z_n\}$$
+$$
+S = \{z_1, \cdots , z_n\}
+$$
 
 Since the training set size is an important parameter of a learning problem, we will assume in the following that all dataset have the same size $n$.
 
 **Definitition 3 (Optimal prediction)**
 
 In our setup we don't have a joint distribution, but just $x$ being random and $t = t(x)$ being a deterministic or random function of $x$, so that $p(x, t) = p(x)p(t\|x)$. The optimal prediction  for an example $x$ is given by
-$$y^* (x) = \arg\min_y \mathbb{E}_{t \sim p(t\|x)} [\ell(t, y)]$$
+
+$$
+y^* (x) = \arg\min_y \mathbb{E}_{t \sim p(t\|x)} [\ell(t, y)]
+$$
 
 In deterministic case, there exist $t \in \mathcal{Y}$ such that $p(t\|x)=1$ : $y^* (x) = \arg\min_y \ell(t, y) = t$.
 
@@ -63,12 +68,14 @@ $$
 
 That is the mean of $p(t\|x)$. For example, if for some $x$, we have the example $(x, 1)$ with probability $p_x \in [0, 1]$ and the example $(x, 0)$ with probability $1-p_x$, that is :
 
-$$t(x) = \left\{
+$$
+t(x) = \left\{
     \begin{array}{ll}
         1 & \mbox{with probability } p_x \\
         0 & \mbox{with probability } 1-p_x
     \end{array}
-\right.$$
+\right.
+$$
 
 Then, using square loss, we have $y^*(x) = p_x$.
 
@@ -86,9 +93,14 @@ $$
 with $F_{t\|x}$ the cumulative distribution function of  $p(t\|x)$. So $y^*(x)$ is the median of $p(t\|x)$.
 
 The last line follows from the fact that $y \mapsto 2 F_{t\|x}(y) - 1$ is the derivative of the function
-$$y \mapsto 2 \int_{-\infty}^{y} F_{t|x}(t)dt - y + \mathbb{E}_{t \sim p(t|x)} [t] +2\lim_{t \rightarrow - \infty} t F_{t|x}(t)$$,
+
+$$
+y \mapsto 2 \int_{-\infty}^{y} F_{t|x}(t)dt - y + \mathbb{E}_{t \sim p(t|x)} [t] +2\lim_{t \rightarrow - \infty} t F_{t|x}(t),
+$$
+
 which thus reaches its minimum when $F_{t\|x}(y) = 1/2$, that is when $y = F_{t\|x}^{-1}(1/2)$.
 The second line follows from
+
 $$
 \begin{equation}
 \begin{split}
@@ -122,7 +134,8 @@ y^*(x)
 \\ &= \arg\min_{y} 1 - \mathbb{E}_{t \sim p(t|x)}[\mathbb{I}[t=y]]
 \\ &= \arg\max_{y} \mathbb{E}_{t \sim p(t|x)}[\mathbb{I}[t=y]]
 \\ &= \arg\max_{t} p(t|x) = \arg\max_{t} p(t, x)
-\end{split}$$
+\end{split}
+$$
 
 That is the most frequent prediction. With the illustrative example use above for square loss, we have
 
@@ -142,11 +155,15 @@ The optimal model is the model for which $f(x) = y^*(x)$ for every $x$. For exam
 
 **Definitition 5 (True Risk)** : Given $h \in \mathcal{H}$
 
-$$R[h] = \mathbb{E}_{(x,t) \sim \mathcal{D}}[ \ell(t, h(x))]$$
+$$
+R[h] = \mathbb{E}_{(x,t) \sim \mathcal{D}}[ \ell(t, h(x))]
+$$
 
 **Definitition 6 (Empirical Risk)** : For $h \in \mathcal{H}$ and a dataset $S = \{(x_1, t_1), \cdots , (x_n, t_n)\}$
 
-$$\hat{R}_S[h] =\frac{1}{n} \sum_{i=1}^n \ell(t_i, h(x_i))$$
+$$
+\hat{R}_S[h] =\frac{1}{n} \sum_{i=1}^n \ell(t_i, h(x_i))
+$$
 
 The essential task of supervised learning is to maximize the performance on all of the possible data via the adjustment of $h$ on a particularly drawn sample set $S$. We won't be using these risk expressions primarily in this monograph, as is customary in statistical learning theory, but we have recalled them anyway to highlight the dependence of $h = \mathcal{A}(S)$ on $S$.
 
@@ -158,17 +175,21 @@ Let $D_n$ be a set of training sets of size $n$, $\hat{y}_n(x)$ the predictions 
 
 The the quantity of interest is the expected loss
 
-$$E_n(x)
+$$
+E_n(x)
 = \mathbb{E}_{D_n, \ t \sim p(t|x)}[\ell(t, \hat{y}_n(x))]
-= \mathbb{E}_{y \sim Y_n(x), \ t \sim p(t|x)}[\ell(t, y)]$$
+= \mathbb{E}_{y \sim Y_n(x), \ t \sim p(t|x)}[\ell(t, y)]
+$$
 
 Our objetive is to bias-variance decompose the expected loss $E_n(x)$ into three terms: **bias**, **variance** and **noise (irreducible error)**. A standard such decomposition exists for squared loss, and a number of different ones have been proposed for zero-one loss.
 
 **Definitition 8 (Main prediction)** : The main prediction for a loss function $\ell$ and a set of training sets $D_n$ is
 
-$$y^{\ell, D_n} (x)
+$$
+y^{\ell, D_n} (x)
 = \arg\min_{y'} \mathbb{E}_{D_n}[\ell(\hat{y}_n(x), y')]
-= \arg\min_{y'} \mathbb{E}_{y \sim Y_n(x)}[\ell(y, y')]$$
+= \arg\min_{y'} \mathbb{E}_{y \sim Y_n(x)}[\ell(y, y')]
+$$
 
 In words, the main prediction is the value whose average loss relative to all the predictions in $Y_n(x)$ is minimum (i.e., it is the prediction that “differs least” from all the predictions in $Y_n(x)$ according to $\ell$). It is a measure of the “central tendency” of a learner.
 
@@ -218,25 +239,42 @@ with $f_{Y_n(x)}$ the mass function ($Y_n(x)$ finite) or the density function (i
 
 **Definition 9 (bias, variance, noise)** The bias, variance and noise (irreducible error) of a learner on an example $x$ are respectively
 
-$$B^2(x) = \ell( y^*(x), y^{\ell, D_n}(x))
+$$
+\begin{gathered}
+B^2(x) = \ell( y^*(x), y^{\ell, D_n}(x))
 \\ V(x) = \mathbb{E}_{D_n}[\ell( y^{\ell, D_n}(x), y_n(x))]
 = \mathbb{E}_{y \sim Y_n(x)}[\ell( y^{\ell, D_n}(x), y )]
-\\ N(x) = \mathbb{E}_{t \sim p(t|x)}[\ell(t, y^*(x))]$$
+\\ N(x) = \mathbb{E}_{t \sim p(t|x)}[\ell(t, y^*(x))]
+\end{gathered}
+$$
 
 In words, the square bias is the loss incurred by the main prediction relative to the optimal prediction, the variance is the average loss incurred by predictions relative to the main prediction, and the noise is the unavoidable component of the loss, that is incurred independently of the learning algorithm. In the deterministic case, $N(x)= \ell(t(x), t(x))$ for all $x$.
 
 Bias and variance may be averaged over all examples, in which case we will refer to them as average square bias
-$$\mathbb{E}_{x \sim p(x)}[B^2(x)]$$
-and average variance
-$$\mathbb{E}_{x \sim p(x)}[V(x)]$$. The average noise is
 
-$$\mathbb{E}_{x \sim p(x)}[N(x)] = \mathbb{E}_{(x,t) \sim p(x,t)}[\ell(t, y^*(x))]$$
+$$
+\mathbb{E}_{x \sim p(x)}[B^2(x)]
+$$
+
+and average variance
+
+$$
+\mathbb{E}_{x \sim p(x)}[V(x)].
+$$
+
+The average noise is
+
+$$
+\mathbb{E}_{x \sim p(x)}[N(x)] = \mathbb{E}_{(x,t) \sim p(x,t)}[\ell(t, y^*(x))]
+$$
 
 **Theorem 2** For square loss $\ell(t, y) = (t−y)^2$
 
-$$V(x) = \mathbb{E}_{y \sim Y_n(x)}[y^2] - ( y^{\ell, D_n}(x))^2
+$$
+V(x) = \mathbb{E}_{y \sim Y_n(x)}[y^2] - ( y^{\ell, D_n}(x))^2
 \text{ and }
-N(x) = \mathbb{E}_{t \sim p(t|x)}[t^2] - (y^*(x))^2$$
+N(x) = \mathbb{E}_{t \sim p(t|x)}[t^2] - (y^*(x))^2
+$$
 
 *Proof*
 
@@ -260,10 +298,13 @@ N(x)
 \end{split}
 $$
 
-# Bias-variance decomposition
+## Bias-variance decomposition
 
 For a given loss functions $\ell$, we are looking for two constants $c_1(x, \ell)$ and $c_2(x, \ell)$ such that
-$$E_n(x) = \ B^2(x) + c_1(x, \ell) \ V(x) + c_2(x, \ell) \ N(x)$$
+
+$$
+E_n(x) = \ B^2(x) + c_1(x, \ell) \ V(x) + c_2(x, \ell) \ N(x)
+$$
 
 **Theorem 2 [1]** For square loss $\ell(t, y) = (t−y)^2$, $c_1(x, \ell)=c_2(x, \ell)=1$
 
@@ -291,11 +332,11 @@ Let $\mathbb{P}_{D_n}(x) = \mathbb{P}[y^*(x) \in Y_n(x)]$ be the probability ove
 
 See [1] for zero-one loss $\ell(t, y) = \mathbb{I}[t\ne y]$ in multiclass problems, and for the absolute loss $\ell(t, y) = \|t−y\|$.
 
-# Application : teacher-student setup
+## Application : teacher-student setup
 
 See the [hackmd version](https://hackmd.io/@6LQ4mvRtS4Sc3LHkNEvDXQ/HJl86oh__2). I'll copy it, format it in markdow and put it here as soon as I can (and check that the derivation I've made there are correct, by the way. I did them in  a rush).
 
-# References
+## References
 
 [1] Pedro Domingos. A unified bias-variance decomposition for zero-one and squared loss. In Proc. of the 17th National Conf. on Artificial Intelligence, pages 564–569, Austin, TX, July 2000.
 

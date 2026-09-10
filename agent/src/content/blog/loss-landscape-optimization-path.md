@@ -6,7 +6,7 @@ image: "/images/blog/loss-landscape.png"
 tags:
   - deep learning
   - loss landscape
-excerpt: "While neural loss functions live in a very high-dimensional space, visualizations are only possible using low-dimensional plots."
+excerpt: "How low-dimensional subspaces can preserve an optimization trajectory and make a neural network’s loss landscape interpretable."
 ---
 
 While neural loss functions live in a very high-dimensional space, visualizations are only possible using low-dimensional 1D (line) or 2D (surface) plots. Several methods exist for closing this dimensionality gap. The idea is to choose a linear subspace that maximally preserves the optimization trajectory’s shape, in order to observe patterns that are meaningful in the full parameter space.

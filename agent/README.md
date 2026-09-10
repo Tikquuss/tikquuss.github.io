@@ -92,20 +92,35 @@ Add a publication:
 src/content/publications/my-paper.md
 ```
 
-Required publication frontmatter:
+Publication example:
 
-```yaml
+```markdown
 ---
 title: "Paper title"
 authors: "Author One, Author Two"
-venue: "Conference or journal"
+venues:
+  - "Conference or journal, year"
 date: "2026-01-01"
 image: "/images/publications/my-paper.png"
 paperUrl: "https://arxiv.org/abs/..."
 tags: ["Grokking", "Generalization"]
-abstract: "Short abstract."
+abstract: "Short summary for page metadata."
 ---
+
+## Abstract
+
+The full abstract goes here. Markdown emphasis and math, such as $x^2$, are supported.
 ```
+
+The `abstract` frontmatter field is a short metadata summary. The Markdown body
+contains the full abstract displayed on the publication page. Add further sections
+for figures, results, or project details after the abstract as needed. Paper, code,
+and project links belong in `paperUrl`, `codeUrl`, and `projectUrl` frontmatter;
+avoid repeating them in the body. Distinct additional links can go in a `## Resources`
+section.
+
+The optional `image` should be a figure relevant to the paper. Omit it when no
+figure is available; the card will show a styled topic and year instead.
 
 Add blog posts and tutorials in:
 
@@ -113,6 +128,9 @@ Add blog posts and tutorials in:
 src/content/blog/
 src/content/tutorials/
 ```
+
+Use a quoted month-only date such as `date: "2025-01"` when only the month is known.
+It displays as "January 2025" in the post and blog listing.
 
 Math works directly in Markdown:
 

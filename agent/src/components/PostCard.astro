@@ -13,8 +13,8 @@ const { href, title, date, excerpt, tags = [] } = Astro.props;
 ---
 
 <a href={href} class="post-card">
-  <div class="post-card-date">{formatDate(date)}</div>
-  <div class="post-card-title">{title}</div>
+  <time class="post-card-date" datetime={date}>{formatDate(date)}</time>
+  <h2 class="post-card-title">{title}</h2>
   {excerpt && <div class="post-card-excerpt">{excerpt}</div>}
   {tags.length > 0 && (
     <div class="tags">

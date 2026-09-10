@@ -1,5 +1,5 @@
 ---
-import { withBase } from '../lib/site';
+import { SITE, withBase } from '../lib/site';
 
 const currentPath = Astro.url.pathname;
 
@@ -20,25 +20,25 @@ const links = [
 ];
 ---
 
-<nav class="site-nav">
+<nav class="site-nav" aria-label="Main navigation">
   <div class="nav-inner">
     <a href={withBase('/')} class="nav-logo">
       <span class="initials">PT</span>
-      Pascal Tikeng
+      {SITE.name}
     </a>
 
-    <ul class="nav-links" role="list">
+    <ul id="main-navigation" class="nav-links" role="list">
       {links.map(link => (
         <li>
-          <a href={link.href} class={isActive(link.href) ? 'active' : ''}>
+          <a href={link.href} class={isActive(link.href) ? 'active' : ''} aria-current={isActive(link.href) ? 'page' : undefined}>
             {link.label}
           </a>
         </li>
       ))}
     </ul>
 
-    <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <button class="nav-hamburger" aria-label="Toggle menu" aria-controls="main-navigation" aria-expanded="false">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
         <line x1="3" y1="18" x2="21" y2="18"/>
