@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="560" viewBox="0 0 1500 560" role="img" aria-labelledby="title desc">
+  <title id="title">Upper, lower, and two-sided quadratic inequalities</title>
+  <desc id="desc">Three panels show a function relative to its tangent and upper and lower quadratic envelopes.</desc>
+  <rect width="1500" height="560" fill="#ffffff"/>
+  <text x="750" y="43" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="30" font-weight="600">The quadratic inequalities bound the error of the tangent model</text>
+
+  <g transform="translate(35,75)">
+    <rect x="0" y="0" width="450" height="430" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="225" y="39" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="27" font-weight="600">L-UQI</text>
+    <line x1="48" y1="350" x2="410" y2="350" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="225" y1="380" x2="225" y2="75" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M60 122 Q225 350 390 122" fill="none" stroke="#2563eb" stroke-width="5"/>
+    <path d="M60 325 Q130 145 225 350 Q330 405 390 290" fill="none" stroke="#166534" stroke-width="6"/>
+    <line x1="65" y1="350" x2="390" y2="350" stroke="#64748b" stroke-width="3" stroke-dasharray="11 8"/>
+    <circle cx="225" cy="350" r="7" fill="#0f172a"/>
+    <text x="285" y="115" fill="#2563eb" font-family="Arial, sans-serif" font-size="21">upper parabola</text>
+    <text x="78" y="300" fill="#166534" font-family="Arial, sans-serif" font-size="21">φ may fall far below</text>
+    <text x="225" y="412" text-anchor="middle" fill="#475569" font-family="Arial, sans-serif" font-size="21">Only an upper bound</text>
+  </g>
+
+  <g transform="translate(525,75)">
+    <rect x="0" y="0" width="450" height="430" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="225" y="39" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="27" font-weight="600">L-LQI</text>
+    <line x1="48" y1="200" x2="410" y2="200" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="225" y1="380" x2="225" y2="75" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M60 372 Q225 200 390 372" fill="none" stroke="#ea580c" stroke-width="5"/>
+    <path d="M60 165 Q125 330 225 200 Q330 40 390 110" fill="none" stroke="#166534" stroke-width="6"/>
+    <line x1="65" y1="200" x2="390" y2="200" stroke="#64748b" stroke-width="3" stroke-dasharray="11 8"/>
+    <circle cx="225" cy="200" r="7" fill="#0f172a"/>
+    <text x="278" y="364" fill="#ea580c" font-family="Arial, sans-serif" font-size="21">lower parabola</text>
+    <text x="70" y="135" fill="#166534" font-family="Arial, sans-serif" font-size="21">φ may rise far above</text>
+    <text x="225" y="412" text-anchor="middle" fill="#475569" font-family="Arial, sans-serif" font-size="21">Only a lower bound</text>
+  </g>
+
+  <g transform="translate(1015,75)">
+    <rect x="0" y="0" width="450" height="430" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="225" y="39" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="27" font-weight="600">L-QI</text>
+    <path d="M60 85 Q225 255 390 85 L390 375 Q225 255 60 375 Z" fill="#dbeafe" opacity="0.75"/>
+    <line x1="48" y1="255" x2="410" y2="255" stroke="#94a3b8" stroke-width="2"/>
+    <line x1="225" y1="390" x2="225" y2="70" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M60 85 Q225 255 390 85" fill="none" stroke="#2563eb" stroke-width="5"/>
+    <path d="M60 375 Q225 255 390 375" fill="none" stroke="#ea580c" stroke-width="5"/>
+    <path d="M60 315 Q125 175 225 255 Q320 345 390 185" fill="none" stroke="#166534" stroke-width="6"/>
+    <line x1="65" y1="255" x2="390" y2="255" stroke="#64748b" stroke-width="3" stroke-dasharray="11 8"/>
+    <circle cx="225" cy="255" r="7" fill="#0f172a"/>
+    <text x="70" y="105" fill="#2563eb" font-family="Arial, sans-serif" font-size="20">upper envelope</text>
+    <text x="270" y="370" fill="#ea580c" font-family="Arial, sans-serif" font-size="20">lower envelope</text>
+    <text x="225" y="412" text-anchor="middle" fill="#475569" font-family="Arial, sans-serif" font-size="21">A quadratic tube around the tangent</text>
+  </g>
+</svg>

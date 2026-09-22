@@ -41,4 +41,108 @@ const formattedDate = formatDate(date);
 
     <Giscus />
   </article>
+
+  <script>
+    const explanationPopovers = Array.from(
+      document.querySelectorAll<HTMLElement>('.explanation-popover'),
+    );
+    const supportsPopover = 'showPopover' in HTMLElement.prototype;
+    const viewportMargin = 12;
+    const triggerGap = 12;
+
+    function positionExplanationPopover(popover: HTMLElement) {
+      const trigger = document.querySelector<HTMLElement>(
+        `[popovertarget="${CSS.escape(popover.id)}"]`,
+      );
+      if (!trigger) return;
+
+      const triggerRect = trigger.getBoundingClientRect();
+      const width = Math.min(520, window.innerWidth - 2 * viewportMargin);
+      popover.style.width = `${width}px`;
+
+      const popoverRect = popover.getBoundingClientRect();
+      const centeredLeft = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2;
+      const left = Math.min(
+        window.innerWidth - popoverRect.width - viewportMargin,
+        Math.max(viewportMargin, centeredLeft),
+      );
+      const roomBelow = window.innerHeight - triggerRect.bottom - triggerGap - viewportMargin;
+      const roomAbove = triggerRect.top - triggerGap - viewportMargin;
+      const placeBelow = roomBelow >= popoverRect.height || roomBelow >= roomAbove;
+      const preferredTop = placeBelow
+        ? triggerRect.bottom + triggerGap
+        : triggerRect.top - popoverRect.height - triggerGap;
+      const top = Math.min(
+        window.innerHeight - popoverRect.height - viewportMargin,
+        Math.max(viewportMargin, preferredTop),
+      );
+      popover.dataset.placement = placeBelow ? 'below' : 'above';
+      popover.style.left = `${left}px`;
+      popover.style.top = `${top}px`;
+    }
+
+    function isOpen(popover: HTMLElement) {
+      return supportsPopover
+        ? popover.matches(':popover-open')
+        : popover.classList.contains('is-open');
+    }
+
+    let positionFrame = 0;
+    function positionOpenExplanations() {
+      cancelAnimationFrame(positionFrame);
+      positionFrame = requestAnimationFrame(() => {
+        explanationPopovers.filter(isOpen).forEach(positionExplanationPopover);
+      });
+    }
+
+    explanationPopovers.forEach(popover => {
+      if (supportsPopover) {
+        popover.addEventListener('toggle', () => {
+          if (isOpen(popover)) positionExplanationPopover(popover);
+        });
+        return;
+      }
+
+      const trigger = document.querySelector<HTMLButtonElement>(
+        `[popovertarget="${CSS.escape(popover.id)}"]`,
+      );
+      trigger?.setAttribute('aria-expanded', 'false');
+      trigger?.addEventListener('click', () => {
+        const opening = !popover.classList.contains('is-open');
+        explanationPopovers.forEach(other => {
+          other.classList.remove('is-open');
+          document
+            .querySelector<HTMLElement>(`[popovertarget="${CSS.escape(other.id)}"]`)
+            ?.setAttribute('aria-expanded', 'false');
+        });
+        popover.classList.toggle('is-open', opening);
+        trigger.setAttribute('aria-expanded', String(opening));
+        if (opening) positionExplanationPopover(popover);
+      });
+    });
+
+    if (!supportsPopover) {
+      document.addEventListener('click', event => {
+        if (event.target instanceof Element && event.target.closest('.explanation-note')) return;
+        explanationPopovers.forEach(popover => {
+          popover.classList.remove('is-open');
+          document
+            .querySelector<HTMLElement>(`[popovertarget="${CSS.escape(popover.id)}"]`)
+            ?.setAttribute('aria-expanded', 'false');
+        });
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        explanationPopovers.forEach(popover => {
+          popover.classList.remove('is-open');
+          document
+            .querySelector<HTMLElement>(`[popovertarget="${CSS.escape(popover.id)}"]`)
+            ?.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    window.addEventListener('resize', positionOpenExplanations);
+    window.addEventListener('scroll', positionOpenExplanations, { passive: true });
+  </script>
 </BaseLayout>

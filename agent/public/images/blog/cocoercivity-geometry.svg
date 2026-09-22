@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="590" viewBox="0 0 1200 590" role="img" aria-labelledby="title desc">
+  <title id="title">Geometric meaning of cocoercivity</title>
+  <desc id="desc">The gradient difference must point sufficiently strongly in the direction of the position difference.</desc>
+  <rect width="1200" height="590" fill="#ffffff"/>
+  <text x="600" y="48" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="31" font-weight="600">Cocoercivity controls both length and direction</text>
+  <defs>
+    <marker id="navyArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#1e3a8a"/></marker>
+    <marker id="greenArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#166534"/></marker>
+  </defs>
+  <circle cx="265" cy="435" r="8" fill="#0f172a"/>
+  <line x1="265" y1="435" x2="935" y2="435" stroke="#1e3a8a" stroke-width="7" marker-end="url(#navyArrow)"/>
+  <line x1="265" y1="435" x2="730" y2="175" stroke="#166534" stroke-width="7" marker-end="url(#greenArrow)"/>
+  <line x1="730" y1="175" x2="730" y2="435" stroke="#94a3b8" stroke-width="3" stroke-dasharray="10 8"/>
+  <path d="M405 435 A140 140 0 0 0 387 367" fill="none" stroke="#7c3aed" stroke-width="4"/>
+  <text x="955" y="445" fill="#1e3a8a" font-family="Arial, sans-serif" font-size="27">Δx</text>
+  <text x="735" y="155" fill="#166534" font-family="Arial, sans-serif" font-size="27">Δ∇φ</text>
+  <text x="405" y="390" fill="#7c3aed" font-family="Arial, sans-serif" font-size="25">θ</text>
+  <text x="505" y="475" fill="#475569" font-family="Arial, sans-serif" font-size="22">projection of Δ∇φ onto Δx</text>
+  <text x="600" y="535" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="24">⟨Δ∇φ, Δx⟩ ≥ ‖Δ∇φ‖²/L forces θ to be acute and the projection to be large enough.</text>
+  <text x="600" y="570" text-anchor="middle" fill="#475569" font-family="Arial, sans-serif" font-size="21">Lipschitz continuity bounds only ‖Δ∇φ‖; cocoercivity also constrains its alignment with Δx.</text>
+</svg>

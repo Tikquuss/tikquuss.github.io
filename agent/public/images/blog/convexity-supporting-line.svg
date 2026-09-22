@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Geometric meaning of convexity and a subgradient</title>
+  <desc id="desc">A convex curve lies below each chord and above every supporting line determined by a subgradient.</desc>
+  <rect width="1200" height="620" fill="#ffffff"/>
+  <line x1="105" y1="525" x2="1110" y2="525" stroke="#64748b" stroke-width="2"/>
+  <line x1="155" y1="560" x2="155" y2="70" stroke="#64748b" stroke-width="2"/>
+  <path d="M170 500 Q608 492 1045 140" fill="none" stroke="#166534" stroke-width="7"/>
+  <line x1="305" y1="489" x2="895" y2="250" stroke="#2563eb" stroke-width="5"/>
+  <line x1="280" y1="544" x2="1030" y2="227" stroke="#ea580c" stroke-width="5" stroke-dasharray="15 10"/>
+  <circle cx="305" cy="489" r="8" fill="#2563eb"/>
+  <circle cx="895" cy="250" r="8" fill="#2563eb"/>
+  <circle cx="620" cy="401" r="8" fill="#ea580c"/>
+  <line x1="620" y1="401" x2="620" y2="525" stroke="#94a3b8" stroke-width="2" stroke-dasharray="7 8"/>
+  <text x="1045" y="120" fill="#166534" font-family="Arial, sans-serif" font-size="28" font-weight="600">φ</text>
+  <text x="500" y="300" fill="#2563eb" font-family="Arial, sans-serif" font-size="25">chord</text>
+  <text x="720" y="405" fill="#ea580c" font-family="Arial, sans-serif" font-size="25">supporting line at x</text>
+  <text x="598" y="558" fill="#334155" font-family="Arial, sans-serif" font-size="25">x</text>
+  <text x="275" y="482" fill="#334155" font-family="Arial, sans-serif" font-size="23">u</text>
+  <text x="905" y="240" fill="#334155" font-family="Arial, sans-serif" font-size="23">v</text>
+  <text x="185" y="52" fill="#0f172a" font-family="Arial, sans-serif" font-size="31" font-weight="600">Convexity gives two complementary pictures</text>
+  <text x="185" y="590" fill="#475569" font-family="Arial, sans-serif" font-size="23">The graph stays below the chord joining two graph points and above the affine support at x.</text>
+</svg>

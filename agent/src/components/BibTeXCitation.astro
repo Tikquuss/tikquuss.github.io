@@ -1,0 +1,53 @@
+---
+import { SITE, withBase } from '../lib/site';
+
+interface Props {
+  title: string;
+  date: string;
+  slug: string;
+}
+
+const { title, date, slug } = Astro.props;
+
+const year = date.slice(0, 4);
+const monthIndex = Number(date.slice(5, 7)) - 1;
+const bibtexMonths = [
+  'jan',
+  'feb',
+  'mar',
+  'apr',
+  'may',
+  'jun',
+  'jul',
+  'aug',
+  'sep',
+  'oct',
+  'nov',
+  'dec',
+];
+const month = bibtexMonths[monthIndex];
+const citationKey = `tikengnotsawo${year}${slug.replace(/[^a-z0-9]/gi, '').toLowerCase()}`;
+const url = new URL(withBase(`/blog/${slug}/`), SITE.url).toString();
+
+const escapeBibTeX = (value: string) =>
+  value
+    .replace(/\\/g, '\\textbackslash{}')
+    .replace(/([#$%&_{}])/g, '\\$1')
+    .replace(/~/g, '\\textasciitilde{}')
+    .replace(/\^/g, '\\textasciicircum{}');
+
+const monthField = month ? `\n  month = ${month},` : '';
+const bibtex = `@misc{${citationKey},
+  author = {Tikeng Notsawo, Pascal Jr.},
+  title = {{${escapeBibTeX(title)}}},
+  year = {${year}},${monthField}
+  url = {${url}},
+  note = {Blog post}
+}`;
+---
+
+<section class="post-citation" aria-labelledby="cite-this-post">
+  <h2 id="cite-this-post">Cite this post</h2>
+  <p>If you would like to cite this post, you can use the following BibTeX entry:</p>
+  <pre><code>{bibtex}</code></pre>
+</section>

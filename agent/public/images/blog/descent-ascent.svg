@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="610" viewBox="0 0 1200 610" role="img" aria-labelledby="title desc">
+  <title id="title">Positive and negative gradient steps</title>
+  <desc id="desc">From a point on a curve, a positive learning rate moves against the gradient and lowers the function, while a negative learning rate moves with the gradient and raises it.</desc>
+  <rect width="1200" height="610" fill="#ffffff"/>
+  <text x="600" y="48" text-anchor="middle" fill="#0f172a" font-family="Arial, sans-serif" font-size="31" font-weight="600">The sign of the learning rate chooses descent or ascent</text>
+  <line x1="90" y1="505" x2="1110" y2="505" stroke="#64748b" stroke-width="2"/>
+  <line x1="130" y1="545" x2="130" y2="80" stroke="#64748b" stroke-width="2"/>
+  <text x="1095" y="490" text-anchor="end" fill="#334155" font-family="Arial, sans-serif" font-size="23">position z</text>
+  <text transform="translate(62 300) rotate(-90)" text-anchor="middle" fill="#334155" font-family="Arial, sans-serif" font-size="23">function value φ(z)</text>
+  <path d="M150 455 C310 448 425 420 520 350 C640 260 735 160 1035 105" fill="none" stroke="#334155" stroke-width="7"/>
+  <circle cx="690" cy="218" r="10" fill="#0f172a"/>
+  <circle cx="460" cy="391" r="10" fill="#2563eb"/>
+  <circle cx="930" cy="120" r="10" fill="#ea580c"/>
+  <line x1="690" y1="218" x2="825" y2="146" stroke="#7c3aed" stroke-width="6" marker-end="url(#purpleArrow)"/>
+  <line x1="680" y1="235" x2="480" y2="375" stroke="#2563eb" stroke-width="6" marker-end="url(#blueArrow)"/>
+  <line x1="705" y1="205" x2="910" y2="128" stroke="#ea580c" stroke-width="6" marker-end="url(#orangeArrow)"/>
+  <defs>
+    <marker id="purpleArrow" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 Z" fill="#7c3aed"/></marker>
+    <marker id="blueArrow" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 Z" fill="#2563eb"/></marker>
+    <marker id="orangeArrow" markerWidth="16" markerHeight="16" refX="14" refY="8" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L16,8 L0,16 Z" fill="#ea580c"/></marker>
+  </defs>
+  <text x="835" y="140" fill="#7c3aed" font-family="Arial, sans-serif" font-size="24">∇φ(x)</text>
+  <text x="425" y="345" fill="#2563eb" font-family="Arial, sans-serif" font-size="24">α &gt; 0</text>
+  <text x="866" y="202" fill="#ea580c" font-family="Arial, sans-serif" font-size="24">α &lt; 0</text>
+  <text x="650" y="205" fill="#0f172a" font-family="Arial, sans-serif" font-size="24">x</text>
+  <text x="315" y="430" fill="#2563eb" font-family="Arial, sans-serif" font-size="23">x − α∇φ(x): lower value</text>
+  <text x="820" y="92" fill="#ea580c" font-family="Arial, sans-serif" font-size="23">x − α∇φ(x): higher value</text>
+  <text x="600" y="572" text-anchor="middle" fill="#475569" font-family="Arial, sans-serif" font-size="23">Smoothness controls how large the guaranteed decrease or increase can be.</text>
+</svg>

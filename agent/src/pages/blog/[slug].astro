@@ -1,5 +1,6 @@
 ---
 import PostLayout from '../../layouts/PostLayout.astro';
+import BibTeXCitation from '../../components/BibTeXCitation.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../../lib/site';
 
@@ -24,4 +25,5 @@ const { Content } = await post.render();
   description={post.data.excerpt}
 >
   <Content />
+  <BibTeXCitation title={post.data.title} date={post.data.date} slug={post.slug} />
 </PostLayout>
