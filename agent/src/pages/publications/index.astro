@@ -13,7 +13,7 @@ const years = [...new Set(sorted.map(pub => new Date(pub.data.date).getFullYear(
 
 <BaseLayout
   title="Publications"
-  description="Publication archive for Pascal Jr. Tikeng Notsawo."
+  description="Publication archive for Pascal Jr Tikeng Notsawo."
   wide={true}
 >
   <div class="section-header">
@@ -35,6 +35,7 @@ const years = [...new Set(sorted.map(pub => new Date(pub.data.date).getFullYear(
               href={withBase(`/publications/${pub.slug}`)}
               title={pub.data.title}
               authors={pub.data.authors}
+              authorContributions={pub.data.authorContributions}
               venues={pub.data.venues}
               date={pub.data.date}
               tags={pub.data.tags}

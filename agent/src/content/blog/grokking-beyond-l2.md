@@ -16,7 +16,7 @@ excerpt: "Why grokking is governed by the property favored late in training—an
 
 This post develops the main idea of our ICML 2025 paper, *Grokking Beyond the Euclidean Norm of Model Parameters* ([Notsawo et al., 2025](#ref-notsawo2025)). We will use the memorization time $t_1$ and the generalization time $t_2$ defined in [What Is Grokking?](/blog/what-is-grokking/).
 
-> <span class="grokking-kicker grokking-kicker--paper">Paper</span> Pascal Jr. Tikeng Notsawo, Guillaume Dumas, and Guillaume Rabusseau, *Grokking Beyond the Euclidean Norm of Model Parameters*, ICML 2025. [arXiv](https://arxiv.org/abs/2506.05718) · [OpenReview](https://openreview.net/forum?id=FRjRuSWF3e)
+> <span class="grokking-kicker grokking-kicker--paper">Paper</span> Pascal Jr Tikeng Notsawo, Guillaume Dumas, and Guillaume Rabusseau, *Grokking Beyond the Euclidean Norm of Model Parameters*, ICML 2025. [arXiv](https://arxiv.org/abs/2506.05718) · [OpenReview](https://openreview.net/forum?id=FRjRuSWF3e)
 
 We demonstrate that grokking can be induced by <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="explicit-implicit-regularization" aria-label="Compare explicit and implicit regularization">explicit or implicit regularization</button><span id="explicit-implicit-regularization" class="explanation-popover" popover="auto" role="note" aria-label="Explicit and implicit regularization" data-label="Distinction"><strong>Explicit regularization</strong> adds a penalty such as $\beta h(\theta)$ to the objective. <strong>Implicit regularization</strong> arises from the parameterization, optimizer, initialization, or data even when no corresponding penalty is written in the loss.</span></span>. More precisely, when there exists a model with a property $P$—for example, sparse or low-rank weights—that generalizes on the problem of interest, gradient descent with a small but non-zero regularization of $P$—for example, $\ell_1$ or nuclear-norm regularization—can result in grokking. This extends previous work showing that small non-zero weight decay induces grokking.
 
@@ -1048,7 +1048,7 @@ The common structure is simple: the <span class="grokking-mark grokking-mark--me
 
 ## References
 
-- <span id="ref-notsawo2025"></span>Pascal Jr. Tikeng Notsawo, Guillaume Dumas, and Guillaume Rabusseau, [“Grokking Beyond the Euclidean Norm of Model Parameters”](https://arxiv.org/abs/2506.05718), ICML 2025.
+- <span id="ref-notsawo2025"></span>Pascal Jr Tikeng Notsawo, Guillaume Dumas, and Guillaume Rabusseau, [“Grokking Beyond the Euclidean Norm of Model Parameters”](https://arxiv.org/abs/2506.05718), ICML 2025.
 - <span id="ref-fort2018"></span>Stanislav Fort and Adam Scherlis, [“The Goldilocks Zone: Towards Better Understanding of Neural Network Loss Landscapes”](https://arxiv.org/abs/1807.02581), 2018.
 - <span id="ref-liu2023omnigrok"></span>Ziming Liu, Eric J. Michaud, and Max Tegmark, [“Omnigrok: Grokking Beyond Algorithmic Data”](https://openreview.net/forum?id=zDiHoIWa0q1), ICLR 2023.
 - <span id="ref-gromov2023"></span>Andrey Gromov, [“Grokking Modular Arithmetic”](https://arxiv.org/abs/2301.02679), 2023.

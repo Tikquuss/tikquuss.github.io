@@ -1,11 +1,19 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Giscus from '../components/Giscus.astro';
+import PublicationAuthors from '../components/PublicationAuthors.astro';
 import { withBase } from '../lib/site';
+
+interface AuthorContributions {
+  lead?: string[];
+  core?: string[];
+  highlighted?: string[];
+}
 
 interface Props {
   title: string;
   authors: string;
+  authorContributions?: AuthorContributions;
   venues: string[];
   date: string;
   paperUrl?: string;
@@ -15,7 +23,18 @@ interface Props {
   description?: string;
 }
 
-const { title, authors, venues, date, paperUrl, codeUrl, projectUrl, tags = [], description } = Astro.props;
+const {
+  title,
+  authors,
+  authorContributions,
+  venues,
+  date,
+  paperUrl,
+  codeUrl,
+  projectUrl,
+  tags = [],
+  description,
+} = Astro.props;
 
 const year = new Date(date).getFullYear();
 ---
@@ -27,7 +46,9 @@ const year = new Date(date).getFullYear();
     <header class="pub-detail-header">
       <p class="eyebrow">Research publication <span aria-hidden="true">/</span> {year}</p>
       <h1>{title}</h1>
-      <p class="pub-detail-authors">{authors}</p>
+      <div class="pub-detail-authors">
+        <PublicationAuthors authors={authors} contributions={authorContributions} />
+      </div>
       <div class="pub-detail-venues" aria-label="Published at">
         {venues.map(item => <p class="pub-detail-venue">{item}</p>)}
       </div>

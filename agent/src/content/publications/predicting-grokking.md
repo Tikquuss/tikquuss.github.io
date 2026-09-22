@@ -1,6 +1,6 @@
 ---
 title: "Predicting Grokking Long Before it Happens: A look into the loss landscape of models which grok"
-authors: "Pascal Jr. Tikeng Notsawo, Hattie Zhou, Mohammad Pezeshki, Irina Rish, Guillaume Dumas"
+authors: "Pascal Jr Tikeng Notsawo, Hattie Zhou, Mohammad Pezeshki, Irina Rish, Guillaume Dumas"
 venues:
   - "Workshop on Mathematical and Empirical Understanding of Foundation Models, ICLR, 2024"
 date: "2023-06-23"

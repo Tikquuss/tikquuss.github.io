@@ -1,6 +1,6 @@
 ---
 title: "Lost in Translation: The Algorithmic Gap Between LMs and the Brain"
-authors: "Tommaso Tosato, Pascal Jr. Tikeng Notsawo, Saskia Helbling, Irina Rish, Guillaume Dumas"
+authors: "Tommaso Tosato, Pascal Jr Tikeng Notsawo, Saskia Helbling, Irina Rish, Guillaume Dumas"
 venues:
   - "Workshop on Large Language Models and Cognition, ICML, 2024"
 date: "2024-07-05"

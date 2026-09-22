@@ -1,6 +1,6 @@
 ---
 title: "Grokking Finite-Dimensional Algebra"
-authors: "Pascal Jr. Tikeng Notsawo, Guillaume Dumas, Guillaume Rabusseau"
+authors: "Pascal Jr Tikeng Notsawo, Guillaume Dumas, Guillaume Rabusseau"
 venues:
   - "Forty-Third International Conference on Machine Learning (ICML), 2026"
 date: "2026-02-23"

@@ -1,10 +1,22 @@
 ---
 title: "Quantifying Overclaiming Propensity in Frontier LLM Agents"
 authors: "Nolan Smyth, Yorguin-Jose Mantilla-Ramos, Pascal Jr Tikeng Notsawo, Saskia Helbling, Alberto Tosato, Mohamed Amine Merzouk, Nouha Dziri, Gauthier Gidel, Tommaso Tosato"
+authorContributions:
+  lead:
+    - "Nolan Smyth"
+    - "Yorguin-Jose Mantilla-Ramos"
+    - "Tommaso Tosato"
+  core:
+    - "Pascal Jr Tikeng Notsawo"
+    - "Saskia Helbling"
+    - "Alberto Tosato"
+  highlighted:
+    - "Pascal Jr Tikeng Notsawo"
 venues:
-  - "arXiv preprint"
+  - "Preprint, under review"
 date: "2026-09-20"
 paperUrl: "https://arxiv.org/abs/2609.20812"
+image: "/images/publications/overclaiming-overview.png"
 tags: ["AI Safety", "Overclaiming", "Benchmarks", "LLM Agents", "Agent Evaluation"]
 abstract: Frontier coding agents often claim to have reviewed every file when they have not, leaving critical issues they missed unreported.
 ---

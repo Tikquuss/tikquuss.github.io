@@ -1,6 +1,6 @@
 ---
 title: "On the use of linguistic similarities to improve Neural Machine Translation for African Languages"
-authors: "Pascal Jr. Tikeng Notsawo, Brice Nanda, James Assiene"
+authors: "Pascal Jr Tikeng Notsawo, Brice Nanda, James Assiene"
 venues:
   - "5th Black in AI Workshop, NeurIPS, 2021"
 date: "2021-12-15"

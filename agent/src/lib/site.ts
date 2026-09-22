@@ -1,9 +1,9 @@
 export const SITE = {
-  name: 'Pascal Jr. Tikeng Notsawo',
+  name: 'Pascal Jr Tikeng Notsawo',
   shortName: 'Pascal Tikeng',
-  title: 'Pascal Jr. Tikeng Notsawo',
+  title: 'Pascal Jr Tikeng Notsawo',
   description:
-    'Personal research website for Pascal Jr. Tikeng Notsawo, a PhD student working on machine learning theory, grokking, generalization, optimization, and alignment.',
+    'Personal research website for Pascal Jr Tikeng Notsawo, a PhD student working on machine learning theory, grokking, generalization, optimization, and alignment.',
   url: 'https://tikquuss.github.io',
   repo: 'Tikquuss/tikquuss.github.io',
   repoId: 'R_kgDOG2kYVg',

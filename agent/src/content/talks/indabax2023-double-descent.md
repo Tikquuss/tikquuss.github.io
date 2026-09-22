@@ -1,9 +1,9 @@
 ---
-title: "Rethinking Generalization in Deep Learning: Double descent and Grokking phenomena"
+title: "Rethinking Generalization in Deep Learning: Double Descent and Grokking"
 type: "Talk"
-venue: "Deep Learning IndabaX Cameroon, 2023"
+venue: "Deep Learning IndabaX Cameroon 2023"
 date: "2023-09-14"
-location: "ENPY, Yaoundé, Cameroun"
+location: "National Advanced School of Engineering of Yaoundé, Cameroon"
 slidesUrl: "/presentations/indabax-cameroon-2023.pdf"
 videoUrl: "https://www.youtube.com/watch?v=nh8IKNx-TX0&list=PLzcNPC1v20laEwwLPDqtH1Fk63NeE6Fma"
 image: "/images/talks/dl-indaba.png"

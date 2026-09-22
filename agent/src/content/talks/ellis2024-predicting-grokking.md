@@ -1,14 +1,13 @@
 ---
 title: "Predicting Grokking Long Before it Happens: A Look into the Loss Landscape of Models Which Grok"
 type: "Talk"
-venue: "5th Workshop on Neural Scaling Laws: Emergence and Phase Transitions, ICML 2023"
-date: "2023-07-28"
-location: "Honolulu, USA"
+venue: "ELLIS Reading Group on Mathematics of Deep Learning, European Laboratory for Learning and Intelligent Systems (ELLIS)"
+date: "2024-01-09"
 slidesUrl: "/presentations/predicting-grokking.pdf"
-image: "/images/talks/icml.png"
+image: "/images/publications/predicting-grokking.png"
 ---
 
-<img src="/images/talks/icml.png" alt="ICML">
+Presented to the ELLIS Reading Group on Mathematics of Deep Learning on January 9, 2024.
 
 <object type="application/pdf" data="/presentations/predicting-grokking.pdf" title="Predicting Grokking Long Before it Happens presentation" width="100%" height="800">
   <p><a href="/presentations/predicting-grokking.pdf">Open the Predicting Grokking presentation (PDF)</a>.</p>

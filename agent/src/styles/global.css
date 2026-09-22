@@ -743,6 +743,38 @@ main.wide {
   line-height: 1.6;
 }
 
+.publication-author strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.publication-author:not(:last-child)::after {
+  content: ', ';
+}
+
+.publication-author sup,
+.author-contribution-legend sup {
+  position: relative;
+  top: -0.12em;
+  margin-left: 0.06em;
+  color: var(--accent-dark);
+  font-family: var(--font-sans);
+  font-size: 0.72em;
+  font-weight: 700;
+  line-height: 0;
+}
+
+.author-contribution-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.18rem 0.9rem;
+  margin-top: 0.3rem;
+  color: var(--subtle);
+  font-family: var(--font-sans);
+  font-size: 0.76em;
+  line-height: 1.5;
+}
+
 .pub-venues {
   display: grid;
   gap: 0.18rem;
@@ -951,6 +983,11 @@ main.wide {
   font-size: 1rem;
   line-height: 1.8;
   margin: 0;
+}
+
+.pub-detail-authors .author-contribution-legend {
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
 }
 
 .pub-detail-header .tags {

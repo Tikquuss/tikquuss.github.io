@@ -1,6 +1,6 @@
 ---
 title: "Adaptive Discrete Communication Bottlenecks with Dynamic Vector Quantization for Heterogeneous Representational Coarseness"
-authors: "Dianbo Liu, Alex Lamb, Xu Ji, Pascal Jr. Tikeng Notsawo, Mike Mozer, Yoshua Bengio, Kenji Kawaguchi"
+authors: "Dianbo Liu, Alex Lamb, Xu Ji, Pascal Jr Tikeng Notsawo, Mike Mozer, Yoshua Bengio, Kenji Kawaguchi"
 venues:
   - "Thirty-Seventh AAAI Conference on Artificial Intelligence (AAAI), 2023"
 date: "2023-02-02"

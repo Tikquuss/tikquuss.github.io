@@ -1,6 +1,6 @@
 ---
 title: "Grokking Beyond the Euclidean Norm of Model Parameters"
-authors: "Pascal Jr. Tikeng Notsawo, Guillaume Dumas, Guillaume Rabusseau"
+authors: "Pascal Jr Tikeng Notsawo, Guillaume Dumas, Guillaume Rabusseau"
 venues:
   - "Forty-Second International Conference on Machine Learning (ICML), 2025"
 date: "2025-05-01"

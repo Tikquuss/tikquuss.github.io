@@ -1,17 +1,25 @@
 ---
 import { resolveUrl } from '../lib/site';
+import PublicationAuthors from './PublicationAuthors.astro';
+
+interface AuthorContributions {
+  lead?: string[];
+  core?: string[];
+  highlighted?: string[];
+}
 
 interface Props {
   href: string;
   title: string;
   authors: string;
+  authorContributions?: AuthorContributions;
   venues: string[];
   date: string;
   tags?: string[];
   image?: string;
 }
 
-const { href, title, authors, venues, date, tags = [], image } = Astro.props;
+const { href, title, authors, authorContributions, venues, date, tags = [], image } = Astro.props;
 const year = new Date(date).getFullYear();
 ---
 
@@ -31,7 +39,9 @@ const year = new Date(date).getFullYear();
       <div class="pub-title">{title}</div>
       <span class="card-arrow" aria-hidden="true">↗</span>
     </div>
-    <div class="pub-authors">{authors}</div>
+    <div class="pub-authors">
+      <PublicationAuthors authors={authors} contributions={authorContributions} />
+    </div>
     <div class="pub-venues" aria-label={venues.length > 1 ? 'Publication venues' : 'Publication venue'}>
       {venues.map(venue => <div class="pub-venue">{venue}</div>)}
     </div>

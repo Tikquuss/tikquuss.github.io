@@ -1,6 +1,6 @@
 # Pascal Research Website
 
-New Astro personal academic website for Pascal Jr. Tikeng Notsawo.
+New Astro personal academic website for Pascal Jr Tikeng Notsawo.
 
 ## Launch Locally
 

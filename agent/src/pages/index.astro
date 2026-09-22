@@ -22,12 +22,12 @@ const news = [
 
 <BaseLayout
   title="Home"
-  description="Pascal Jr. Tikeng Notsawo - PhD student in Machine Learning Theory at Mila and Université de Montréal."
+  description="Pascal Jr Tikeng Notsawo - PhD student in Machine Learning Theory at Mila and Université de Montréal."
   wide={true}
 >
   <section class="home-hero">
     <div class="hero-photo-wrap">
-      <img class="hero-photo" src={withBase('/images/people/pascal.jpg')} alt="Pascal Jr. Tikeng Notsawo" />
+      <img class="hero-photo" src={withBase('/images/people/pascal.jpg')} alt="Pascal Jr Tikeng Notsawo" />
     </div>
 
     <div class="hero-content">
@@ -95,6 +95,7 @@ const news = [
           href={withBase(`/publications/${pub.slug}`)}
           title={pub.data.title}
           authors={pub.data.authors}
+          authorContributions={pub.data.authorContributions}
           venues={pub.data.venues}
           date={pub.data.date}
           tags={pub.data.tags}

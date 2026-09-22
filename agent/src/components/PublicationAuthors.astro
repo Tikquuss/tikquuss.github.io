@@ -1,0 +1,47 @@
+---
+interface AuthorContributions {
+  lead?: string[];
+  core?: string[];
+  highlighted?: string[];
+}
+
+interface Props {
+  authors: string;
+  contributions?: AuthorContributions;
+}
+
+const { authors, contributions } = Astro.props;
+const names = authors.split(',').map(name => name.trim()).filter(Boolean);
+const leadAuthors = new Set(contributions?.lead ?? []);
+const coreAuthors = new Set(contributions?.core ?? []);
+const highlightedAuthors = new Set(contributions?.highlighted ?? []);
+const hasLegend = leadAuthors.size > 0 || coreAuthors.size > 0;
+
+const isSiteAuthor = (name: string) => {
+  const normalizedName = name
+    .toLocaleLowerCase('en')
+    .replace(/\./g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  return normalizedName === 'pascal jr tikeng notsawo';
+};
+---
+
+<span class="publication-authors-list">
+  {names.map(name => {
+    const marker = leadAuthors.has(name) ? '*' : coreAuthors.has(name) ? '†' : undefined;
+    const markerLabel = leadAuthors.has(name) ? 'lead contribution' : 'core contributor';
+
+    return (
+      <span class="publication-author">{highlightedAuthors.has(name) || isSiteAuthor(name) ? <strong>{name}</strong> : name}{marker && <sup aria-label={markerLabel}>{marker}</sup>}</span>
+    );
+  })}
+</span>
+
+{hasLegend && (
+  <span class="author-contribution-legend" aria-label="Author contribution markers">
+    {leadAuthors.size > 0 && <span><sup aria-hidden="true">*</sup> Lead contribution</span>}
+    {coreAuthors.size > 0 && <span><sup aria-hidden="true">†</sup> Core contributors</span>}
+  </span>
+)}

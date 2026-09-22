@@ -1,6 +1,6 @@
 ---
 title: "Stochastic Average Gradient : A Simple Empirical Investigation"
-authors: "Pascal Junior Tikeng Notsawo"
+authors: "Pascal Jr Tikeng Notsawo"
 venues:
   - "IFT6512: Stochastic Programming, Université de Montréal, 2023"
 date: "2023-01-31"
