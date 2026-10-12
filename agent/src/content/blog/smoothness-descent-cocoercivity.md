@@ -321,7 +321,7 @@ $$
 \end{equation}
 $$
 
-The blue terms show the substitution $\mathbf{w}-\mathbf{y}=-\mathbf{s}/L$ in both the linear and quadratic terms. Their contributions combine to $-\|\mathbf{s}\|_2^2/(2L)$.
+The <span style="color:#2563eb">blue terms</span> show the substitution $\mathbf{w}-\mathbf{y}=-\mathbf{s}/L$ in both the linear and quadratic terms. Their contributions combine to $-\|\mathbf{s}\|_2^2/(2L)$.
 
 Rearranging and recalling that $\mathbf{s}=\nabla f(\mathbf{y})-\nabla f(\mathbf{x})$ gives
 
@@ -477,7 +477,7 @@ $$
 \end{equation}
 $$
 
-In the second equality, the blue terms display the same quantity being added and subtracted. The first inequality follows from the Cauchy–Schwarz inequality, and the second uses the $L$-Lipschitz continuity of $\nabla\varphi$.
+In the second equality, the <span style="color:#2563eb">blue terms</span> display the same quantity being added and subtracted. The first inequality follows from the Cauchy–Schwarz inequality, and the second uses the $L$-Lipschitz continuity of $\nabla\varphi$.
 
 Since $-\varphi$ is also $L$-smooth, applying the upper bound just proved to $-\varphi$ gives
 
@@ -537,7 +537,7 @@ h(\mathbf{y})-h(\mathbf{x})
 \end{equation}
 $$
 
-The blue and orange terms are the two possible signs of the same remainder $r$, while the purple quadratic term is common to both shifted functions. Since $|r|\le(L/2)\|\mathbf{d}\|_2^2$, both colored sums are nonnegative.
+The <span style="color:#2563eb">blue</span> and <span style="color:#ea580c">orange</span> terms are the two possible signs of the same remainder $r$, while the <span style="color:#7c3aed">purple quadratic term</span> is common to both shifted functions. Since $|r|\le(L/2)\|\mathbf{d}\|_2^2$, both colored sums are nonnegative.
 
 Both quantities lie in $[0,L\|\mathbf{d}\|_2^2]$. Hence $g$ and $h$ are convex and $2L$-UQI. By Lemma 1, they are $(2L)$-GLB. Therefore,
 
@@ -583,7 +583,7 @@ $$
 \end{equation}
 $$
 
-The blue and orange vectors are mirror images in the $\boldsymbol{\Delta}$ component. When their squared norms are added, the opposite cross terms cancel; this is precisely the parallelogram identity used in the next line.
+The <span style="color:#2563eb">blue</span> and <span style="color:#ea580c">orange</span> vectors are mirror images in the $\boldsymbol{\Delta}$ component. When their squared norms are added, the opposite cross terms cancel; this is precisely the parallelogram identity used in the next line.
 
 Thus $\nabla\varphi$ is $L$-Lipschitz continuous, so $\varphi$ is $L$-smooth.
 
@@ -644,7 +644,7 @@ $$
 \end{equation}
 $$
 
-The blue terms combine the linear decrease $-\alpha\|\nabla\varphi(\mathbf{x})\|_2^2$ with the quadratic smoothness penalty. Their net effect is a guaranteed decrease when $0<\alpha<2/L$.
+The <span style="color:#2563eb">blue terms</span> combine the linear decrease $-\alpha\|\nabla\varphi(\mathbf{x})\|_2^2$ with the quadratic smoothness penalty. Their net effect is a guaranteed decrease when $0<\alpha<2/L$.
 
 Its lower quadratic inequality similarly gives
 
@@ -664,7 +664,7 @@ $$
 \end{equation}
 $$
 
-The orange terms give the mirrored lower estimate. When $-2/L<\alpha<0$, their combined coefficient makes the new value strictly larger whenever $\nabla\varphi(\mathbf{x})\ne0$.
+The <span style="color:#ea580c">orange terms</span> give the mirrored lower estimate. When $-2/L<\alpha<0$, their combined coefficient makes the new value strictly larger whenever $\nabla\varphi(\mathbf{x})\ne0$.
 
 For $0\le\alpha\le 2/L$, the coefficient $\alpha(2-L\alpha)/2$ is nonnegative, which proves the descent statement. For $-2/L\le\alpha\le0$, the coefficient $-\alpha(2+L\alpha)/2$ is nonnegative, which proves the ascent statement.
 
@@ -754,7 +754,7 @@ $$
 
 which yields the second bound. Setting $\alpha=-1/L$ gives its stated special case.
 
-The blue chain uses the lower bound $\varphi_\star$ to limit how much descent remains possible. The orange chain is its ascent counterpart: the upper bound $\varphi^\star$ limits how much increase remains possible.
+The <span style="color:#2563eb">blue chain</span> uses the lower bound $\varphi_\star$ to limit how much descent remains possible. The <span style="color:#ea580c">orange chain</span> is its ascent counterpart: the upper bound $\varphi^\star$ limits how much increase remains possible.
 
 $$
 \begin{array}{r}
@@ -820,7 +820,7 @@ $$
 \end{equation}
 $$
 
-The blue factors show the same infinitesimal distance $|t|$: Lipschitz continuity contributes one factor through $\|t\mathbf{v}\|_2=|t|\|\mathbf{v}\|_2$, which then cancels with the difference-quotient denominator.
+The <span style="color:#2563eb">blue factors</span> show the same infinitesimal distance $|t|$: Lipschitz continuity contributes one factor through $\|t\mathbf{v}\|_2=|t|\|\mathbf{v}\|_2$, which then cancels with the difference-quotient denominator.
 
 If $\mathbf{v}$ is an eigenvector of $\nabla^2 \varphi(\mathbf{x})$ associated with the eigenvalue $\lambda$, then $\lambda \mathbf{v} = \nabla^2 \varphi(\mathbf{x}) \mathbf{v}$, which implies $| \lambda | \| \mathbf{v} \|_2 =  \|\nabla^2 \varphi(\mathbf{x}) \mathbf{v} \|_2 \le L \| \mathbf{v} \|_2$. Dividing both sides by $\| \mathbf{v} \|_2 \ne 0$, we obtain $| \lambda |  \le L$.
 
@@ -862,7 +862,7 @@ $$
 \end{equation}
 $$
 
-The purple step uses $\left\|\nabla^2\varphi(\cdot)\right\|_{2 \to 2}=\sigma_{\max}\left(\nabla^2\varphi(\cdot)\right)\le L$. Indeed, since $\varphi\in C^2(\mathbb{R}^n)$, its Hessian is symmetric, so <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="symmetric-spectral-norm" aria-label="Explain the spectral norm of a symmetric Hessian">its spectral norm equals the largest absolute eigenvalue</button><span id="symmetric-spectral-norm" class="explanation-popover" popover="auto" role="note" aria-label="Spectral norm of a symmetric matrix" data-label="Linear algebra">A real symmetric matrix has an orthonormal eigenbasis and singular values equal to the absolute values of its eigenvalues. Hence $\|\mathbf H\|_{2\to2}=\max_i|\lambda_i(\mathbf H)|$.</span></span>, which is at most $L$ by assumption.
+The <span style="color:#7c3aed">purple step</span> uses $\left\|\nabla^2\varphi(\cdot)\right\|_{2 \to 2}=\sigma_{\max}\left(\nabla^2\varphi(\cdot)\right)\le L$. Indeed, since $\varphi\in C^2(\mathbb{R}^n)$, its Hessian is symmetric, so <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="symmetric-spectral-norm" aria-label="Explain the spectral norm of a symmetric Hessian">its spectral norm equals the largest absolute eigenvalue</button><span id="symmetric-spectral-norm" class="explanation-popover" popover="auto" role="note" aria-label="Spectral norm of a symmetric matrix" data-label="Linear algebra">A real symmetric matrix has an orthonormal eigenbasis and singular values equal to the absolute values of its eigenvalues. Hence $\|\mathbf H\|_{2\to2}=\max_i|\lambda_i(\mathbf H)|$.</span></span>, which is at most $L$ by assumption.
 
 $$
 \begin{array}{r}
@@ -1051,7 +1051,7 @@ $$
 \end{equation}
 $$
 
-The blue and orange function-value differences cancel exactly when the two inequalities are added. The remaining two tangent terms then combine into the inner product required for cocoercivity.
+The <span style="color:#2563eb">blue</span> and <span style="color:#ea580c">orange</span> function-value differences cancel exactly when the two inequalities are added. The remaining two tangent terms then combine into the inner product required for cocoercivity.
 
 $$
 \begin{array}{r}

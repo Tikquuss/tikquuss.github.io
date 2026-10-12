@@ -68,7 +68,7 @@ then increases, with $w(\lambda)\to\infty$ both as $\lambda\to0$ and as $\lambda
 
 <figure class="article-figure article-figure-wide">
   <img src="/images/blog/grokking/parameter-norm-reparameterization.svg" width="1400" height="490" alt="Three log-log plots of the squared parameter norm w of lambda for a less than b, a equal to b, and a greater than b, with colors representing homogeneity degrees L from one to ten and divergence toward both ends of the lambda axis" loading="lazy" />
-  <figcaption>The same predictor can have very different parameter norms after rescaling. Each panel fixes a relation between $a$ and $b$; color represents $L\in\{1,\ldots,10\}$, and each dot marks the unique minimizer $\lambda_0=(Lb/a)^{1/(2L+2)}$. Both axes are logarithmic so that the divergence as $\lambda\to0^+$ and the eventual growth as $\lambda\to\infty$ are visible. The dashed line shows $\lambda=1$, where every curve in a panel has the common value $a+b$.</figcaption>
+  <figcaption>The same predictor can have very different parameter norms after rescaling. Each panel fixes a relation between $a$ and $b$; color represents $L\in\{1,\ldots,10\}$, and each dot marks the unique minimizer $\lambda_0=(Lb/a)^{1/(2L+2)}$. Both axes are logarithmic so that the divergence as $\lambda\to0^+$ and the eventual growth as $\lambda\to\infty$ are visible. The <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span> line shows $\lambda=1$, where every curve in a panel has the common value $a+b$.</figcaption>
 </figure>
 
 There is also a direct experimental objection. We trained the same modular-addition MLP described in [*What Is Grokking?*](/blog/what-is-grokking/#modular-addition) with a layerwise <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="three-matrix-norms" aria-label="Compare the three matrix norms">$\ell_1$, Frobenius, or nuclear norm</button><span id="three-matrix-norms" class="explanation-popover" popover="auto" role="note" aria-label="Three matrix norms" data-label="Comparison">The entrywise $\ell_1$ norm promotes sparse weights; the Frobenius norm is the Euclidean norm of all entries; the nuclear norm is the sum of singular values and promotes low rank.</span></span>. Let $\theta$ denote the collection of the model's weight matrices. The three corresponding norms are
@@ -881,7 +881,7 @@ We use <span class="explanation-note"><button type="button" class="explanation-t
       <text x="969" y="847" text-anchor="middle" class="legend-fraction-text">√n</text>
     </svg>
   </div>
-  <figcaption>Low-rank matrix completion shows the same scaling: the late-phase time is proportional to the spectral distance from the least-squares fit to the target, divided by αβ, and the nuclear-norm recovery error is proportional to αβ. The orange recovery error is normalized by √n, where n = n₁n₂, correcting the archived figure legend. Plateau checkpoints use the same empirical rule as in the sparse experiment.</figcaption>
+  <figcaption>Low-rank matrix completion shows the same scaling: the late-phase time is proportional to the spectral distance from the least-squares fit to the target, divided by αβ, and the nuclear-norm recovery error is proportional to αβ. The <span style="color:#ff7f0e">orange recovery error</span> is normalized by √n, where n = n₁n₂, correcting the archived figure legend. Plateau checkpoints use the same empirical rule as in the sparse experiment.</figcaption>
 </figure>
 
 ### Matrix sensing, completion, and data selection
@@ -910,7 +910,7 @@ measure how strongly each row and column aligns with the leading singular subspa
 
 <figure class="article-figure article-figure-narrow">
   <img src="/images/blog/grokking/matrix-completion-data-selection.png" width="798" height="436" alt="Matrix-completion training and recovery error for data-selection strengths from zero to one" loading="lazy" />
-  <figcaption>Training error (solid) and recovery error (dashed) for $N=70$. Increasing $\tau$ allocates more samples to entries with large leverage scores and substantially accelerates recovery.</figcaption>
+  <figcaption>Training error (<span style="text-decoration:underline solid;text-underline-offset:0.2em">solid</span>) and recovery error (<span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>) for $N=70$. Increasing $\tau$ allocates more samples to entries with large leverage scores and substantially accelerates recovery.</figcaption>
 </figure>
 
 For compressed sensing, the direction is reversed: <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="incoherent-measurements" aria-label="Explain why incoherent measurements help compressed sensing">incoherent measurements</button><span id="incoherent-measurements" class="explanation-popover" popover="auto" role="note" aria-label="Incoherent measurements" data-label="Geometry">Measurements that are not aligned with the sparse coordinate basis mix information across coordinates. They reduce redundancy and make different sparse signals easier to distinguish with fewer observations.</span></span> are beneficial, whereas high coherence between measurement vectors and the sparse basis is detrimental. Thus data selection can amplify or suppress grokking even when the model and optimization hyperparameters remain fixed.
@@ -996,7 +996,7 @@ We consider addition modulo $p=97$ with a $40\%$ training fraction, as described
 
 <figure class="article-figure article-figure-wide">
   <img src="/images/blog/grokking/modular-addition-alpha-beta-l1.png" width="1814" height="436" alt="Training and test accuracy on modular addition under L1 regularization for combinations of learning rate and regularization strength" loading="lazy" />
-  <figcaption>Training accuracy (solid) and test accuracy (dashed) for $\ell_1$-regularized modular addition. Across learning rates $\alpha$, increasing $\beta$ shortens the delay between <span class="grokking-mark grokking-mark--memorization">memorization</span> and <span class="grokking-mark grokking-mark--comprehension">generalization</span>.</figcaption>
+  <figcaption>Training accuracy (<span style="text-decoration:underline solid;text-underline-offset:0.2em">solid</span>) and test accuracy (<span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>) for $\ell_1$-regularized modular addition. Across learning rates $\alpha$, increasing $\beta$ shortens the delay between <span class="grokking-mark grokking-mark--memorization">memorization</span> and <span class="grokking-mark grokking-mark--comprehension">generalization</span>.</figcaption>
 </figure>
 
 ### Nonlinear teacher–student model
@@ -1020,7 +1020,7 @@ For $\ell_1$, $\ell_2$, and nuclear-norm regularization, the smaller $\alpha\bet
 
 <figure class="article-figure article-figure-wide">
   <img src="/images/blog/grokking/teacher-student-l1.png" width="1864" height="910" alt="Training and test losses for a two-layer ReLU teacher-student model under L1 regularization" loading="lazy" />
-  <figcaption>Training loss (solid) and test loss (dashed) for the two-layer ReLU teacher–student model. Each panel fixes $\alpha$ and varies $\beta$; small $\alpha\beta$ produces a longer generalization delay.</figcaption>
+  <figcaption>Training loss (<span style="text-decoration:underline solid;text-underline-offset:0.2em">solid</span>) and test loss (<span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>) for the two-layer ReLU teacher–student model. Each panel fixes $\alpha$ and varies $\beta$; small $\alpha\beta$ produces a longer generalization delay.</figcaption>
 </figure>
 
 ### Domain-specific regularization
@@ -1041,7 +1041,7 @@ It favors agreement of input derivatives; <span class="explanation-note"><button
 
 <figure class="article-figure article-figure-wide">
   <img src="/images/blog/grokking/teacher-student-sobolev.png" width="1863" height="910" alt="Training and test losses for a two-layer ReLU teacher-student model with first-order Sobolev regularization" loading="lazy" />
-  <figcaption>Training loss (solid) and test loss (dashed) under first-order Sobolev regularization. Larger values of $\alpha\beta$ again lead to faster grokking, now through a domain-specific derivative-matching bias.</figcaption>
+  <figcaption>Training loss (<span style="text-decoration:underline solid;text-underline-offset:0.2em">solid</span>) and test loss (<span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>) under first-order Sobolev regularization. Larger values of $\alpha\beta$ again lead to faster grokking, now through a domain-specific derivative-matching bias.</figcaption>
 </figure>
 
 The common structure is simple: the <span class="grokking-mark grokking-mark--memorization">fast dynamics fit the observations</span>; the <span class="grokking-mark grokking-mark--comprehension">slow bias selects one fitting solution</span>. Grokking occurs when that selection process eventually favors a solution that generalizes.
