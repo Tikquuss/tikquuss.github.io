@@ -520,15 +520,11 @@ $$
 is a valid shift as long as it exceeds the midpoint of the spectrum. Symmetrically, every $\beta<(\lambda_{\min}+\lambda_{\max})/2$ works for $\mathbf{C}$.
 
 The midpoint is unknown when $\lambda_{\min}$ and $\lambda_{\max}$ are, so $\mathbf{x}$ must be chosen without it. A random vector is not enough. For $\mathbf{g}\sim\mathcal{N}(0,\mathbb{I}_d)$, the unit vector $\mathbf{u}=\mathbf{g}/\|\mathbf{g}\|$ is uniformly distributed on the sphere, so $\mathbb{E}[\mathbf{u}\mathbf{u}^\top]=\mathbb{I}_d/d$ and
-$$
-\mathbb{E}\left[\frac{\mathbf{g}^\top\mathbf{A}\mathbf{g}}{\|\mathbf{g}\|^2}\right]=\operatorname{tr}\bigl(\mathbf{A}\,\mathbb{E}[\mathbf{u}\mathbf{u}^\top]\bigr)=\frac{\operatorname{tr}(\mathbf{A})}{d},
-$$
+$\mathbb{E}\left[\mathbf{g}^\top\mathbf{A}\mathbf{g} / \|\mathbf{g}\|^2\right]=\operatorname{tr}\bigl(\mathbf{A}\,\mathbb{E}[\mathbf{u}\mathbf{u}^\top]\bigr)=\operatorname{tr}(\mathbf{A})/d,$
 the mean of the eigenvalues counted with multiplicity, which can lie far below the midpoint. For the spectrum $\{10,0,\dots,0\}$, the midpoint is $5$, while the mean is $10/d$.
 
 Power iteration itself supplies a suitable $\mathbf{x}$. Assume that one of the two extremes is strictly larger in absolute value than the other, so that, with a random initialization ([Remark 4](#remark-4-which-eigenvalue-is-found)), power iteration on $\mathbf{A}$ converges to it. Take for $\mathbf{x}$ the iterate $\mathbf{v}_k$, and for the shift its Rayleigh quotient $\theta_k=\mathbf{v}_k^\top\mathbf{A}\mathbf{v}_k$. By [Theorem 1](#32-theorem-1-rate-of-convergence), $\theta_k$ converges to the dominant eigenvalue $\lambda_\star\in\{\lambda_{\min},\lambda_{\max}\}$, with
-$$
-|\theta_k-\lambda_\star|\le2|\lambda_\star|\left(\frac{\rho_2}{|\lambda_\star|}\right)^{2k}\tan^2(\phi_0).
-$$
+$|\theta_k-\lambda_\star|\le2|\lambda_\star|\left(\rho_2/|\lambda_\star|\right)^{2k}\tan^2(\phi_0).$
 Both extremes lie at the distance $(\lambda_{\max}-\lambda_{\min})/2$ from the midpoint. As soon as $|\theta_k-\lambda_\star|$ is smaller than this distance, $\theta_k$ lies on the same side of the midpoint as $\lambda_\star$, and $\theta_k$ is a valid shift. The sign of $\lambda_\star$ tells which extreme was found. If $\lambda_\star>0$, every other eigenvalue satisfies $\lambda\le|\lambda|<\lambda_\star$, so $\lambda_\star=\lambda_{\max}$. If $\lambda_\star<0$, every other eigenvalue satisfies $\lambda\ge-|\lambda|>\lambda_\star$, so $\lambda_\star=\lambda_{\min}$. This sign can be read from $\theta_k$. In both cases, the midpoint lies strictly between $0$ and $\lambda_\star$. For instance, if $\lambda_\star=\lambda_{\max}>0$, then $|\lambda_{\min}|<\lambda_{\max}$ gives $\lambda_{\min}+\lambda_{\max}>0$. Hence a $\theta_k$ on the same side of the midpoint as $\lambda_\star$ has the sign of $\lambda_\star$. The sign also shows in the iterates: $\mathbf{v}_k^\top\mathbf{v}_{k+1}=\theta_k/\|\mathbf{A}\mathbf{v}_k\|$, so consecutive iterates point to opposite sides exactly when $\theta_k<0$, which is the alternation of [Remark 2](#remark-2-a-negative-dominant-eigenvalue). If $\theta_k>0$, the matrix to use is $\mathbf{B}=\theta_k\mathbb{I}_d-\mathbf{A}$ of [Corollary 1](#33-corollary-1-recovering-algebraic-extrema-by-shifting), with $\alpha=\theta_k$. If $\theta_k<0$, it is $\mathbf{C}=\mathbf{A}-\theta_k\mathbb{I}_d$, with $\beta=\theta_k$. Even this distinction is a convenience. The two matrices differ only by their sign, so they have the same eigenvectors, and power iteration on either, from a random initialization, converges, up to sign ([Remark 2](#remark-2-a-negative-dominant-eigenvalue)), to an eigenvector of the eigenvalue of $\mathbf{A}$ farthest from $\theta_k$, which is the other extreme.
 
 Products alone cannot certify that $\theta_k$ has passed the midpoint, because the spread $\lambda_{\max}-\lambda_{\min}$ is unknown. A failure is nevertheless visible. If $\theta_k$ is still on the wrong side of the midpoint, the eigenvalue of $\mathbf{A}$ farthest from $\theta_k$ is $\lambda_\star$ itself, so the second run converges to an eigenvector of $\lambda_\star$, the eigenvalue already found by the first run, instead of the other extreme, and comparing the eigenvalues returned by the two runs reveals it. The remedy is to continue the first run, which brings $\theta_k$ closer to $\lambda_\star$, and to repeat the second. Once $|\theta_k-\lambda_\star|<(\lambda_{\max}-\lambda_{\min})/2$, the second run reaches the other extreme. This can only fail if the half-spread is below the accuracy reached, that is, if every eigenvalue of $\mathbf{A}$ is within twice that accuracy of $\lambda_\star$, and then the other extreme coincides with $\lambda_\star$ to that accuracy anyway. [Algorithm 1](#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation) avoids the question altogether: it uses no shift, reaches the remaining eigenpairs by deflation, and separates eigenvalues of opposite signs by [sign separation](#35-proposition-2-power-iteration-with-sign-separation).
@@ -653,7 +649,7 @@ $$
 
 When an eigenvalue is repeated, deflating one unit eigenvector removes only that direction. Other directions in the same eigenspace that are orthogonal to it retain their eigenvalue.
 
-Ordinary power iteration can be applied repeatedly to the deflated operator whenever the hypotheses of [Proposition 1](#31-proposition-1-convergence-of-power-iteration) hold at each stage. The following modification also handles opposite eigenvalues of equal magnitude, without requiring a spectral bound.
+Ordinary power iteration can be applied repeatedly to the deflated operator whenever the hypotheses of [Proposition 1](#31-proposition-1-convergence-of-power-iteration) hold at each stage. The following modification also handles opposite eigenvalues of equal magnitude, without requiring a spectral bound, such as a lower bound $\beta\le\lambda_{\min}$ that would make $\mathbf{A}-\beta\mathbb{I}_d$ positive semidefinite and thus free of opposite eigenvalues. It squares the operator instead, which makes it positive semidefinite without any bound, and then separates the signs.
 
 ### 3.5 Proposition 2 [Power iteration with sign separation]
 
@@ -758,15 +754,27 @@ For every real symmetric matrix $\mathbf{A}$, orthogonal deflation combined with
 
 #### Proof
 
-At the first stage, $\mathbf{P}_0=\mathbb{I}_d$ and $\mathbf{B}_1=\mathbf{A}$, so [Proposition 2](#35-proposition-2-power-iteration-with-sign-separation) yields an eigenpair of $\mathbf{A}$.
-Suppose that the first $j-1$ stages have produced orthonormal eigenvectors of $\mathbf{A}$. By [Lemma 1](#34-lemma-1-orthogonal-deflation),
-$\mathbf{B}_j\mathbf{x}=\mathbf{A}\mathbf{x}$ whenever $\mathbf{Q}_{j-1}^\top\mathbf{x}=0.$
-The initialization belongs to this orthogonal complement. Since $\mathbf{B}_j=\mathbf{P}_{j-1}\mathbf{A}\mathbf{P}_{j-1}$, every squared-power iterate also belongs to it. The limit vector and the sign-separated vectors therefore belong to it as well.
-Consequently, the resulting unit vector $\mathbf{q}_j$ satisfies
-$\mathbf{A}\mathbf{q}_j=\mathbf{B}_j\mathbf{q}_j=\lambda_j\mathbf{q}_j$ and
-$\mathbf{Q}_{j-1}^\top\mathbf{q}_j=0.$
-The zero case is also valid: if $\mathbf{B}_j\mathbf{w}_0=0$, then
-$\mathbf{A}\mathbf{w}_0=\mathbf{B}_j\mathbf{w}_0=0.$
+The proof is by induction on the stage $j$. Assume that the columns of $\mathbf{Q}_{j-1}$ are orthonormal eigenvectors of $\mathbf{A}$, which holds trivially for $j=1$, since $\mathbf{Q}_0$ has no columns. Let
+
+$$
+S_j=\{\mathbf{x}\in\mathbb{R}^d:\mathbf{Q}_{j-1}^\top\mathbf{x}=0\}
+$$
+
+be the orthogonal complement of the eigenvectors already found, with $S_1=\mathbb{R}^d$. We show that $\mathbf{q}_j$ is a unit eigenvector of $\mathbf{A}$ that lies in $S_j$, so that the columns of $\mathbf{Q}_j=[\mathbf{Q}_{j-1},\mathbf{q}_j]$ are again orthonormal eigenvectors of $\mathbf{A}$.
+
+**On $S_j$, $\mathbf{B}_j$ acts as $\mathbf{A}$.** By [Lemma 1](#34-lemma-1-orthogonal-deflation), $\mathbf{B}_j=\mathbf{A}-\mathbf{Q}_{j-1}\mathbf{D}_{j-1}\mathbf{Q}_{j-1}^\top$, where $\mathbf{D}_{j-1}$ is the diagonal matrix of the eigenvalues already found. Hence $\mathbf{B}_j\mathbf{x}=\mathbf{A}\mathbf{x}$ for every $\mathbf{x}\in S_j$.
+
+**$\mathbf{B}_j$ maps every vector into $S_j$.** Since $\mathbf{Q}_{j-1}^\top\mathbf{Q}_{j-1}=\mathbb{I}_{j-1}$,
+$\mathbf{Q}_{j-1}^\top\mathbf{P}_{j-1}=\mathbf{Q}_{j-1}^\top-\mathbf{Q}_{j-1}^\top\mathbf{Q}_{j-1}\mathbf{Q}_{j-1}^\top=0,$
+so $\mathbf{P}_{j-1}\mathbf{y}\in S_j$ for every $\mathbf{y}\in\mathbb{R}^d$. In particular, $\mathbf{B}_j\mathbf{x}=\mathbf{P}_{j-1}(\mathbf{A}\mathbf{P}_{j-1}\mathbf{x})\in S_j$ for every $\mathbf{x}$.
+
+**Every vector computed at stage $j$ lies in $S_j$.** The initialization $\mathbf{w}_0=\mathbf{P}_{j-1}\mathbf{z}/\|\mathbf{P}_{j-1}\mathbf{z}\|$ does, by the previous step. Each iterate $\mathbf{w}_{k+1}$ is a multiple of $\mathbf{B}_j(\mathbf{B}_j\mathbf{w}_k)$, so it does too. The limit $\mathbf{w}$ does, because a subspace is closed. Finally, $\mathbf{u}_\pm=\frac12(\mathbf{w}\pm\mathbf{B}_j\mathbf{w}/\rho)$ are linear combinations of the two vectors $\mathbf{w}$ and $\mathbf{B}_j\mathbf{w}$ of $S_j$.
+
+**Conclusion.** The matrix $\mathbf{B}_j$ is symmetric, so [Proposition 2](#35-proposition-2-power-iteration-with-sign-separation) applies to it. If $\mathbf{B}_j\mathbf{w}_0\neq0$, the vector $\mathbf{q}_j$ is a normalized $\mathbf{u}_+$ or $\mathbf{u}_-$. It lies in $S_j$, that is, $\mathbf{Q}_{j-1}^\top\mathbf{q}_j=0$, and it satisfies $\mathbf{B}_j\mathbf{q}_j=\mu\,\mathbf{q}_j$ with $\mu=\rho$ or $\mu=-\rho$. The first step turns this into
+$\mathbf{A}\mathbf{q}_j=\mathbf{B}_j\mathbf{q}_j=\mu\,\mathbf{q}_j,$
+so $\mathbf{q}_j$ is an eigenvector of $\mathbf{A}$, and $\lambda_j=\mathbf{q}_j^\top\mathbf{A}\mathbf{q}_j=\mu$. If $\mathbf{B}_j\mathbf{w}_0=0$, then $\mathbf{q}_j=\mathbf{w}_0$ lies in $S_j$, and the first step gives
+$\mathbf{A}\mathbf{w}_0=\mathbf{B}_j\mathbf{w}_0=0,$
+so $\mathbf{w}_0$ is an eigenvector of $\mathbf{A}$ with the eigenvalue $\lambda_j=0$.
 
 Thus each stage adds one unit eigenvector orthogonal to all previously stored eigenvectors.
 After $d$ stages,
@@ -808,10 +816,6 @@ $\mathbf{r}
 .$
 Then $\min_{\lambda\in\Lambda(\mathbf{A})}|\widehat{\lambda}-\lambda|\le\|\mathbf{r}\|.$
 
-#### Remark 10 [A computable bound on an unknown distance]
-
-The residual is computable with one product, and it bounds an unknown quantity: the distance from the estimate $\widehat\lambda$ to the nearest true eigenvalue. If $\mathbf{q}$ is exactly an eigenvector, the residual is zero, and the bound says that $\widehat\lambda$ is exactly an eigenvalue.
-
 #### Proof
 
 Expand $\mathbf{q}$ in an orthonormal eigenbasis $\mathbf{u}_1,\dots,\mathbf{u}_d$ of $\mathbf{A}$:
@@ -842,18 +846,51 @@ $$
 \end{array}
 $$
 
-This certificate concerns proximity to some eigenvalue. A small residual alone does not certify that the eigenvalue has the largest remaining absolute value.
+#### Remark 10 [A computable bound on an unknown distance]
+
+The residual is computable with one product, and it bounds an unknown quantity: the distance from the estimate $\widehat\lambda$ to the nearest true eigenvalue. If $\mathbf{q}$ is exactly an eigenvector, the residual is zero, and the bound says that $\widehat\lambda$ is exactly an eigenvalue. The lemma has three consequences.
+
+**A stopping rule with a guarantee.** The eigenvalues of $\mathbf{A}$ are unknown, so the error of $\widehat\lambda$ cannot be measured directly. The lemma converts the computable residual into a guarantee: the interval $[\widehat\lambda-\|\mathbf{r}\|,\widehat\lambda+\|\mathbf{r}\|]$ contains an eigenvalue of $\mathbf{A}$. Stopping when $\|\mathbf{r}\|\le\varepsilon$ therefore ensures that $\widehat\lambda$ is within $\varepsilon$ of an eigenvalue, and this is how [Algorithm 1](#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation) and [Algorithm 2](#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks) stop. [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) is the counterpart for nonsymmetric matrices.
+
+**Independence from the method.** The lemma involves only $\mathbf{A}$, $\mathbf{q}$ and one product, not the way $\mathbf{q}$ was obtained. It applies equally to an unconverged power iterate, an approximate eigenvector produced by the [Lanczos method](#4-the-lanczos-method) of Section 4, or a vector from a late deflation stage whose earlier eigenvectors carry rounding errors. This is why the algorithms compute the residual with the original matrix $\mathbf{A}$ rather than with the deflated matrix $\mathbf{B}_j$. Errors in the deflation vectors change $\mathbf{B}_j$, but not the certificate.
+
+**What it does not say.** It certifies some eigenvalue, not a particular one, such as the largest remaining one. Nor does a small residual alone make $\mathbf{q}$ close to an eigenvector. The expansion in the proof above also bounds the angle between $\mathbf{q}$ and an eigenspace. Fix an eigenvalue $\lambda$, and let $\delta=\min\{|\mu-\widehat\lambda|:\mu\in\Lambda(\mathbf{A})\setminus\{\lambda\}\}$ be the distance from $\widehat\lambda$ to the other eigenvalues, assumed positive. Then
+$$
+\begin{aligned}
+\|\mathbf{r}\|^2
+&=\sum_{i=1}^dc_i^2(\lambda_i-\widehat\lambda)^2\\
+&\ge\sum_{i:\,\lambda_i\neq\lambda}c_i^2(\lambda_i-\widehat\lambda)^2\\
+&\ge\delta^2\sum_{i:\,\lambda_i\neq\lambda}c_i^2\\
+&=\delta^2\,\|\mathbf{q}-\Pi_\lambda\mathbf{q}\|^2\\
+&=\delta^2\sin^2\angle(\mathbf{q},E_\lambda).
+\end{aligned}
+$$
+The first line is the expansion of the proof. The second drops the terms with $\lambda_i=\lambda$, which are nonnegative. The third uses $|\lambda_i-\widehat\lambda|\ge\delta$ for every $\lambda_i\neq\lambda$, which is the definition of $\delta$. For the fourth, the $\mathbf{u}_i$ with $\lambda_i=\lambda$ form an orthonormal basis of $E_\lambda$, so $\Pi_\lambda\mathbf{q}=\sum_{i:\,\lambda_i=\lambda}c_i\mathbf{u}_i$ and $\mathbf{q}-\Pi_\lambda\mathbf{q}=\sum_{i:\,\lambda_i\neq\lambda}c_i\mathbf{u}_i$, whose squared norm is $\sum_{i:\,\lambda_i\neq\lambda}c_i^2$ by Pythagoras. The last is the sine of the angle between the unit vector $\mathbf{q}$ and $E_\lambda$, as in [Theorem 1](#32-theorem-1-rate-of-convergence): the side of the right triangle opposite the angle, over the hypotenuse $\|\mathbf{q}\|=1$. Dividing by $\delta^2$ and taking square roots gives
+$$
+\sin\angle(\mathbf{q},E_\lambda)\le\frac{\|\mathbf{r}\|}{\delta}.
+$$
+The eigenvector is accurate only when $\widehat\lambda$ is well separated from the rest of the spectrum. When another eigenvalue is close, a small residual still allows $\mathbf{q}$ to mix the two eigenvectors.
+
+For example, take $\mathbf{A}=\operatorname{diag}(1,3)$ and the unit vector $\mathbf{q}=[\cos t,\sin t]^\top$, at the angle $t$ from the eigenvector $[1,0]^\top$ of $1$. Then
+$$
+\widehat\lambda=\cos^2t+3\sin^2t=1+2\sin^2t,
+\qquad
+\mathbf{r}=2\sin t\cos t\,[-\sin t,\cos t]^\top,
+\qquad
+\|\mathbf{r}\|=|\sin2t| .
+$$
+For $\sin t=0.1$, $\widehat\lambda=1.02$ and $\|\mathbf{r}\|\approx0.199$, so the lemma guarantees an eigenvalue in $[0.821,1.219]$, and $1$ is there. The eigenvector bound gives $\sin t\le0.199/1.98\approx0.1005$, close to the true $0.1$. The actual eigenvalue error, $0.02$, is ten times smaller than the residual: it is quadratic in the angle $t$, while the residual is linear in it, which is why the certificate is pessimistic in [Figure 4](#figure-residual-certificate).
 
 #### Remark 11 [Any scalar, and the best one]
 
-The proof never uses the definition of $\widehat\lambda$. The same expansion gives
+The proof never uses the definition of $\widehat\lambda$. Replacing $\widehat\lambda$ by any scalar $\mu$, the same expansion gives $\|\mathbf{A}\mathbf{q}-\mu\mathbf{q}\|^2=\sum_{i=1}^dc_i^2(\lambda_i-\mu)^2\ge\min_i(\lambda_i-\mu)^2$, that is,
 
 $$
 \min_{\lambda\in\Lambda(\mathbf{A})}|\mu-\lambda|\le\|\mathbf{A}\mathbf{q}-\mu\mathbf{q}\|
-\qquad\text{for every scalar }\mu,
+\qquad\text{for every unit vector }\mathbf{q}\text{ and every scalar }\mu .
 $$
 
-so the certificate applies to an eigenvalue estimate computed by any means, as long as it is paired with a unit vector. The Rayleigh quotient is the best choice of $\mu$. Indeed, expanding the square with $\|\mathbf{q}\|=1$ and $\widehat\lambda=\mathbf{q}^\top\mathbf{A}\mathbf{q}$ gives
+No relation between $\mathbf{q}$ and $\mu$ is required. They can be chosen independently, and a poor match only makes the bound loose, never wrong. For $\mathbf{A}=\operatorname{diag}(1,3)$, $\mathbf{q}=[1,0]^\top$ and $\mu=10$, it reads $7\le9$. Hence the certificate applies to an eigenvalue estimate computed by any means, as long as it is paired with a unit vector. The Rayleigh quotient is the best choice of $\mu$. Indeed, expanding the square with $\|\mathbf{q}\|=1$ and $\widehat\lambda=\mathbf{q}^\top\mathbf{A}\mathbf{q}$ gives
 
 $$
 \begin{aligned}
@@ -864,7 +901,17 @@ $$
 \end{aligned}
 $$
 
-where the last line is the second one at $\mu=\widehat\lambda$. The <span style="color:#2563eb">blue term</span> does not depend on $\mu$, so the certificate is smallest at $\mu=\widehat\lambda$, where it equals the residual of [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair), and the <span style="color:#ea580c">orange term</span> is the price of any other estimate. As a function of $\mu$, the certificate $\sqrt{(\mu-\widehat\lambda)^2+\|\mathbf{r}\|^2}$ is a hyperbola centered at the Rayleigh quotient, and it lies above the distance from $\mu$ to the spectrum, as panel (a) of Figure 4 below shows.
+where the last line is the second one at $\mu=\widehat\lambda$. The <span style="color:#2563eb">blue term</span> does not depend on $\mu$, so the certificate is smallest at $\mu=\widehat\lambda$, where it equals the residual of [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair), and the <span style="color:#ea580c">orange term</span> is the price of any other estimate. As a function of $\mu$, the certificate $\sqrt{(\mu-\widehat\lambda)^2+\|\mathbf{r}\|^2}$ is a hyperbola centered at the Rayleigh quotient, and it lies above the distance from $\mu$ to the spectrum, as panel (a) of Figure 4 below shows. The remark has three consequences.
+
+**Certifying an estimate obtained elsewhere.** An eigenvalue estimate $\mu$ that does not come from a Rayleigh quotient, such as a value known from theory, the value $\alpha-\mu_{\max}$ recovered from a shifted run in [Corollary 1](#33-corollary-1-recovering-algebraic-extrema-by-shifting), or the value $\pm\rho$ of [Proposition 2](#35-proposition-2-power-iteration-with-sign-separation), is certified by pairing it with a unit vector $\mathbf{q}$ and computing one product: some eigenvalue of $\mathbf{A}$ lies within $\|\mathbf{A}\mathbf{q}-\mu\mathbf{q}\|$ of $\mu$.
+
+**Reporting the Rayleigh quotient.** For a given $\mathbf{q}$, replacing $\mu$ by $\widehat\lambda$ never weakens the certificate, and strictly improves it when $\mu\neq\widehat\lambda$. It costs no extra product, since $\widehat\lambda=\mathbf{q}^\top(\mathbf{A}\mathbf{q})$ reuses the product already needed for the residual. This is why [Corollary 2](#36-corollary-2-recovery-of-a-complete-eigenbasis) recovers each eigenvalue as $\lambda_j=\mathbf{q}_j^\top\mathbf{A}\mathbf{q}_j$ rather than reporting $\pm\rho$: the two coincide in exact arithmetic, but in practice $\mathbf{q}_j$ is only approximately an eigenvector. Geometrically, $\mathbf{q}^\top\mathbf{r}=\widehat\lambda-\widehat\lambda=0$, so $\widehat\lambda\mathbf{q}$ is the orthogonal projection of $\mathbf{A}\mathbf{q}$ onto the line spanned by $\mathbf{q}$, the point of that line closest to $\mathbf{A}\mathbf{q}$. The certificate measures how well the pair $(\mu,\mathbf{q})$ fits together, not the error of $\mu$ alone. In the example of [Remark 10](#remark-10-a-computable-bound-on-an-unknown-distance), the exact eigenvalue $\mu=1$ receives the certificate $\|\mathbf{A}\mathbf{q}-\mathbf{q}\|=\|[0,\,0.2]^\top\|=0.2$, slightly worse than the $0.199$ of $\widehat\lambda=1.02$, because $\mathbf{q}$ is not its eigenvector.
+
+**Testing a given value.** For a fixed $\mu$, every unit vector $\mathbf{q}$ gives an upper bound on the distance from $\mu$ to the spectrum, so a single well-chosen $\mathbf{q}$ suffices to show that $\mu$ is nearly an eigenvalue. With $\mu=0$, the bound reads
+$$
+\min_{\lambda\in\Lambda(\mathbf{A})}|\lambda|\le\|\mathbf{A}\mathbf{q}\| .
+$$
+Any unit vector that $\mathbf{A}$ nearly annihilates proves that $\mathbf{A}$ has an eigenvalue near zero, that is, that $\mathbf{A}$ is nearly singular. Combined with $\|\mathbf{A}\|\ge\|\mathbf{A}\mathbf{q}'\|$ for any other unit vector $\mathbf{q}'$, it gives a lower bound on the [condition number](#remark-3-the-convergence-factor) computed from two products, $\kappa(\mathbf{A})\ge\|\mathbf{A}\mathbf{q}'\|/\|\mathbf{A}\mathbf{q}\|$.
 
 <figure class="article-figure article-figure-wide" id="figure-residual-certificate">
   <img src="/images/blog/matrix-vector-products/residual-certificate.svg" width="1400" height="460" alt="Three panels on a 60 by 60 sample covariance matrix. Left: for several power-iteration iterates, the norm of A v minus mu v as a function of mu is a hyperbola lying above the saw-tooth distance from mu to the spectrum, with its minimum at the Rayleigh quotient. Middle: the residual decreases geometrically and the distance to the nearest eigenvalue twice as fast, down to rounding level. Right: a log-log scatter of distance against residual for many iterates, all below the diagonal." loading="lazy" />
