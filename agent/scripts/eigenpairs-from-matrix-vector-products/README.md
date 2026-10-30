@@ -33,7 +33,7 @@ Every solver accesses the matrix only through a function `apply_a(x)` that retur
 | Figure 2 | `bipartite-graph.svg` | the graph that Figure 3 decomposes (Corollary 2): drawing, adjacency matrix, symmetric spectrum | adjacency matrix of a bipartite graph | `figures/bipartite_graph.py` |
 | Figure 3 | `complete-eigenbasis.svg` | Corollary 2 | adjacency matrix of a bipartite graph | `figures/complete_eigenbasis.py` |
 | Figure 4 | `residual-certificate.svg` | Lemma 2 and Remark 11 | sample covariance matrix (principal components) | `figures/residual_certificate.py` |
-| Figure 5 | `hessian-deflation.svg` | Algorithm 1, with the training and test losses of the network | Hessian of a network training loss | `figures/hessian_deflation.py` |
+| Figure 5 | `hessian-deflation.svg` | Algorithm 1, with the training of the network and its Hessian spectrum during training and at the last step | Hessian of a network training loss | `figures/hessian_deflation.py` |
 | Figure 6 | `lanczos.svg` | Lemma 5 and Proposition 3 | prescribed spectrum with repeated eigenvalues | `figures/lanczos_ritz.py` |
 | Figure 7 | `lanczos-vs-deflation.svg` | Algorithm 2 against Algorithm 1, Proposition 4 | network Hessian and bipartite graph | `figures/lanczos_vs_deflation.py` |
 | Figure 8 | `directed-graph.svg` | the random walk of Section 5 that Figure 9 analyzes: drawing, transition matrix, the walker's distribution, complex spectrum | transition matrix of a random walk on a directed graph | `figures/directed_graph.py` |
