@@ -52,8 +52,7 @@ $$
 \qquad
 \mathbb{I}_d=\sum_{\lambda\in\Lambda(\mathbf{A})}\Pi_\lambda,
 \qquad
-\Pi_\lambda\Pi_\mu=0
-\quad\text{when }\lambda\neq\mu .
+\Pi_\lambda\Pi_\mu=\delta_{\lambda,\mu}\,\Pi_\lambda .
 $$
 
 The powers of $\mathbf{A}$ act on each eigenspace separately, and so does every polynomial:
