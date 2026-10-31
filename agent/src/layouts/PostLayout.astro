@@ -49,12 +49,54 @@ const formattedDate = formatDate(date);
     const supportsPopover = 'showPopover' in HTMLElement.prototype;
     const viewportMargin = 12;
     const triggerGap = 12;
+    // On phones, a popover opens as a sheet along the bottom of the screen, so
+    // the page stays visible above it and the trigger can be scrolled into view.
+    const narrowScreen = window.matchMedia('(max-width: 680px)');
+
+    function triggerOf(popover: HTMLElement) {
+      return document.querySelector<HTMLElement>(`[popovertarget="${CSS.escape(popover.id)}"]`);
+    }
+
+    function closeExplanationPopover(popover: HTMLElement) {
+      if (supportsPopover) {
+        popover.hidePopover();
+      } else {
+        popover.classList.remove('is-open');
+        triggerOf(popover)?.setAttribute('aria-expanded', 'false');
+      }
+      triggerOf(popover)?.focus({ preventScroll: true });
+    }
+
+    // A header with the label and a close button, which stays at the top while
+    // a long popover scrolls. Without JavaScript, the label comes from CSS instead.
+    explanationPopovers.forEach(popover => {
+      const header = document.createElement('span');
+      header.className = 'explanation-popover__header';
+      const label = document.createElement('span');
+      label.className = 'explanation-popover__label';
+      label.textContent = popover.dataset.label ?? '';
+      const close = document.createElement('button');
+      close.type = 'button';
+      close.className = 'explanation-popover__close';
+      close.setAttribute('aria-label', 'Close');
+      close.textContent = '×';
+      close.addEventListener('click', () => closeExplanationPopover(popover));
+      header.append(label, close);
+      popover.prepend(header);
+      popover.classList.add('has-header');
+    });
 
     function positionExplanationPopover(popover: HTMLElement) {
-      const trigger = document.querySelector<HTMLElement>(
-        `[popovertarget="${CSS.escape(popover.id)}"]`,
-      );
+      const trigger = triggerOf(popover);
       if (!trigger) return;
+
+      if (narrowScreen.matches) {
+        popover.dataset.placement = 'sheet';
+        popover.style.left = '';
+        popover.style.top = '';
+        popover.style.width = '';
+        return;
+      }
 
       const triggerRect = trigger.getBoundingClientRect();
       const width = Math.min(520, window.innerWidth - 2 * viewportMargin);
@@ -95,10 +137,26 @@ const formattedDate = formatDate(date);
       });
     }
 
+    // In the sheet layout, scroll the page so that the trigger stays visible above the sheet.
+    function revealTriggerAboveSheet(popover: HTMLElement) {
+      if (!narrowScreen.matches) return;
+      const trigger = triggerOf(popover);
+      if (!trigger) return;
+      const sheetTop = popover.getBoundingClientRect().top;
+      const overlap = trigger.getBoundingClientRect().bottom + triggerGap - sheetTop;
+      if (overlap > 0) window.scrollBy({ top: overlap, behavior: 'smooth' });
+    }
+
+    function openedExplanationPopover(popover: HTMLElement) {
+      positionExplanationPopover(popover);
+      popover.scrollTop = 0;
+      revealTriggerAboveSheet(popover);
+    }
+
     explanationPopovers.forEach(popover => {
       if (supportsPopover) {
         popover.addEventListener('toggle', () => {
-          if (isOpen(popover)) positionExplanationPopover(popover);
+          if (isOpen(popover)) openedExplanationPopover(popover);
         });
         return;
       }
@@ -117,7 +175,7 @@ const formattedDate = formatDate(date);
         });
         popover.classList.toggle('is-open', opening);
         trigger.setAttribute('aria-expanded', String(opening));
-        if (opening) positionExplanationPopover(popover);
+        if (opening) openedExplanationPopover(popover);
       });
     });
 
@@ -144,5 +202,6 @@ const formattedDate = formatDate(date);
 
     window.addEventListener('resize', positionOpenExplanations);
     window.addEventListener('scroll', positionOpenExplanations, { passive: true });
+    narrowScreen.addEventListener('change', positionOpenExplanations);
   </script>
 </BaseLayout>

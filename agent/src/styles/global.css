@@ -1326,6 +1326,82 @@ main.wide {
   text-transform: uppercase;
 }
 
+/* With JavaScript, the label moves into a header that also holds a close
+   button and stays at the top while a long popover scrolls. */
+.explanation-popover.has-header {
+  padding-top: 0;
+}
+
+.explanation-popover.has-header::before {
+  content: none;
+}
+
+.explanation-popover__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 -1.15rem 0.38rem;
+  padding: 0.6rem 0.6rem 0.3rem 1.15rem;
+  background: #fffefb;
+}
+
+.explanation-popover__label {
+  color: var(--accent);
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.explanation-popover__close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #cbd8d2;
+  border-radius: 999px;
+  padding: 0;
+  background: #f2f7f5;
+  color: var(--accent-dark);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.explanation-popover__close:hover,
+.explanation-popover__close:focus-visible {
+  border-color: #6f9e92;
+  background: #dfeee9;
+}
+
+/* On phones, the popover is a sheet along the bottom of the screen: the page
+   stays visible and tappable above it, and the sheet scrolls on its own. */
+.explanation-popover[data-placement='sheet'] {
+  inset: auto 0 0 0;
+  width: auto;
+  max-width: none;
+  max-height: 60dvh;
+  border-bottom: 0;
+  border-radius: 16px 16px 0 0;
+  padding-bottom: calc(1.05rem + env(safe-area-inset-bottom));
+  box-shadow: 0 -12px 40px rgba(29, 48, 41, 0.18);
+  overscroll-behavior: contain;
+}
+
+.explanation-popover[data-placement='sheet'] .explanation-popover__close {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
 @supports selector(:popover-open) {
   .explanation-popover:popover-open {
     display: block;
