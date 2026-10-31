@@ -1,0 +1,11 @@
+{
+  "d": 40,
+  "gamma": 0.2,
+  "s": 1.22474,
+  "s_power_d_minus_1": 2715.06,
+  "kappa_S_V_tilde": 2715.06,
+  "relative_eigen_residual": 1.15261e-14,
+  "min_share_last_quarter": 0.845983,
+  "max_abs_cosine": 0.979174,
+  "median_abs_cosine": 0.128542
+}

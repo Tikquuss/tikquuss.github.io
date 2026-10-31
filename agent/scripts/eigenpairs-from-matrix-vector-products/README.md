@@ -30,16 +30,24 @@ Every solver accesses the matrix only through a function `apply_a(x)` that retur
 
 | In the post | File | Statement of the post | Matrix (Sections 2 and 5 of the post) | Script |
 | --- | --- | --- | --- | --- |
-| Figure 1 | `power-iteration.svg` | Proposition 1, Theorem 1, Remarks 2 and 5, Proposition 2 | prescribed spectra, size 60 | `figures/power_iteration.py` |
-| Figure 2 | `bipartite-graph.svg` | the graph that Figure 3 decomposes (Corollary 2): drawing, adjacency matrix, symmetric spectrum | adjacency matrix of a bipartite graph | `figures/bipartite_graph.py` |
-| Figure 3 | `complete-eigenbasis.svg` | Corollary 2 | adjacency matrix of a bipartite graph | `figures/complete_eigenbasis.py` |
-| Figure 4 | `residual-certificate.svg` | Lemma 2 and Remark 11 | sample covariance matrix (principal components) | `figures/residual_certificate.py` |
-| Figure 5 | `hessian-deflation.svg` | Algorithm 1, with the training of the network and its Hessian spectrum during training and at the last step | Hessian of a network training loss | `figures/hessian_deflation.py` |
-| Figure 6 | `lanczos.svg` | Lemma 5 and Proposition 3 | prescribed spectrum with repeated eigenvalues | `figures/lanczos_ritz.py` |
-| Figure 7 | `lanczos-vs-deflation.svg` | Algorithm 2 against Algorithm 1, Proposition 4 | network Hessian and bipartite graph | `figures/lanczos_vs_deflation.py` |
-| Figure 8 | `directed-graph.svg` | the random walk of Section 5 that Figure 9 analyzes: drawing, transition matrix, the walker's distribution, complex spectrum | transition matrix of a random walk on a directed graph | `figures/directed_graph.py` |
-| Figure 9 | `arnoldi.svg` | Proposition 5, Remark 18 and Lemma 7 (Arnoldi method), against power iteration | random walk on a directed graph, convection–diffusion operator | `figures/arnoldi_nonsymmetric.py` |
+| Figure 1 | `finite-differences.svg` | the discretization of u ↦ −u″ (Section 2.2): grid values, stencil, tridiagonal matrix | schematic, d = 7 | `figures/finite_differences.py` |
+| Figure 2 | `power-iteration.svg` | Proposition 1, Theorem 1, Remarks 2 and 5, Proposition 2 | prescribed spectra, size 60 | `figures/power_iteration.py` |
+| Figure 3 | `bipartite-graph.svg` | the graph that Figure 4 decomposes (Corollary 2): drawing, adjacency matrix, symmetric spectrum | adjacency matrix of a bipartite graph | `figures/bipartite_graph.py` |
+| Figure 4 | `complete-eigenbasis.svg` | Corollary 2 | adjacency matrix of a bipartite graph | `figures/complete_eigenbasis.py` |
+| Figure 5 | `residual-certificate.svg` | Lemma 2 and Remark 11 | sample covariance matrix (principal components) | `figures/residual_certificate.py` |
+| Figure 6 | `algorithm-1-flow.svg` | Algorithm 1: execution diagram, with the stage loop and the inner loop | flowchart | `figures/algorithm1_flow.py` |
+| Figure 7 | `hessian-deflation.svg` | Algorithm 1, with the training of the network and its Hessian spectrum during training and at the last step | Hessian of a network training loss | `figures/hessian_deflation.py` |
+| Figure 8 | `lanczos.svg` | Lemma 5 and Proposition 3 | prescribed spectrum with repeated eigenvalues | `figures/lanczos_ritz.py` |
+| Figure 9 | `lanczos-continuation.svg` | Proposition 4: the basis built by successive runs and the block-tridiagonal matrix T_d | schematic, d = 9 | `figures/lanczos_continuation.py` |
+| Figure 10 | `algorithm-2-flow.svg` | Algorithm 2: execution diagram, with the iteration loop and the cases of step 6 | flowchart | `figures/algorithm2_flow.py` |
+| Figure 11 | `lanczos-vs-deflation.svg` | Algorithm 2 against Algorithm 1, Proposition 4 | network Hessian and bipartite graph | `figures/lanczos_vs_deflation.py` |
+| Figure 12 | `directed-graph.svg` | the random walk of Section 5 that Figure 13 analyzes: drawing, transition matrix, the walker's distribution, complex spectrum | transition matrix of a random walk on a directed graph | `figures/directed_graph.py` |
+| Figure 13 | `arnoldi.svg` | Proposition 5, Remark 18 and Lemma 7 (Arnoldi method), against power iteration | random walk on a directed graph, convection–diffusion operator | `figures/arnoldi_nonsymmetric.py` |
+| Figure 14 | `algorithm-3-flow.svg` | Algorithm 3: execution diagram, with the restart case of step 6 | flowchart | `figures/algorithm3_flow.py` |
 | popover of Theorem 1 | `angle-to-eigenspace.svg` | Theorem 1 (the angle between the starting vector and the dominant eigenspace) | schematic | `figures/angle_diagram.py` |
+
+The execution diagrams share the drawing helpers of `figures/flowchart.py`, and the diagram of Algorithm 3 reuses the
+layout of `figures/algorithm2_flow.py`.
 
 ## Reproducing the figures
 
@@ -61,8 +69,16 @@ come from
 python -m checks.gram_schmidt_on_powers      # writes summaries/gram-schmidt-on-powers.json
 ```
 
-All random draws are seeded, so the outputs are deterministic for a given software stack. The ten
-figures take about three minutes on a laptop CPU, most of it for the network Hessian.
+The numbers that Section 5.1 quotes for the eigenvectors of the convection–diffusion matrix (their
+concentration near t = 1, the largest inner product between two of them, and κ(**V**) = s^(d−1)) come from
+
+```bash
+python -m checks.convection_eigenvectors     # writes summaries/convection-eigenvectors.json
+```
+
+All random draws are seeded, so the outputs are deterministic for a given software stack. The fifteen
+figures take about three minutes on a laptop CPU, most of it for the network Hessian; the schematics and
+execution diagrams take a second each.
 
 ## Using the solvers
 

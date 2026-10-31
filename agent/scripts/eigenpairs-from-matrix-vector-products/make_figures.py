@@ -19,15 +19,20 @@ HERE = Path(__file__).resolve().parent
 PUBLISHED = HERE.parents[1] / "public" / "images" / "blog" / "matrix-vector-products"
 
 FIGURES = [
+    "finite_differences",
     "power_iteration",
     "bipartite_graph",
     "complete_eigenbasis",
     "residual_certificate",
+    "algorithm1_flow",
     "hessian_deflation",
     "lanczos_ritz",
+    "lanczos_continuation",
+    "algorithm2_flow",
     "lanczos_vs_deflation",
     "directed_graph",
     "arnoldi_nonsymmetric",
+    "algorithm3_flow",
     "angle_diagram",
 ]
 
