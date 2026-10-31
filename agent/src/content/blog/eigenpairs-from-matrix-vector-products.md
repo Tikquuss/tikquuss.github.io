@@ -2055,6 +2055,31 @@ $$
 
 In $\mathbf{T}_3$, symmetry made each entry above the diagonal either a length already found (<span style="color:#ea580c">orange</span>) or zero (<span style="color:#7d8783">grey</span>). In $\mathbf{H}_3$, these entries are new numbers (<span style="color:#7c3aed">purple</span>). The zeros below the first subdiagonal remain in both matrices, because they come from the nesting of Krylov subspaces. A matrix whose entries below the first subdiagonal are zero is called **upper Hessenberg**.
 
+**Step 4: Gram–Schmidt on $\mathcal{K}_5(\mathbf{A},\mathbf{q}_1)$.** The fourth product gives $\mathbf{A}\mathbf{q}_4$. By the argument of Step 3, its components along $\mathbf{q}_1$, $\mathbf{q}_2$ and $\mathbf{q}_3$ are nonzero in general, and the one along $\mathbf{q}_4$ is a new number too. Since $\mathbf{A}\mathbf{q}_4$ lies in $\mathcal{K}_5(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_5\}$, it has no component beyond $\mathbf{q}_5$:
+
+$$
+\mathbf{A}\mathbf{q}_4=\textcolor{#7c3aed}{h_{14}\mathbf{q}_1}+\textcolor{#7c3aed}{h_{24}\mathbf{q}_2}+\textcolor{#7c3aed}{h_{34}\mathbf{q}_3}+\textcolor{#7c3aed}{h_{44}\mathbf{q}_4}+\textcolor{#16a34a}{h_{54}\mathbf{q}_5}.
+$$
+
+The number of inner products grows by one at each step: step $j$ computes $j$ of them, where the Lanczos method computes one. In terms of polynomials, write $\mathbf{q}_i=p_{i-1}(\mathbf{A})\mathbf{q}_1$ as in [Section 4.3](#43-how-the-lanczos-method-works), with $p_0=1$. Solving the relation above for $\mathbf{q}_5$ gives $\mathbf{q}_5=p_4(\mathbf{A})\mathbf{q}_1$ for the polynomial of degree four defined by
+
+$$
+h_{54}\,p_4(t)=t\,p_3(t)-h_{14}\,p_0(t)-h_{24}\,p_1(t)-h_{34}\,p_2(t)-h_{44}\,p_3(t).
+$$
+
+Each new polynomial involves all the previous ones, and not only the last two as in the three-term recurrence of [Section 4.3](#43-how-the-lanczos-method-works). The coefficients found so far fill the upper Hessenberg matrix
+
+$$
+\mathbf{H}_4=\mathbf{Q}_4^\top\mathbf{A}\mathbf{Q}_4=\begin{bmatrix}
+\textcolor{#7c3aed}{h_{11}}&\textcolor{#7c3aed}{h_{12}}&\textcolor{#7c3aed}{h_{13}}&\textcolor{#7c3aed}{h_{14}}\\
+\textcolor{#16a34a}{h_{21}}&\textcolor{#7c3aed}{h_{22}}&\textcolor{#7c3aed}{h_{23}}&\textcolor{#7c3aed}{h_{24}}\\
+\textcolor{#7d8783}{0}&\textcolor{#16a34a}{h_{32}}&\textcolor{#7c3aed}{h_{33}}&\textcolor{#7c3aed}{h_{34}}\\
+\textcolor{#7d8783}{0}&\textcolor{#7d8783}{0}&\textcolor{#16a34a}{h_{43}}&\textcolor{#7c3aed}{h_{44}}
+\end{bmatrix},
+$$
+
+whose <span style="color:#7d8783">grey zeros</span> are the three entries below the first subdiagonal. The last coefficient, $h_{54}$ on $\mathbf{q}_5$, lies outside $\mathcal{K}_4(\mathbf{A},\mathbf{q}_1)$, as $\beta_4$ did in [Section 4.3](#43-how-the-lanczos-method-works).
+
 **The general step.** The same reasoning holds at every step $j\in\{1,2,3,\dots\}$, as long as the previous steps have produced $\mathbf{q}_j$, which for $j\ge2$ means that $h_{j,j-1}>0$. The product $\mathbf{A}\mathbf{q}_j$ lies in $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}$, because $\mathbf{q}_j\in\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, so it has no component beyond $\mathbf{q}_{j+1}$. Its components $\textcolor{#7c3aed}{h_{ij}}=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j$ along all of $\mathbf{q}_1,\dots,\mathbf{q}_j$, on the other hand, have to be computed and removed. What remains is orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_j$, and when its length $\textcolor{#16a34a}{h_{j+1,j}}$ is positive, dividing by it gives the next basis vector:
 
 $$
