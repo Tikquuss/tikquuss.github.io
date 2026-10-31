@@ -1,0 +1,35 @@
+{
+  "new direction of A^j q_1 relative to its length": {
+    "1": 0.475819,
+    "5": 0.00399647,
+    "10": 5.59443e-06,
+    "20": 7.65418e-12
+  },
+  "new direction of A q_j relative to its length": {
+    "1": 0.475819,
+    "5": 0.403317,
+    "10": 0.417759,
+    "20": 0.39951
+  },
+  "orthogonality loss of the basis from the powers": {
+    "10": 8.89424e-11,
+    "20": 0.00434765,
+    "25": 0.855915,
+    "30": 0.93259
+  },
+  "orthogonality loss of the Lanczos basis": {
+    "10": 2.89571e-15,
+    "20": 4.74288e-15,
+    "25": 5.19459e-15,
+    "30": 5.80557e-15,
+    "100": 2.81554e-12,
+    "150": 6.47789e-10,
+    "200": 1.45501e-06
+  },
+  "orthogonality loss of the Lanczos basis with full reorthogonalization": {
+    "30": 9.1142e-16,
+    "100": 1.1263e-15,
+    "150": 1.26396e-15,
+    "200": 1.31914e-15
+  }
+}

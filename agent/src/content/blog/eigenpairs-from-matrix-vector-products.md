@@ -14,7 +14,7 @@ excerpt: "What power iteration, deflation, and the Lanczos method recover about 
 
 This document rigorously studies what can be learned about the <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="eigenvalues-eigenvectors" aria-label="Recall what eigenvalues and eigenvectors are">eigenpairs</button><span id="eigenvalues-eigenvectors" class="explanation-popover" popover="auto" role="note" aria-label="Eigenvalues and eigenvectors" data-label="Definition">A nonzero vector $\mathbf u$ is an <strong>eigenvector</strong> of $\mathbf A$, with <strong>eigenvalue</strong> $\lambda$, when <span class="explanation-popover__equation">$\mathbf A\mathbf u=\lambda\mathbf u.$</span> Multiplying $\mathbf u$ by $\mathbf A$ only rescales it, by the factor $\lambda$, and the pair $(\lambda,\mathbf u)$ is called an <strong>eigenpair</strong>. For example, $\mathbf A=\left[\begin{smallmatrix}2&1\\1&2\end{smallmatrix}\right]$ maps $[1,1]^\top$ to $3[1,1]^\top$ and $[1,-1]^\top$ to itself, so these two vectors are eigenvectors, with the eigenvalues $3$ and $1$. Rewriting the definition as $(\mathbf A-\lambda\,\mathbb I_d)\mathbf u=0$ shows that $\lambda$ is an eigenvalue exactly when the matrix $\mathbf A-\lambda\,\mathbb I_d$ is singular, that is, when $\lambda$ is a root of the polynomial <span class="explanation-popover__equation">$\lambda\mapsto\det(\lambda\,\mathbb I_d-\mathbf A),$</span> of degree $d$, called the <strong>characteristic polynomial</strong> of $\mathbf A$. The eigenvectors of $\lambda$ are then the nonzero vectors of the null space $\ker(\mathbf A-\lambda\,\mathbb I_d)$, called the <strong>eigenspace</strong> of $\lambda$. A real polynomial can have complex roots, so a real matrix can have complex eigenvalues. The rotation $\left[\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right]$ turns every real vector by a quarter turn, so it has no real eigenvector, and its characteristic polynomial $\lambda^2+1$ has the roots $\pm i$. A real symmetric matrix, in contrast, has only real eigenvalues and an orthonormal basis of eigenvectors, by the [spectral theorem](#spectral-decomposition) used in Sections [1](#1-notation-and-preliminaries) to [4](#4-the-lanczos-method). Computing the characteristic polynomial requires every entry of $\mathbf A$, which the setting of this post does not provide. <span style="color:#2563eb">The definition itself, however, involves $\textcolor{#2563eb}{\mathbf A}$ only through the product $\textcolor{#2563eb}{\mathbf A\mathbf u}$.</span> One product is enough to test a candidate pair $(\lambda,\mathbf u)$, because the residual $\mathbf A\mathbf u-\lambda\mathbf u=(\mathbf A-\lambda\,\mathbb I_d)\mathbf u$ vanishes exactly when the pair is an eigenpair. The methods of this post use $\mathbf A$ in no other way. For a symmetric matrix, [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) and [Remark 11](#remark-11-any-scalar-and-the-best-one) also turn a small residual into a guarantee: if $\|\mathbf u\|=1$, then $\lambda$ is within $\|\mathbf A\mathbf u-\lambda\mathbf u\|$ of an eigenvalue.</span></span> of a real matrix $\mathbf{A}\in\mathbb{R}^{d\times d}$ that is known only through the map $\mathbf{x}\mapsto\mathbf{A}\mathbf{x}$. Storing $\mathbf{A}$ takes $d^2$ numbers, and forming it can cost much more. In many applications, however, the product $\mathbf{A}\mathbf{x}$ is cheap, because it follows directly from how $\mathbf{A}$ is defined, whether $\mathbf{A}$ is built from a data matrix, a sparse graph or a discretized differential operator, or is the Hessian of a function whose gradient can be computed ([Section 2](#2-matrices-known-only-through-their-products) gives more examples). Two families of methods need nothing more than such products: **[power iteration](#3-power-iteration)** ([Section 3](#3-power-iteration)), which extracts one eigenpair at a time and reaches further eigenpairs through [shifts](#33-corollary-1-recovering-algebraic-extrema-by-shifting) and [deflation](#34-lemma-1-orthogonal-deflation), and the **[Lanczos method](#4-the-lanczos-method)** ([Section 4](#4-the-lanczos-method)), which builds an orthonormal basis of a [Krylov subspace](#41-definition-1-krylov-subspace) and solves a small tridiagonal eigenvalue problem inside it. Sections [1](#1-notation-and-preliminaries) to [4](#4-the-lanczos-method) assume that $\mathbf{A}$ is symmetric, as Hessians, covariance matrices and the adjacency matrices of undirected graphs are. The **[Arnoldi method](#5-the-arnoldi-method)** ([Section 5](#5-the-arnoldi-method)) extends the Lanczos method to nonsymmetric matrices, such as the transition matrix of a random walk on a directed graph.
 
-The results assume neither positive definiteness nor distinct eigenvalues. Each statement says precisely which eigenpairs are recovered, and the remarks say which are not. All the delicate cases are treated explicitly: a dominant eigenvalue of either sign, opposite eigenvalues of equal magnitude, repeated eigenvalues, and zero eigenvalues. Sections [3](#3-power-iteration), [4](#4-the-lanczos-method) and [5](#5-the-arnoldi-method) each end with an implementable procedure: [Algorithm 1](#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation) for power iteration, [Algorithm 2](#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks) for the Lanczos method and [Algorithm 3](#57-algorithm-3-arnoldi-with-reorthogonalization-and-residual-checks) for the Arnoldi method. All three stop when a residual computed with the original matrix falls below a tolerance. The figures run these procedures on matrices with prescribed spectra and on five matrices from applications: the adjacency matrix of a graph, a covariance matrix and the Hessian of a neural network ([Section 2](#2-matrices-known-only-through-their-products)), and the transition matrix of a random walk on a directed graph and a discretized convection–diffusion operator ([Section 5.1](#51-nonsymmetric-matrices-known-through-their-products)). The code that produces them, with implementations of the three algorithms, is [on GitHub](https://github.com/Tikquuss/tikquuss.github.io/tree/master/agent/scripts/eigenpairs-from-matrix-vector-products).
+The results assume neither positive definiteness nor distinct eigenvalues. Each statement says precisely which eigenpairs are recovered, and the remarks say which are not. All the delicate cases are treated explicitly: a dominant eigenvalue of either sign, opposite eigenvalues of equal magnitude, repeated eigenvalues, and zero eigenvalues. Sections [3](#3-power-iteration), [4](#4-the-lanczos-method) and [5](#5-the-arnoldi-method) each end with an implementable procedure: [Algorithm 1](#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation) for power iteration, [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks) for the Lanczos method and [Algorithm 3](#57-algorithm-3-arnoldi-with-reorthogonalization-and-residual-checks) for the Arnoldi method. All three stop when a residual computed with the original matrix falls below a tolerance. The figures run these procedures on matrices with prescribed spectra and on five matrices from applications: the adjacency matrix of a graph, a covariance matrix and the Hessian of a neural network ([Section 2](#2-matrices-known-only-through-their-products)), and the transition matrix of a random walk on a directed graph and a discretized convection–diffusion operator ([Section 5.1](#51-nonsymmetric-matrices-known-through-their-products)). The code that produces them, with implementations of the three algorithms, is [on GitHub](https://github.com/Tikquuss/tikquuss.github.io/tree/master/agent/scripts/eigenpairs-from-matrix-vector-products).
 
 For a symmetric $\mathbf{A}$, the central object is the decomposition of a vector along the eigenspaces of $\mathbf{A}$. Let $\Lambda(\mathbf{A})$ be the set of distinct eigenvalues of $\mathbf{A}$, and let $\Pi_\lambda$ be the orthogonal projection onto the eigenspace of $\lambda\in\Lambda(\mathbf{A})$. Then, for every vector $\mathbf{v}\in\mathbb{R}^d$ and every integer $k\ge0$,
 
@@ -30,7 +30,7 @@ Started from $\mathbf{v}$, power iteration keeps the last vector of the sequence
 
 ### Notation
 
-* $\|\cdot\|$ is the Euclidean norm, $\mathbb{I}_d$ the $d\times d$ identity matrix, $\delta_{i\ell}$ the Kronecker delta, and $\mathbf{e}_m=[0,\ldots,0,1]^\top\in\mathbb{R}^m$ the last standard basis vector of $\mathbb{R}^m$.
+* $\|\cdot\|$ is the Euclidean norm, $\mathbb{I}_d$ the $d\times d$ identity matrix, $\delta_{a,b}$ the Kronecker delta, equal to $1$ if $a=b$ and to $0$ otherwise, for $a$ and $b$ in any set (we write $\delta_{ij}$, without the comma, when $i$ and $j$ are integers), and $\mathbf{e}_m=[0,\ldots,0,1]^\top\in\mathbb{R}^m$ the last standard basis vector of $\mathbb{R}^m$.
 * For a subspace $S\subseteq\mathbb{R}^d$, $S^\perp=\{\mathbf{x}\in\mathbb{R}^d:\mathbf{x}^\top\mathbf{s}=0 \ \forall \mathbf{s}\in S\}$ is its orthogonal complement.
 * For a matrix $\mathbf{M}$ with $n$ columns, $\ker(\mathbf{M})=\{\mathbf{x}\in\mathbb{R}^n:\mathbf{M}\mathbf{x}=0\}$ is its null space and $\operatorname{range}(\mathbf{M})=\{\mathbf{M}\mathbf{x}:\mathbf{x}\in\mathbb{R}^n\}$ is its column space. 
 
@@ -842,7 +842,7 @@ $$
 
 The residual $\mathbf{r}=\mathbf{A}\mathbf{q}-\widehat{\lambda}\mathbf{q}$ is computable with one product, and it bounds an unknown quantity: the distance from the estimate $\widehat\lambda=\mathbf{q}^\top\mathbf{A}\mathbf{q}$ to the nearest true eigenvalue. If $\mathbf{q}$ is exactly an eigenvector, the residual is zero, and the bound says that $\widehat\lambda$ is exactly an eigenvalue. The lemma has three consequences.
 
-**A stopping rule with a guarantee.** The eigenvalues of $\mathbf{A}$ are unknown, so the error of $\widehat\lambda$ cannot be measured directly. The lemma converts the computable residual into a guarantee: the interval $[\widehat\lambda-\|\mathbf{r}\|,\widehat\lambda+\|\mathbf{r}\|]$ contains an eigenvalue of $\mathbf{A}$. Stopping when $\|\mathbf{r}\|\le\varepsilon$ therefore ensures that $\widehat\lambda$ is within $\varepsilon$ of an eigenvalue, and this is how [Algorithm 1](#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation) and [Algorithm 2](#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks) stop. [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) is the counterpart for nonsymmetric matrices.
+**A stopping rule with a guarantee.** The eigenvalues of $\mathbf{A}$ are unknown, so the error of $\widehat\lambda$ cannot be measured directly. The lemma converts the computable residual into a guarantee: the interval $[\widehat\lambda-\|\mathbf{r}\|,\widehat\lambda+\|\mathbf{r}\|]$ contains an eigenvalue of $\mathbf{A}$. Stopping when $\|\mathbf{r}\|\le\varepsilon$ therefore ensures that $\widehat\lambda$ is within $\varepsilon$ of an eigenvalue, and this is how [Algorithm 1](#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation) and [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks) stop. [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) is the counterpart for nonsymmetric matrices.
 
 **Independence from the method.** The lemma involves only $\mathbf{A}$, $\mathbf{q}$ and one product, not the way $\mathbf{q}$ was obtained. It applies equally to an unconverged power iterate, an approximate eigenvector produced by the [Lanczos method of Section 4](#4-the-lanczos-method), or a vector from a late deflation stage whose earlier eigenvectors carry rounding errors. This is why the algorithms compute the residual with the original matrix $\mathbf{A}$ rather than with the matrix iterated at stage $j$ of the deflation in [Corollary 2](#36-corollary-2-recovery-of-a-complete-eigenbasis), $\mathbf{B}_j=\mathbf{P}_{j-1}\mathbf{A}\mathbf{P}_{j-1}$, where $\mathbf{P}_{j-1}=\mathbb{I}_d-\mathbf{Q}_{j-1}\mathbf{Q}_{j-1}^\top$ removes the directions of the eigenvectors $\mathbf{q}_1,\dots,\mathbf{q}_{j-1}$ already found. Errors in these eigenvectors change $\mathbf{B}_j$, but not the certificate.
 
@@ -1059,19 +1059,45 @@ $$
 \end{array}
 $$
 
-Power iteration started at $\mathbf{q}_1$ keeps only the last vector $\mathbf{A}^{m-1}\mathbf{q}_1$ of this list. The Krylov subspace keeps all of them, so it contains every polynomial filter of degree at most $m-1$ applied to $\mathbf{q}_1$. By the spectral decomposition, $p(\mathbf{A})\mathbf{q}_1=\sum_\lambda p(\lambda)\Pi_\lambda\mathbf{q}_1$, so a polynomial that is large at one eigenvalue and small at the others can isolate that eigencomponent much better than the monomial $t^{m-1}$ used by power iteration.
+Power iteration started at $\mathbf{q}_1$ keeps only the last vector $\mathbf{A}^{m-1}\mathbf{q}_1$ of this list. The Krylov subspace keeps all of them, so it contains every polynomial filter of degree at most $m-1$ applied to $\mathbf{q}_1$. By the spectral decomposition, $p(\mathbf{A})\mathbf{q}_1=\sum_\lambda p(\lambda)\Pi_\lambda\mathbf{q}_1$, so **a polynomial that is large at one eigenvalue and small at the others can isolate that eigencomponent much better than the monomial $t^{m-1}$ used by power iteration.**
 
-### 4.2 How the method works
+### 4.2 The Gram–Schmidt process
 
-> <span class="article-kicker article-kicker--theorem">The idea</span> The Lanczos method runs the Gram–Schmidt process on the Krylov subspace $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, one matrix–vector product per step. 
+The Gram–Schmidt process turns linearly independent vectors $\mathbf{v}_1,\dots,\mathbf{v}_m$ of $\mathbb{R}^d$ into orthonormal vectors $\mathbf{q}_1,\dots,\mathbf{q}_m$, that is, vectors with
+$\mathbf{q}_i^\top\mathbf{q}_j=\delta_{ij}$
+that span the same subspaces: $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_j\}=\operatorname{span}\{\mathbf{v}_1,\dots,\mathbf{v}_j\}$ for every $j$. It builds them one at a time. The first is $\mathbf{q}_1=\mathbf{v}_1/\|\mathbf{v}_1\|$. At step $j\ge2$, it subtracts from $\mathbf{v}_j$ its components along the vectors already built, and normalizes the remainder:
+
+$$
+\mathbf{r}_j=\mathbf{v}_j-\sum_{i=1}^{j-1}(\mathbf{q}_i^\top\mathbf{v}_j)\,\mathbf{q}_i,
+\qquad
+\mathbf{q}_j=\frac{\mathbf{r}_j}{\|\mathbf{r}_j\|}.
+$$
+
+Both properties are proved together, by induction on $j$. Suppose that $\mathbf{q}_1,\dots,\mathbf{q}_{j-1}$ are orthonormal and span the same subspace as $\mathbf{v}_1,\dots,\mathbf{v}_{j-1}$. This holds for $j=2$, since $\mathbf{q}_1$ is a unit multiple of $\mathbf{v}_1$. Three facts carry it over to $j$.
+
+* First, the remainder $\mathbf{r}_j$ is not zero, so the division by $\|\mathbf{r}_j\|$ is allowed. If $\mathbf{r}_j$ were zero, its definition would give $\mathbf{v}_j=\sum_{i<j}(\mathbf{q}_i^\top\mathbf{v}_j)\,\mathbf{q}_i$, a vector of $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j-1}\}$. By the hypothesis, this subspace is $\operatorname{span}\{\mathbf{v}_1,\dots,\mathbf{v}_{j-1}\}$, so $\mathbf{v}_j$ would be a combination of $\mathbf{v}_1,\dots,\mathbf{v}_{j-1}$, which linear independence forbids. Without independence, $\mathbf{r}_j=0$ is exactly the signal that $\mathbf{v}_j$ adds no new direction.
+
+* Second, $\mathbf{q}_j$ is orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_{j-1}$. For $k<j$, every term of the sum but $i=k$ vanishes in the inner product with $\mathbf{q}_k$, since $\mathbf{q}_k^\top\mathbf{q}_i=\delta_{ki}$, i.e.
+$\mathbf{q}_k^\top\mathbf{r}_j=\mathbf{q}_k^\top\mathbf{v}_j-\sum_{i=1}^{j-1}(\mathbf{q}_i^\top\mathbf{v}_j)\,\mathbf{q}_k^\top\mathbf{q}_i
+=\mathbf{q}_k^\top\mathbf{v}_j-\mathbf{q}_k^\top\mathbf{v}_j
+=0$.
+Dividing by $\|\mathbf{r}_j\|$ keeps this orthogonality and gives $\mathbf{q}_j=\mathbf{r}_j/\|\mathbf{r}_j\|$ norm one, so $\mathbf{q}_1,\dots,\mathbf{q}_j$ are orthonormal.
+
+* Third, the spans agree. The vector $\mathbf{q}_j$ is a combination of $\mathbf{v}_j$ and $\mathbf{q}_1,\dots,\mathbf{q}_{j-1}$, hence of $\mathbf{v}_1,\dots,\mathbf{v}_j$ by the hypothesis. Conversely, $\mathbf{v}_j=\|\mathbf{r}_j\|\,\mathbf{q}_j+\sum_{i<j}(\mathbf{q}_i^\top\mathbf{v}_j)\,\mathbf{q}_i$ is a combination of $\mathbf{q}_1,\dots,\mathbf{q}_j$.
+
+For example, $\mathbf{v}_1=[1,1,0]^\top$ and $\mathbf{v}_2=[1,0,1]^\top$ give $\mathbf{q}_1=[1,1,0]^\top/\sqrt2$, then $\mathbf{q}_1^\top\mathbf{v}_2=1/\sqrt2$, $\mathbf{r}_2=\mathbf{v}_2-\mathbf{q}_1/\sqrt2=[\tfrac12,-\tfrac12,1]^\top$ and $\mathbf{q}_2=[1,-1,2]^\top/\sqrt6$, and indeed $\mathbf{q}_1^\top\mathbf{q}_2=(1-1+0)/\sqrt{12}=0$. Step $j$ costs $j-1$ inner products and subtractions, so the cost per step grows with $j$. The following section applies the process to the spanning vectors $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\mathbf{A}^2\mathbf{q}_1,\dots$ of the Krylov subspace.
+
+### 4.3 How the Lanczos method works
+
+> <span class="article-kicker article-kicker--theorem">The idea</span> The Lanczos method runs the [Gram–Schmidt process](#42-the-gramschmidt-process) on the Krylov subspace $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1) = \operatorname{span}\{\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^{m-1}\mathbf{q}_1\}$, one matrix–vector product per step. 
 > The numbers that Gram–Schmidt computes along the way form a small symmetric matrix, and the eigenvalues of that matrix approximate eigenvalues of $\mathbf{A}$.
 
-This section unpacks these sentences. It first explains why the search for eigenvalues needs an orthonormal basis of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, then runs Gram–Schmidt on the Krylov subspace by hand for four steps, states the general step, and finally shows how eigenvalues and eigenvectors come out of the coefficients. The proofs are in Lemmas [3](#45-lemma-3-orthogonality-and-tridiagonal-projection) to [5](#47-lemma-5-variational-characterization-and-monotonicity) and [Proposition 3](#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run).
+This section unpacks these sentences. It first explains why the search for eigenvalues needs an orthonormal basis of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, then runs Gram–Schmidt on the Krylov subspace by hand for four steps, states the general step, and finally shows how eigenvalues and eigenvectors come out of the coefficients. The proofs are in Lemmas [3](#46-lemma-3-orthogonality-and-tridiagonal-projection) to [5](#48-lemma-5-variational-characterization-and-monotonicity) and [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run).
 
 After $m-1$ products, every vector of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ is within reach. It is a combination $c_0\mathbf{q}_1+c_1\mathbf{A}\mathbf{q}_1+\dots+c_{m-1}\mathbf{A}^{m-1}\mathbf{q}_1=p(\mathbf{A})\mathbf{q}_1$, and by the spectral decomposition, $p(\mathbf{A})\mathbf{q}_1=\sum_{\lambda}p(\lambda)\,\Pi_\lambda\mathbf{q}_1$ reweights each eigencomponent of $\mathbf{q}_1$ by the value $p(\lambda)$. Power iteration only ever uses the polynomial $t \mapsto t^{m-1}$. The Lanczos method considers all of them at once.
 
 To turn these vectors into eigenvalue estimates, recall that the Rayleigh quotient of a unit vector never exceeds $\lambda_{\max}(\mathbf{A})=\max_{\|\mathbf{x}\|=1}\mathbf{x}^\top\mathbf{A}\mathbf{x}$ and never falls below $\lambda_{\min}(\mathbf{A})=\min_{\|\mathbf{x}\|=1}\mathbf{x}^\top\mathbf{A}\mathbf{x}$ ([Remark 7](#remark-7-the-shift-only-needs-to-pass-the-midpoint)), with equality at the corresponding eigenvectors. 
-These optimizations run over all unit vectors of $\mathbb{R}^d$, which are out of reach. Running them over the unit vectors of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ only gives two numbers $\vartheta_{\max}^{(m)}\le\lambda_{\max}(\mathbf{A})$ and $\vartheta_{\min}^{(m)}\ge\lambda_{\min}(\mathbf{A})$. They are the best estimates of the extreme eigenvalues that Rayleigh quotients of vectors of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ can give, and they improve as $m$ grows, because the subspaces are nested. The power iterate $\mathbf{v}=\mathbf{A}^{m-1}\mathbf{q}_1/\|\mathbf{A}^{m-1}\mathbf{q}_1\|$ is a unit vector of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, so the estimate of power iteration, $\mathbf{v}^\top\mathbf{A}\mathbf{v}$, lies between $\vartheta_{\min}^{(m)}$ and $\vartheta_{\max}^{(m)}$: whichever extreme eigenvalue power iteration approaches, the corresponding estimate of the Lanczos method is at least as close. [Lemma 5](#47-lemma-5-variational-characterization-and-monotonicity) states these facts precisely.
+These optimizations run over all unit vectors of $\mathbb{R}^d$, which are out of reach. Running them over the unit vectors of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ only gives two numbers $\vartheta_{\max}^{(m)}\le\lambda_{\max}(\mathbf{A})$ and $\vartheta_{\min}^{(m)}\ge\lambda_{\min}(\mathbf{A})$. They are the best estimates of the extreme eigenvalues that Rayleigh quotients of vectors of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ can give, and they improve as $m$ grows, because the subspaces are nested. The power iterate $\mathbf{v}=\mathbf{A}^{m-1}\mathbf{q}_1/\|\mathbf{A}^{m-1}\mathbf{q}_1\|$ is a unit vector of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, so the estimate of power iteration, $\mathbf{v}^\top\mathbf{A}\mathbf{v}$, lies between $\vartheta_{\min}^{(m)}$ and $\vartheta_{\max}^{(m)}$: whichever extreme eigenvalue power iteration approaches, the corresponding estimate of the Lanczos method is at least as close. [Lemma 5](#48-lemma-5-variational-characterization-and-monotonicity) states these facts precisely.
 
 Searching a subspace needs coordinates, and the convenient ones come from an orthonormal basis $\mathbf{q}_1,\dots,\mathbf{q}_m$ of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, the columns of $\mathbf{Q}_m=[\mathbf{q}_1,\dots,\mathbf{q}_m]$. Every vector of the subspace is then $\mathbf{x}=\mathbf{Q}_m\mathbf{y}=y_1\mathbf{q}_1+\dots+y_m\mathbf{q}_m$ for a unique $\mathbf{y}\in\mathbb{R}^m$, lengths are preserved, $\|\mathbf{x}\|=\|\mathbf{y}\|$, and
 
@@ -1092,7 +1118,7 @@ $$
 \qquad
 \mathbf{q}_2
 =\frac{\mathbf{r}_1}{\beta_1}
-=\frac{(\mathbf{A}-\alpha_1\mathbb{I}_d)\,\mathbf{q}_1}{\beta_1}.
+=\frac{\mathbf{A}-\alpha_1\mathbb{I}_d}{\beta_1} \mathbf{q}_1.
 $$
 
 So $\mathbf{q}_1,\mathbf{q}_2$ is an orthonormal basis of $\mathcal{K}_2(\mathbf{A},\mathbf{q}_1)$, and $\mathbf{q}_2=p_1(\mathbf{A})\mathbf{q}_1$ for the polynomial $p_1(t)=(t-\alpha_1)/\beta_1$ of degree one. In the colors used throughout this section, a <span style="color:#7c3aed">purple</span> coefficient is computed at the current step, and a <span style="color:#16a34a">green</span> one is the length of the new direction.
@@ -1116,7 +1142,7 @@ $$
 \qquad
 \textcolor{#16a34a}{\beta_2}=\|\mathbf{r}_2\|,
 \qquad
-\mathbf{q}_3=\frac{\mathbf{r}_2}{\beta_2},
+\mathbf{q}_3=\frac{\mathbf{r}_2}{\beta_2}=\frac{(\mathbf{A}-\alpha_1\mathbb{I}_d)p_1(\mathbf{A})-\beta_1\mathbb{I}_d}{\beta_2} \mathbf{q}_1,
 $$
 
 that is, $\mathbf{A}\mathbf{q}_2=\textcolor{#ea580c}{\beta_1\mathbf{q}_1}+\textcolor{#7c3aed}{\alpha_2\mathbf{q}_2}+\textcolor{#16a34a}{\beta_2\mathbf{q}_3}$. Now $\mathbf{q}_1,\mathbf{q}_2,\mathbf{q}_3$ is an orthonormal basis of $\mathcal{K}_3(\mathbf{A},\mathbf{q}_1)$, and $\mathbf{q}_3=p_2(\mathbf{A})\mathbf{q}_1$ for the polynomial $p_2(t)=\bigl((t-\alpha_2)\,p_1(t)-\beta_1\bigr)/\beta_2$ of degree two. The coefficients found so far already give the matrix of the Rayleigh quotient on $\mathcal{K}_2(\mathbf{A},\mathbf{q}_1)$,
@@ -1132,7 +1158,7 @@ whose two eigenvalues are the smallest and largest values of $\mathbf{x}^\top\ma
 $$
 \mathbf{A}\mathbf{q}_3=\frac{1}{\beta_1\beta_2}\,\textcolor{#2563eb}{\mathbf{A}^3\mathbf{q}_1}+\textcolor{#ea580c}{\mathbf{k}},
 \qquad
-\textcolor{#ea580c}{\mathbf{k}}\in\mathcal{K}_3(\mathbf{A},\mathbf{q}_1),
+\textcolor{#ea580c}{\mathbf{k}}\in\mathcal{K}_3(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1, \mathbf{q}_2, \mathbf{q}_3\},
 $$
 
 where the <span style="color:#ea580c">orange vector</span> collects the terms of lower degree. Removing the components along $\mathbf{q}_1,\mathbf{q}_2,\mathbf{q}_3$ deletes it, so $\mathbf{A}\mathbf{q}_3$ brings the same new direction as $\mathbf{A}^3\mathbf{q}_1$. Its coefficient on $\mathbf{q}_1$ is
@@ -1143,9 +1169,15 @@ $$
 
 because $\mathbf{A}\mathbf{q}_1$ lies in $\mathcal{K}_2(\mathbf{A},\mathbf{q}_1)$, to which $\mathbf{q}_3$ is orthogonal. Gram–Schmidt has nothing to subtract along $\mathbf{q}_1$, and <span style="color:#7d8783">grey</span> marks such vanishing coefficients. The coefficient on $\mathbf{q}_2$ is $(\mathbf{A}\mathbf{q}_2)^\top\mathbf{q}_3=\textcolor{#ea580c}{\beta_2}$, known from Step 2, and the one on $\mathbf{q}_3$ is the new number $\textcolor{#7c3aed}{\alpha_3}=\mathbf{q}_3^\top\mathbf{A}\mathbf{q}_3$. Two subtractions and a normalization give $\mathbf{q}_4$:
 $\mathbf{A}\mathbf{q}_3=\textcolor{#ea580c}{\beta_2\mathbf{q}_2}+\textcolor{#7c3aed}{\alpha_3\mathbf{q}_3}+\textcolor{#16a34a}{\beta_3\mathbf{q}_4}$,
-and $\mathbf{q}_1,\dots,\mathbf{q}_4$ is an orthonormal basis of $\mathcal{K}_4(\mathbf{A},\mathbf{q}_1)$.
+and $\mathbf{q}_1,\dots,\mathbf{q}_4$ is an orthonormal basis of $\mathcal{K}_4(\mathbf{A},\mathbf{q}_1)$. Solving this relation for $\mathbf{q}_4$, with $\mathbf{q}_2=p_1(\mathbf{A})\mathbf{q}_1$ and $\mathbf{q}_3=p_2(\mathbf{A})\mathbf{q}_1$, gives $\mathbf{q}_4=p_3(\mathbf{A})\mathbf{q}_1$ for the polynomial $p_3(t)=\bigl((t-\alpha_3)\,p_2(t)-\beta_2\,p_1(t)\bigr)/\beta_3$ of degree three. The coefficients found so far give the matrix of the Rayleigh quotient on $\mathcal{K}_3(\mathbf{A},\mathbf{q}_1)$,
 
-**Step 4: Gram–Schmidt on $\mathcal{K}_5(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1, \mathbf{A}\mathbf{q}_1, \mathbf{A}^2\mathbf{q}_1, \mathbf{A}^3\mathbf{q}_1, \mathbf{A}^4\mathbf{q}_1\}$, and the pattern.** The fourth product gives $\mathbf{A}\mathbf{q}_4$, which, by the argument of Steps 2 and 3, brings the same new direction as $\mathbf{A}^4\mathbf{q}_1$. Its coefficients on $\mathbf{q}_1$ and $\mathbf{q}_2$ vanish, since $\mathbf{A}\mathbf{q}_1$ and $\mathbf{A}\mathbf{q}_2$ lie in $\mathcal{K}_3(\mathbf{A},\mathbf{q}_1)$, to which $\mathbf{q}_4$ is orthogonal. Its coefficient on $\mathbf{q}_3$ is $\textcolor{#ea580c}{\beta_3}$, known from Step 3, and the new number is $\textcolor{#7c3aed}{\alpha_4}=\mathbf{q}_4^\top\mathbf{A}\mathbf{q}_4$, so that $\mathbf{A}\mathbf{q}_4=\textcolor{#ea580c}{\beta_3\mathbf{q}_3}+\textcolor{#7c3aed}{\alpha_4\mathbf{q}_4}+\textcolor{#16a34a}{\beta_4\mathbf{q}_5}$. The four steps have computed the coordinates of $\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}\mathbf{q}_4$ in the basis:
+$$
+\mathbf{T}_3=\mathbf{Q}_3^\top\mathbf{A}\mathbf{Q}_3=\begin{bmatrix}\alpha_1&\beta_1&\textcolor{#7d8783}{0}\\\beta_1&\alpha_2&\beta_2\\\textcolor{#7d8783}{0}&\beta_2&\alpha_3\end{bmatrix},
+$$
+
+where the <span style="color:#7d8783">grey zeros</span> are the vanishing coefficient $\mathbf{q}_1^\top\mathbf{A}\mathbf{q}_3$ and its symmetric copy. Its smallest and largest eigenvalues are the smallest and largest values of $\mathbf{x}^\top\mathbf{A}\mathbf{x}$ over the unit vectors of $\mathcal{K}_3(\mathbf{A},\mathbf{q}_1)$.
+
+**Step 4: Gram–Schmidt on $\mathcal{K}_5(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1, \mathbf{A}\mathbf{q}_1, \mathbf{A}^2\mathbf{q}_1, \mathbf{A}^3\mathbf{q}_1, \mathbf{A}^4\mathbf{q}_1\}$, and the pattern.** The fourth product gives $\mathbf{A}\mathbf{q}_4$, which, by the argument of Steps 2 and 3, brings the same new direction as $\mathbf{A}^4\mathbf{q}_1$. Its coefficients on $\mathbf{q}_1$ and $\mathbf{q}_2$ vanish, since $\mathbf{A}\mathbf{q}_1$ and $\mathbf{A}\mathbf{q}_2$ lie in $\mathcal{K}_3(\mathbf{A},\mathbf{q}_1)$, to which $\mathbf{q}_4$ is orthogonal. Its coefficient on $\mathbf{q}_3$ is $\textcolor{#ea580c}{\beta_3}$, known from Step 3, and the new number is $\textcolor{#7c3aed}{\alpha_4}=\mathbf{q}_4^\top\mathbf{A}\mathbf{q}_4$, so that $\mathbf{A}\mathbf{q}_4=\textcolor{#ea580c}{\beta_3\mathbf{q}_3}+\textcolor{#7c3aed}{\alpha_4\mathbf{q}_4}+\textcolor{#16a34a}{\beta_4\mathbf{q}_5}$, and $\mathbf{q}_5=p_4(\mathbf{A})\mathbf{q}_1$ for the polynomial $p_4(t)=\bigl((t-\alpha_4)\,p_3(t)-\beta_3\,p_2(t)\bigr)/\beta_4$ of degree four. The four steps have computed the coordinates of $\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}\mathbf{q}_4$ in the basis:
 
 | | on $\mathbf{q}_1$ | on $\mathbf{q}_2$ | on $\mathbf{q}_3$ | on $\mathbf{q}_4$ | on $\mathbf{q}_5$ |
 |---|:---:|:---:|:---:|:---:|:---:|
@@ -1167,8 +1199,27 @@ $$
 
 It is tridiagonal: only the diagonal and its two neighbors are nonzero. The last column of the table, $\beta_4$ on $\mathbf{q}_5$, lies outside $\mathcal{K}_4(\mathbf{A},\mathbf{q}_1)$, and it plays a central role below.
 
-**The general step.** The same reasoning holds at every step $j\in\{1,2,3,\dots\}$, as long as the previous steps have produced $\mathbf{q}_j$, which for $j\ge2$ means $\beta_{j-1}>0$. For $j=1$, there is no earlier basis vector, and the conventions $\mathbf{q}_0=0$ and $\beta_0=0$ of [Definition 2](#44-definition-2-lanczos-recurrence-and-exact-breakdown) let the formulas below cover this case too. By symmetry, the coefficient of $\mathbf{A}\mathbf{q}_j$ on an earlier basis vector $\mathbf{q}_i$ is $(\mathbf{A}\mathbf{q}_i)^\top\mathbf{q}_j$, and $\mathbf{A}\mathbf{q}_i$ lies in $\mathcal{K}_{i+1}(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{i+1}\}$, to which $\mathbf{q}_j$ is orthogonal as soon as $i\le j-2$. Only two coefficients survive: $\textcolor{#ea580c}{\beta_{j-1}}$, computed as a length at the previous step, and the new number $\textcolor{#7c3aed}{\alpha_j}=\mathbf{q}_j^\top\mathbf{A}\mathbf{q}_j$. Step $j$ of [Definition 2](#44-definition-2-lanczos-recurrence-and-exact-breakdown) below is therefore the following Gram–Schmidt step.
+**The general step.** The same reasoning holds at every step $j\in\{1,2,3,\dots\}$, as long as the previous steps have produced $\mathbf{q}_j$, which for $j\ge2$ means that the length $\beta_{j-1}=\|\mathbf{r}_{j-1}\|$ found at step $j-1$ is positive. For $j=1$, there is no earlier basis vector, and the conventions $\mathbf{q}_0=0$ and $\beta_0=0$ of [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown) let the formulas below cover this case too. By symmetry, the coefficient of $\mathbf{A}\mathbf{q}_j$ on an earlier basis vector $\mathbf{q}_i$ is $(\mathbf{A}\mathbf{q}_i)^\top\mathbf{q}_j$, and $\mathbf{A}\mathbf{q}_i$ lies in $\mathcal{K}_{i+1}(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{i+1}\}$, to which $\mathbf{q}_j$ is orthogonal as soon as $i+2\le j$. Only two coefficients then survive, $i=j-1$ and $i=j$:
+* The one on $\mathbf{q}_{j-1}$ is the length $\beta_{j-1}=\|\mathbf{r}_{j-1}\|$ already computed at the previous step, as for $\beta_1$ in Step 2:
+$$
+\mathbf{q}_{j-1}^\top\mathbf{A}\mathbf{q}_j
+=(\mathbf{A}\mathbf{q}_{j-1})^\top\mathbf{q}_j
+=(\beta_{j-2}\mathbf{q}_{j-2}+\alpha_{j-1}\mathbf{q}_{j-1}+\beta_{j-1}\mathbf{q}_j)^\top\mathbf{q}_j
+=\textcolor{#ea580c}{\beta_{j-1}}.
+% by symmetry, the relation of step $j-1$, and orthonormality. 
+$$ 
 
+* The one on $\mathbf{q}_j$ is the new number $\textcolor{#7c3aed}{\alpha_j}=\mathbf{q}_j^\top\mathbf{A}\mathbf{q}_j$. 
+
+Subtracting both components from $\mathbf{A}\mathbf{q}_j$ leaves the remainder $\mathbf{r}_j$, orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_j$, and when its length $\textcolor{#16a34a}{\beta_j}=\|\mathbf{r}_j\|$ is positive, dividing by it gives the next basis vector $\mathbf{q}_{j+1}$:
+
+$$
+\mathbf{r}_j
+=\mathbf{A}\mathbf{q}_j\textcolor{#ea580c}{-\beta_{j-1}\mathbf{q}_{j-1}}\textcolor{#7c3aed}{-\alpha_j\mathbf{q}_j}
+=\textcolor{#16a34a}{\beta_j\mathbf{q}_{j+1}}.
+$$
+
+Step $j$ of [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown) below is therefore the following Gram–Schmidt step, which makes the two subtractions one after the other.
 $$
 \mathbf{q}_j
 \xrightarrow{\ \mathbf{A}\ }
@@ -1192,11 +1243,65 @@ $$
 
 Rearranging the definitions of $\mathbf{z}_j$ and $\mathbf{r}_j$ gives the three-term recurrence
 $\mathbf{A}\mathbf{q}_j=\textcolor{#ea580c}{\beta_{j-1}\mathbf{q}_{j-1}}+\textcolor{#7c3aed}{\alpha_j\mathbf{q}_j}+\textcolor{#16a34a}{\beta_j\mathbf{q}_{j+1}}$.
-The <span style="color:#ea580c">orange term</span> was found at the previous step, the <span style="color:#7c3aed">purple term</span> is the only coefficient computed at step $j$, and the <span style="color:#16a34a">green term</span> is the new direction. In terms of polynomials, $\mathbf{q}_{j+1}=p_j(\mathbf{A})\mathbf{q}_1$, where $p_0=1$, $p_{-1}=0$ and 
-$\beta_j\,p_j(t)=(t-\alpha_j)\,p_{j-1}(t)-\beta_{j-1}\,p_{j-2}(t)$.
-Gram–Schmidt on $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ is thus Gram–Schmidt on the polynomials $1,t,t^2,\dots$ for the inner product $\langle p,r\rangle=\bigl(p(\mathbf{A})\mathbf{q}_1\bigr)^\top r(\mathbf{A})\mathbf{q}_1=\sum_\lambda p(\lambda)\,r(\lambda)\,\|\Pi_\lambda\mathbf{q}_1\|^2$, and the polynomials $p_j$ are orthonormal for it.
+The <span style="color:#ea580c">orange term</span> was found at the previous step, the <span style="color:#7c3aed">purple term</span> is the only coefficient computed at step $j$, and the <span style="color:#16a34a">green term</span> is the new direction. In terms of polynomials, $\mathbf{q}_{j+1}=p_j(\mathbf{A})\mathbf{q}_1$ with $p_0=1$ and 
+$\beta_j\,p_j(t)=(t-\alpha_j)\,p_{j-1}(t)-\beta_{j-1}\,p_{j-2}(t)$ for all $j \ge 1$, where $p_{-1}=0$.
+<span id="krylov-inner-product"></span>Gram–Schmidt on $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ is thus Gram–Schmidt on the polynomials $1,t,t^2,\dots$ for the inner product $\langle p,r\rangle=\bigl(p(\mathbf{A})\mathbf{q}_1\bigr)^\top r(\mathbf{A})\mathbf{q}_1=\sum_\lambda p(\lambda)\,r(\lambda)\,\|\Pi_\lambda\mathbf{q}_1\|^2$, and the polynomials $p_j$ are <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="lanczos-orthonormal-polynomials" aria-label="Prove that the Lanczos polynomials are orthonormal for this inner product">orthonormal for it</button><span id="lanczos-orthonormal-polynomials" class="explanation-popover" popover="auto" role="note" aria-label="Proof that the Lanczos polynomials are orthonormal" data-label="Derivation">Everything follows from $\mathbf{q}_{j+1}=p_j(\mathbf{A})\mathbf{q}_1$. First, the polynomials are orthonormal because the basis vectors are: for all $i,j\ge0$, <span class="explanation-popover__equation">$\langle p_i,p_j\rangle=\bigl(p_i(\mathbf{A})\mathbf{q}_1\bigr)^\top p_j(\mathbf{A})\mathbf{q}_1=\mathbf{q}_{i+1}^\top\mathbf{q}_{j+1}=\delta_{ij}.$</span> Second, the sum over eigenvalues comes from the expansion $\mathbf{A}^k\mathbf{q}_1=\sum_\lambda\lambda^k\,\Pi_\lambda\mathbf{q}_1$ of the introduction. By linearity, $p(\mathbf{A})\mathbf{q}_1=\sum_\lambda p(\lambda)\,\Pi_\lambda\mathbf{q}_1$ for every polynomial $p$, and since the eigenspaces of distinct eigenvalues are orthogonal, only the terms with $\mu=\lambda$ survive in the product: <span class="explanation-popover__equation">$\bigl(p(\mathbf{A})\mathbf{q}_1\bigr)^\top r(\mathbf{A})\mathbf{q}_1=\sum_{\lambda,\mu}p(\lambda)\,r(\mu)\,(\Pi_\lambda\mathbf{q}_1)^\top\Pi_\mu\mathbf{q}_1=\sum_\lambda p(\lambda)\,r(\lambda)\,\|\Pi_\lambda\mathbf{q}_1\|^2.$</span> Third, this is an inner product on the polynomials that matter. It is symmetric and bilinear, and $\langle p,p\rangle=\sum_\lambda p(\lambda)^2\,\|\Pi_\lambda\mathbf{q}_1\|^2$ vanishes only if $p$ is zero at every eigenvalue $\lambda$ with $\Pi_\lambda\mathbf{q}_1\neq0$. If there are $s$ such eigenvalues, a nonzero polynomial of degree less than $s$ cannot vanish at all of them, and these degrees cover $p_0,\dots,p_{s-1}$, all the polynomials the method produces, since it stops at step $s$ by [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run). Finally, $p_j$ has degree $j$ and the positive leading coefficient $1/(\beta_1\cdots\beta_j)$, so $p_0,\dots,p_j$ are exactly what Gram–Schmidt produces from $1,t,\dots,t^j$ for this inner product.</span></span>.
 
-Compared with textbook Gram–Schmidt on $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\mathbf{A}^2\mathbf{q}_1,\dots$, the method makes two changes, and neither changes the subspaces. First, it multiplies the newest basis vector instead of forming the next power. In general, $\mathbf{q}_j$ has a nonzero coefficient on $\mathbf{A}^{j-1}\mathbf{q}_1$, since otherwise it would lie in $\mathcal{K}_{j-1}(\mathbf{A},\mathbf{q}_1)$, to which it is orthogonal. Hence $\mathbf{A}\mathbf{q}_j$ is a nonzero multiple of $\mathbf{A}^j\mathbf{q}_1$ plus a vector of $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, and the two bring the same new direction, as in Step 2. This avoids a loss of accuracy. Up to scaling, the powers $\mathbf{A}^j\mathbf{q}_1$ are the iterates of power iteration, so they turn toward the same dominant eigenvector and become nearly parallel, and extracting a new direction from nearly parallel vectors loses accuracy to cancellation. Second, symmetry leaves two subtractions per step instead of $j$, so every step costs the same. In floating-point arithmetic, the vanishing coefficients are only approximately zero and the orthogonality they protect is gradually lost, which is why [Algorithm 2](#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks) below reorthogonalizes.
+Compared with textbook Gram–Schmidt on $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\mathbf{A}^2\mathbf{q}_1,\dots$, the method makes two changes, and neither changes the subspaces. 
+* First, at step $j$ it multiplies the newest basis vector $\mathbf{q}_j$ by $\mathbf{A}$ instead of forming the next power $\mathbf{A}^j\mathbf{q}_1$. In general, $\mathbf{q}_j$ has a nonzero coefficient on $\mathbf{A}^{j-1}\mathbf{q}_1$ (recall that $\mathbf{q}_j$ exists only when $\beta_{j-1}=\|\mathbf{r}_{j-1}\|>0$), since otherwise it would lie in $\mathcal{K}_{j-1}(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^{j-2}\mathbf{q}_1\}=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j-1}\}$, to which it is orthogonal. By the recurrence for the polynomials $p_j$ above, this coefficient is $1/(\beta_1\beta_2\cdots\beta_{j-1})$, the leading coefficient of $p_{j-1}$. Hence $\mathbf{A}\mathbf{q}_j$ is a nonzero multiple of $\mathbf{A}^j\mathbf{q}_1$ plus a vector of $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, and the two bring the same new direction, the direction $\mathbf{q}_{j+1}$ orthogonal to $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, as in Step 2, where $\mathbf{A}\mathbf{q}_2$ and $\mathbf{A}^2\mathbf{q}_1$ both bring $\mathbf{q}_3$. In exact arithmetic, both choices therefore give the same basis. In floating-point arithmetic they do not: the basis computed from the powers $\mathbf{A}^j\mathbf{q}_1$ loses its orthogonality within a few steps, as the example below shows, and the reason is the following. Since $p_j$ has leading coefficient $1/(\beta_1\cdots\beta_j)$, and by the three-term recurrence,
+
+  $$
+  \mathbf{A}^j\mathbf{q}_1=\textcolor{#16a34a}{\beta_1\beta_2\cdots\beta_j\,\mathbf{q}_{j+1}}+\underbrace{\mathbf{k}_j}_{\in\,\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)},
+  \qquad
+  \mathbf{A}\mathbf{q}_j=\textcolor{#16a34a}{\beta_j\,\mathbf{q}_{j+1}}+\underbrace{\beta_{j-1}\mathbf{q}_{j-1}+\alpha_j\mathbf{q}_j}_{\in\,\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)},
+  $$
+
+  for some vector $\mathbf{k}_j$. In each of the two vectors, the green term is orthogonal to $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_j\}$ and the other terms lie in it, so Gram–Schmidt removes the other terms and keeps only the <span style="color:#16a34a">green term</span>. Let $\mathbf{x}$ be either vector, $\mathbf{A}^j\mathbf{q}_1$ or $\mathbf{A}\mathbf{q}_j$, and $\textcolor{#16a34a}{\mathbf{g}}$ its green term. What decides the accuracy is the ratio $f=\|\textcolor{#16a34a}{\mathbf{g}}\|/\|\mathbf{x}\|$.
+  Since $\textcolor{#16a34a}{\mathbf{g}}$ is orthogonal to $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ and $\mathbf{x}-\textcolor{#16a34a}{\mathbf{g}}$ lies in it, $f$ is the sine of the angle between $\mathbf{x}$ and $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$. It lies in $[0,1]$. It equals $1$ when $\mathbf{x}$ is orthogonal to $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ and there is nothing to remove, the best case. It is close to $0$ when $\mathbf{x}$ is close to $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, the bad case, because the computed $\mathbf{q}_{j+1}$ then loses orthogonality to the earlier basis vectors, by an amount that grows as $f$ shrinks, as shown next. Gram–Schmidt removes the terms $\mathbf{x}-\textcolor{#16a34a}{\mathbf{g}}$ from $\mathbf{x}$. In double precision, whose unit roundoff is $u\approx1.1\cdot10^{-16}$, it does so with rounding errors <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="gram-schmidt-rounding" aria-label="Explain why the rounding errors of Gram–Schmidt are proportional to the length of x">of the order of $u\|\mathbf{x}\|$</button><span id="gram-schmidt-rounding" class="explanation-popover" popover="auto" role="note" aria-label="Rounding errors of one Gram–Schmidt step" data-label="Derivation">Gram–Schmidt computes the coefficients $c_i=\mathbf{q}_i^\top\mathbf{x}$ of $\mathbf{x}$ on the basis vectors of $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ and subtracts the nonzero terms $c_i\mathbf{q}_i$ from $\mathbf{x}$ one at a time. There are $n=2$ of them for $\mathbf{A}\mathbf{q}_j$ and $n=j$ for $\mathbf{A}^j\mathbf{q}_1$. Write $\mathbf{y}_k$ for the intermediate vector left after the first $k$ subtractions, so that $\mathbf{y}_0=\mathbf{x}$ and $\mathbf{y}_n=\textcolor{#16a34a}{\mathbf{g}}$. In floating-point arithmetic, every addition, subtraction and multiplication is rounded: its computed result is the exact one times $1+\delta$, with $|\delta|\le u$. Each operation therefore errs by at most $u$ times the size of its result, and the results here have the size of $\mathbf{x}$, not of $\textcolor{#16a34a}{\mathbf{g}}$. Indeed, $|c_i|\le\|\mathbf{q}_i\|\|\mathbf{x}\|=\|\mathbf{x}\|$ by the Cauchy–Schwarz inequality, and the vectors $\mathbf{y}_k$ are no longer than $\mathbf{x}$. The difference $\mathbf{x}-\mathbf{y}_k$, the sum of the first $k$ terms, is the orthogonal projection of $\mathbf{x}$ onto the span of the first $k$ basis vectors used, and $\mathbf{y}_k$ is orthogonal to this span. Pythagoras' theorem therefore gives $\|\mathbf{x}\|^2=\|\mathbf{x}-\mathbf{y}_k\|^2+\|\mathbf{y}_k\|^2$, so $\|\mathbf{y}_k\|\le\|\mathbf{x}\|$ (the triangle inequality would only give $\|\mathbf{y}_k\|\le(k+1)\|\mathbf{x}\|$ because it ignores that the terms $c_i\mathbf{q}_i$ are orthogonal). An inner product of two vectors of $\mathbb{R}^d$ sums $d$ rounded products, so each $c_i$ is computed with an error of at most about $d\,u\,\|\mathbf{x}\|$, and each subtraction of a term adds at most about $2u\|\mathbf{x}\|$, one $u\|\mathbf{x}\|$ for forming the term and one for subtracting it from $\mathbf{y}_{k-1}$. Up to terms of order $u^2$, the computed green term $\widehat{\mathbf{g}}$ therefore satisfies <span class="explanation-popover__equation">$\|\widehat{\mathbf{g}}-\textcolor{#16a34a}{\mathbf{g}}\|\le n\,(d+2)\,u\,\|\mathbf{x}\|.$</span> The factor $n(d+2)$ is a worst case, and actual errors are usually much smaller, because rounding errors of different signs partly cancel. The number of terms makes this bound $j/2$ times larger for $\mathbf{A}^j\mathbf{q}_1$ than for $\mathbf{A}\mathbf{q}_j$, which costs only $\log_{10}(j/2)$ digits, one digit at $j=20$. The large difference between the two vectors comes from the ratio $f=\|\textcolor{#16a34a}{\mathbf{g}}\|/\|\mathbf{x}\|$, not from $n$: at $j=20$, in the example below, $f$ is $8\cdot10^{-12}$ for $\mathbf{A}^{20}\mathbf{q}_1$ and $0.4$ for $\mathbf{A}\mathbf{q}_{20}$. What matters here is that the bound is proportional to $\|\mathbf{x}\|$, not to $\|\textcolor{#16a34a}{\mathbf{g}}\|$: a small $\textcolor{#16a34a}{\mathbf{g}}$ does not come with a small error.</span></span>, and these errors stay in the computed $\textcolor{#16a34a}{\mathbf{g}}$. Relative to $\|\textcolor{#16a34a}{\mathbf{g}}\|=f\|\mathbf{x}\|$, they are therefore of the order of $u/f$, and so are the components that the computed $\mathbf{q}_{j+1}$ keeps on the earlier basis vectors. This loss of accuracy is called *cancellation*. The same thing happens with a number in place of the vector $\mathbf{x}$. Subtracting $1$ from $x=1.000001$ leaves $\textcolor{#16a34a}{g}=10^{-6}$, so $f=\textcolor{#16a34a}{g}/x\approx10^{-6}$, and the error of about $10^{-16}$ with which $x$ is stored stays in $\textcolor{#16a34a}{g}$, where it is a relative error of about $u/f=10^{-10}$.
+
+  The two ratios behave very differently. For $\mathbf{x}=\mathbf{A}\mathbf{q}_j$, the three terms are orthogonal, so $\|\mathbf{x}\|^2=\beta_{j-1}^2+\alpha_j^2+\beta_j^2$ and
+
+  $$
+  f=\frac{\beta_j}{\sqrt{\beta_{j-1}^2+\alpha_j^2+\beta_j^2}},
+  $$
+
+  which depends only on the coefficients of step $j$, and is close to $0$ only if $\beta_j$ is small compared with $\sqrt{\beta_{j-1}^2+\alpha_j^2}$. For $\mathbf{x}=\mathbf{A}^j\mathbf{q}_1$, the green term has length $\beta_1\beta_2\cdots\beta_j$, so
+
+  $$
+  f=\frac{\beta_1\beta_2\cdots\beta_j}{\|\mathbf{A}^j\mathbf{q}_1\|}.
+  $$
+
+  Up to scaling, the powers $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\mathbf{A}^2\mathbf{q}_1,\dots$ are the iterates of power iteration started from $\mathbf{q}_1$ ([Section 3](#3-power-iteration)), which, under the hypotheses of [Theorem 1](#32-theorem-1-rate-of-convergence), converge up to sign to the dominant eigenvector, so the angle between $\mathbf{A}^j\mathbf{q}_1$ and the previous power $\mathbf{A}^{j-1}\mathbf{q}_1$, which lies in $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, tends to $0$. As a result, this ratio <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="powers-ratio-bound" aria-label="Prove that the ratio f for the powers shrinks geometrically">shrinks at least geometrically with $j$</button><span id="powers-ratio-bound" class="explanation-popover" popover="auto" role="note" aria-label="Geometric bound on the ratio f for the powers" data-label="Derivation">Write $\mathbf{v}_k=\mathbf{A}^k\mathbf{q}_1/\|\mathbf{A}^k\mathbf{q}_1\|$ for the iterates of power iteration started from $\mathbf{q}_1$, and $s=\operatorname{sgn}(\lambda_\star)$. The green term of $\mathbf{v}_j$ has length $f$ and is orthogonal to $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, so $f$ is the distance from $\mathbf{v}_j$ to this subspace, which contains $s\,\mathbf{v}_{j-1}$. Under the hypotheses of [Theorem 1](#32-theorem-1-rate-of-convergence), $s^k\mathbf{v}_k$ lies within $(\rho_2/|\lambda_\star|)^k\tan(\phi_0)$ of $\mathbf{q}_\star$ for every $k$, and since $s^2=1$, <span class="explanation-popover__equation">$f\le\|\mathbf{v}_j-s\,\mathbf{v}_{j-1}\|=\|s^j\mathbf{v}_j-s^{j-1}\mathbf{v}_{j-1}\|\le\|s^j\mathbf{v}_j-\mathbf{q}_\star\|+\|\mathbf{q}_\star-s^{j-1}\mathbf{v}_{j-1}\|\le2\left(\dfrac{\rho_2}{|\lambda_\star|}\right)^{j-1}\tan(\phi_0).$</span> This bound uses only the last power in $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$. Using all of them gives the much faster decrease seen in practice.</span></span>, and in practice much faster, since $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ contains all the earlier powers, not only the last one. For example, we ran both methods in double precision on the diagonal matrix of size $1000$ with eigenvalues drawn uniformly from $[0,1]$, from a random unit vector $\mathbf{q}_1$, and measured the ratios:
+
+  | step $j$ | $1$ | $5$ | $10$ | $20$ |
+  |---|:---:|:---:|:---:|:---:|
+  | $f$ for $\mathbf{A}^j\mathbf{q}_1$ | $0.5$ | $4\cdot10^{-3}$ | $6\cdot10^{-6}$ | $8\cdot10^{-12}$ |
+  | $f$ for $\mathbf{A}\mathbf{q}_j$ | $0.5$ | $0.4$ | $0.4$ | $0.4$ |
+
+  The same runs also measured how far each computed basis is from orthonormal. Let $\mathbf{Q}_m$ be the matrix whose columns are the first $m$ computed basis vectors. The entries of $\mathbf{Q}_m^\top\mathbf{Q}_m-\mathbb{I}_m$ are the numbers $\mathbf{q}_i^\top\mathbf{q}_k-\delta_{ik}$, so its norm is $0$ for an exactly orthonormal basis, and close to $1$ when two of the basis vectors are nearly parallel. The measured norms are:
+
+  | number $m$ of basis vectors | $10$ | $20$ | $25$ | $30$ |
+  |---|:---:|:---:|:---:|:---:|
+  | basis from the powers $\mathbf{A}^j\mathbf{q}_1$ | $9\cdot10^{-11}$ | $4\cdot10^{-3}$ | $0.9$ | $0.9$ |
+  | basis from the Lanczos recurrence, without reorthogonalization | $3\cdot10^{-15}$ | $5\cdot10^{-15}$ | $5\cdot10^{-15}$ | $6\cdot10^{-15}$ |
+
+  The basis built from the powers thus loses its orthogonality step by step and is far from orthonormal after $25$ vectors, while the Lanczos basis stays orthonormal to within $10^{-14}$.
+* Second, it skips the coefficients that vanish. Full Gram–Schmidt on $\mathbf{A}\mathbf{q}_j$ computes the $j$ coefficients $\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j$, $i=1,\dots,j$, and subtracts the $j$ terms, which costs $O(jd)$ operations at step $j$, a cost that grows with $j$. By symmetry, the coefficients with $i\le j-2$ are zero, as shown in the general step above. The Lanczos method therefore computes only $\alpha_j$, reuses $\beta_{j-1}$, and subtracts two terms, so that every step costs one product and $O(d)$ further operations, whatever $j$.
+  This saving has a price in floating-point arithmetic. The proof that $\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j=0$ for $i\le j-2$ uses that $\mathbf{q}_j$ is exactly orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_{j-1}$, and the computed basis vectors are orthogonal only up to rounding errors. The skipped coefficients are therefore small but not zero, and since the method does not remove them, they stay in the computed $\mathbf{r}_j$. For $i\le j-2$, the new basis vector $\mathbf{q}_{j+1}=\mathbf{r}_j/\beta_j$ then has, up to the rounding errors of step $j$ itself, the component
+
+  $$
+  \mathbf{q}_i^\top\mathbf{q}_{j+1}
+  =\frac{\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j-\beta_{j-1}\,\mathbf{q}_i^\top\mathbf{q}_{j-1}-\alpha_j\,\mathbf{q}_i^\top\mathbf{q}_j}{\beta_j}
+  $$
+
+  on the earlier vector $\mathbf{q}_i$, which is zero in exact arithmetic. Its numerator is made of inner products between earlier basis vectors: $\mathbf{q}_i^\top\mathbf{q}_{j-1}$ and $\mathbf{q}_i^\top\mathbf{q}_j$ directly, and $\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j=(\mathbf{A}\mathbf{q}_i)^\top\mathbf{q}_j$ through the recurrence $\mathbf{A}\mathbf{q}_i=\beta_{i-1}\mathbf{q}_{i-1}+\alpha_i\mathbf{q}_i+\beta_i\mathbf{q}_{i+1}$, up to rounding. The loss of orthogonality of the previous steps thus feeds into every new basis vector, and it accumulates. The same runs as in the first item measured $\lVert\mathbf{Q}_m^\top\mathbf{Q}_m-\mathbb{I}_m\rVert$ for the Lanczos basis, without reorthogonalization and with the reorthogonalization of [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks) described below:
+
+  | number $m$ of basis vectors | $30$ | $100$ | $150$ | $200$ |
+  |---|:---:|:---:|:---:|:---:|
+  | without reorthogonalization | $6\cdot10^{-15}$ | $3\cdot10^{-12}$ | $6\cdot10^{-10}$ | $1\cdot10^{-6}$ |
+  | with reorthogonalization | $9\cdot10^{-16}$ | $1\cdot10^{-15}$ | $1\cdot10^{-15}$ | $1\cdot10^{-15}$ |
+
+  Without reorthogonalization, the loss is much slower than for the powers, where it reached $0.9$ after $25$ vectors, but it does not stop. This is why [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks) below reorthogonalizes: after the three-term step, it removes from $\mathbf{r}_j$ its components on all the stored basis vectors $\mathbf{q}_1,\dots,\mathbf{q}_j$ once more, here in two passes, and the basis then stays orthonormal to about $10^{-15}$ at every $m$ of the table. This gives back the $O(jd)$ cost per step that symmetry had saved. Unlike Gram–Schmidt on the powers, however, this extra pass is accurate. The components it removes have the size of the loss of orthogonality, tiny compared with $\|\mathbf{r}_j\|$, so the ratio $f$ of the first item is close to $1$ for it.
 
 **Eigenvalues and eigenvectors from the coefficients.** After $m$ steps, the coefficients fill the $m\times m$ tridiagonal matrix
 
@@ -1216,7 +1321,7 @@ $$
 \mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{T}_m+\textcolor{#16a34a}{\beta_m\mathbf{q}_{m+1}\mathbf{e}_m^\top},
 $$
 
-where $\mathbf{e}_m$ is the last standard basis vector of $\mathbb{R}^m$. Inside $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, the matrix $\mathbf{A}$ acts on coordinates as the small matrix $\mathbf{T}_m$, except for the <span style="color:#16a34a">green term</span>, through which the last basis vector leaks out of the subspace. Every eigenpair $(\vartheta,\mathbf{y})$ of $\mathbf{T}_m$, with $\|\mathbf{y}\|=1$, therefore gives a candidate eigenpair $(\vartheta,\mathbf{Q}_m\mathbf{y})$ of $\mathbf{A}$. Such a candidate is called a **Ritz pair**: the **Ritz value** $\vartheta$ estimates an eigenvalue of $\mathbf{A}$, and the **Ritz vector** $\mathbf{Q}_m\mathbf{y}$, a unit vector of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, estimates a corresponding eigenvector. [Lemma 4](#46-lemma-4-ritz-pairs-and-their-residuals) states their properties. In short,
+where $\mathbf{e}_m$ is the last standard basis vector of $\mathbb{R}^m$. Inside $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_m\}$, the matrix $\mathbf{A}$ acts on coordinates as the small matrix $\mathbf{T}_m$, except for the <span style="color:#16a34a">green term</span>, through which the last basis vector leaks out of the subspace. Every eigenpair $(\vartheta,\mathbf{y})$ of $\mathbf{T}_m$, with $\|\mathbf{y}\|=1$, therefore gives a candidate eigenpair $(\vartheta,\mathbf{Q}_m\mathbf{y})$ of $\mathbf{A}$. Such a candidate is called a **Ritz pair**: the **Ritz value** $\vartheta$ estimates an eigenvalue of $\mathbf{A}$, and the **Ritz vector** $\mathbf{Q}_m\mathbf{y}$, a unit vector of $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, estimates a corresponding eigenvector. [Lemma 4](#47-lemma-4-ritz-pairs-and-their-residuals) states their properties. In short,
 
 $$
 \underbrace{\mathbf{A}}_{d\times d}
@@ -1244,17 +1349,35 @@ $$
 
 The residual is available without any further product, and [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) turns it into a certificate. The basis vectors are building blocks, not approximate eigenvectors. An approximate eigenvector $\mathbf{Q}_m\mathbf{y}$ combines all of them, so the basis must be stored to form it, whereas the Ritz values need only the numbers $\alpha_j$ and $\beta_j$.
 
-Gram–Schmidt also explains why the Ritz values approach eigenvalues. At step $m$, the part of $\mathbf{A}^m\mathbf{q}_1$ that Gram–Schmidt keeps is what remains after removing its orthogonal projection onto $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, and it points along $\mathbf{q}_{m+1}$. Every vector $\mathbf{A}^m\mathbf{q}_1-\mathbf{k}$ with $\mathbf{k}\in\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ is $\pi(\mathbf{A})\mathbf{q}_1$ for a monic polynomial $\pi$ of degree $m$, that is, one whose coefficient of $t^m$ is $1$, and the orthogonal projection gives the closest $\mathbf{k}$. The remainder is therefore $\pi_m(\mathbf{A})\mathbf{q}_1=\beta_1\beta_2\cdots\beta_m\,\mathbf{q}_{m+1}$, where $\pi_m$ is the monic polynomial of degree $m$ that makes
+Gram–Schmidt also explains why the Ritz values approach eigenvalues. The argument has three steps.
+* First, the green term of $\mathbf{A}^m\mathbf{q}_1$ has the smallest Euclidean norm among the vectors of a certain form. As shown above with $j=m$,
+  $\mathbf{A}^m\mathbf{q}_1=\textcolor{#16a34a}{\beta_1\beta_2\cdots\beta_m\,\mathbf{q}_{m+1}}+\mathbf{k}_m$ with $\mathbf{k}_m\in\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$.
+  Every $\mathbf{k}\in\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ is a combination of $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^{m-1}\mathbf{q}_1$, say $\mathbf{k}=\sum_{i=0}^{m-1}a_i\mathbf{A}^i\mathbf{q}_1$, so
+  $
+  \mathbf{A}^m\mathbf{q}_1-\mathbf{k}
+  %=\mathbf{A}^m\mathbf{q}_1-\sum_{i=0}^{m-1}a_i\mathbf{A}^i\mathbf{q}_1
+  =\pi(\mathbf{A})\mathbf{q}_1
+  $
+  with $\pi(t)=t^m-\sum_{i=0}^{m-1}a_i\,t^i$ a <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="monic-polynomial" aria-label="Define a monic polynomial">monic</button><span id="monic-polynomial" class="explanation-popover" popover="auto" role="note" aria-label="Monic polynomial" data-label="Definition">A polynomial of degree $m$ is called monic if its coefficient of $t^m$ is $1$, i.e. if it has the form $t\mapsto t^m+\sum_{i=m-1}^{0}c_i\,t^i$.</span></span> of degree $m$. Conversely, any monic polynomial $t^m+\sum_{i=0}^{m-1}c_i\,t^i$ of degree $m$ arises in this way from $a_i=-c_i$. The vectors $\mathbf{A}^m\mathbf{q}_1-\mathbf{k}$ with $\mathbf{k}\in\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ are therefore exactly the vectors $\pi(\mathbf{A})\mathbf{q}_1$ with $\pi$ monic of degree $m$. Each of them is the green term $\textcolor{#16a34a}{\beta_1\beta_2\cdots\beta_m\,\mathbf{q}_{m+1}}$ plus $\mathbf{k}_m-\mathbf{k}\in\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, two orthogonal vectors, so Pythagoras' theorem gives $\|\mathbf{A}^m\mathbf{q}_1-\mathbf{k}\|^2=(\beta_1\cdots\beta_m)^2+\|\mathbf{k}_m-\mathbf{k}\|^2$, which is smallest for $\mathbf{k}=\mathbf{k}_m$, where the vector is the green term itself. Among the vectors $\pi(\mathbf{A})\mathbf{q}_1$ with $\pi$ monic of degree $m$, the green term thus has the smallest Euclidean norm $\|\pi(\mathbf{A})\mathbf{q}_1\|$. Its own polynomial follows from $\mathbf{q}_{m+1}=p_m(\mathbf{A})\mathbf{q}_1$: the green term is $\pi_m(\mathbf{A})\mathbf{q}_1$ for $\pi_m(t)=\beta_1\cdots\beta_m\,p_m(t)$, which is monic because $p_m$ has leading coefficient $1/(\beta_1\cdots\beta_m)$. Hence $\pi_m$ minimizes $\|\pi(\mathbf{A})\mathbf{q}_1\|$ over the monic polynomials of degree $m$. Recall the [inner product on polynomials](#krylov-inner-product) defined with the three-term recurrence, $\langle p,r\rangle=\bigl(p(\mathbf{A})\mathbf{q}_1\bigr)^\top r(\mathbf{A})\mathbf{q}_1=\sum_\lambda p(\lambda)\,r(\lambda)\,\|\Pi_\lambda\mathbf{q}_1\|^2$. It gives $\|\pi(\mathbf{A})\mathbf{q}_1\|^2=\langle\pi,\pi\rangle$, so this Euclidean norm of the vector $\pi(\mathbf{A})\mathbf{q}_1$ is also the norm of the polynomial $\pi$ for that inner product, and with its expression as a sum over the eigenvalues, the minimization reads
 
-$$
-\|\pi(\mathbf{A})\mathbf{q}_1\|^2=\sum_{\lambda\in\Lambda(\mathbf{A})}\pi(\lambda)^2\,\|\Pi_\lambda\mathbf{q}_1\|^2
-$$
+  $$
+  \sum_{\lambda\in\Lambda(\mathbf{A})}\pi_m(\lambda)^2\,\|\Pi_\lambda\mathbf{q}_1\|^2
+  =\min_{\pi\ \text{monic},\ \deg\pi=m}\ \sum_{\lambda\in\Lambda(\mathbf{A})}\pi(\lambda)^2\,\|\Pi_\lambda\mathbf{q}_1\|^2 .
+  $$
 
-as small as possible. To keep this sum small, $\pi_m$ must be small at every eigenvalue that carries a large share of $\mathbf{q}_1$. The Ritz values at step $m$ are exactly the roots of $\pi_m$: expanding $\det(t\,\mathbb{I}_m-\mathbf{T}_m)$ along its last row gives the same three-term recurrence as $\beta_1\cdots\beta_m\,p_m(t)$, so $\det(t\,\mathbb{I}_m-\mathbf{T}_m)=\pi_m(t)$. The Ritz values therefore sit near the eigenvalues at which $\pi_m$ has to be small. Once $m$ equals the number $s$ of distinct eigenvalues present in $\mathbf{q}_1$, the polynomial $\prod_\lambda(t-\lambda)$ over those eigenvalues makes the sum zero. The remainder then vanishes, $\beta_s=0$, and the Ritz values are exactly those eigenvalues ([Proposition 3](#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run)). [Lemma 5](#47-lemma-5-variational-characterization-and-monotonicity) adds that the extreme Ritz values move monotonically toward $\lambda_{\min}(\mathbf{A})$ and $\lambda_{\max}(\mathbf{A})$.
+  In words, $\pi_m$ is the monic polynomial of degree $m$ that is smallest on the eigenvalues of $\mathbf{A}$, each eigenvalue weighted by $\|\Pi_\lambda\mathbf{q}_1\|^2$, the squared length of the component of $\mathbf{q}_1$ in its eigenspace.
+* Second, the Ritz values at step $m$ are exactly the roots of $\pi_m$, because <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="ritz-characteristic-polynomial" aria-label="Prove that the characteristic polynomial of T_m is pi_m">$\det(t\,\mathbb{I}_m-\mathbf{T}_m)=\pi_m(t)$</button><span id="ritz-characteristic-polynomial" class="explanation-popover" popover="auto" role="note" aria-label="The characteristic polynomial of the tridiagonal matrix" data-label="Derivation">Let $D_k(t)=\det(t\,\mathbb{I}_k-\mathbf{T}_k)$, with $D_0=1$ and $D_{-1}=0$. The matrix $t\,\mathbb{I}_k-\mathbf{T}_k$ is tridiagonal, and its last row has only two nonzero entries, $-\beta_{k-1}$ and $t-\alpha_k$. Expanding the determinant along this row, and the remaining minor along its last column, gives <span class="explanation-popover__equation">$D_k(t)=(t-\alpha_k)\,D_{k-1}(t)-\beta_{k-1}^2\,D_{k-2}(t).$</span> Multiplying the recurrence $\beta_k\,p_k=(t-\alpha_k)\,p_{k-1}-\beta_{k-1}\,p_{k-2}$ by $\beta_1\cdots\beta_{k-1}$ shows that $P_k=\beta_1\cdots\beta_k\,p_k$ satisfies the same recurrence, <span class="explanation-popover__equation">$P_k(t)=(t-\alpha_k)\,P_{k-1}(t)-\beta_{k-1}^2\,P_{k-2}(t),$</span> with the same starting values $P_0=1$ and $P_{-1}=0$. Hence $D_k=P_k$ for every $k$, and in particular $\det(t\,\mathbb{I}_m-\mathbf{T}_m)=P_m=\pi_m$.</span></span>. If $\vartheta_1,\dots,\vartheta_m$ are the Ritz values, then $\pi_m(t)=\prod_{i=1}^m(t-\vartheta_i)$.
+* Third, the two steps combine into one statement. Any $m$ real numbers $z_1,\dots,z_m$ define the monic polynomial $\prod_{i=1}^m(t-z_i)$ of degree $m$, and $\pi_m$ is of this form with $z_i=\vartheta_i$, since $\mathbf{T}_m$ is symmetric and its eigenvalues are real. Since $\pi_m$ minimizes over all monic polynomials of degree $m$, the Ritz values minimize in particular, over all $(z_1,\dots,z_m)\in\mathbb{R}^m$, the sum
 
-### 4.3 A three-dimensional example
+  $$
+  \sum_{\lambda\in\Lambda(\mathbf{A})}\|\Pi_\lambda\mathbf{q}_1\|^2\prod_{i=1}^m(\lambda-z_i)^2 .
+  $$
 
-The steps of [Section 4.2](#42-how-the-method-works) can be followed with numbers on a small matrix. Take
+  Each term is the weight of an eigenvalue $\lambda$ times the product of its squared distances to $z_1,\dots,z_m$. A term with a large weight is reduced by placing one of the $z_i$ close to its eigenvalue, and this is why the Ritz values approach the eigenvalues that $\mathbf{q}_1$ contains. Two statements make this exact. When $m$ equals the number $s$ of eigenvalues with $\Pi_\lambda\mathbf{q}_1\neq0$, choosing the $z_i$ equal to these eigenvalues makes the sum zero, so the minimum is zero, $\beta_1\cdots\beta_s=0$, hence $\beta_s=0$, and the Ritz values are exactly these eigenvalues ([Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run)). Before that, [Lemma 5](#48-lemma-5-variational-characterization-and-monotonicity) shows that the extreme Ritz values move monotonically toward $\lambda_{\min}(\mathbf{A})$ and $\lambda_{\max}(\mathbf{A})$.
+
+### 4.4 A three-dimensional example
+
+The steps of [Section 4.3](#43-how-the-lanczos-method-works) can be followed with numbers on a small matrix. Take
 
 $$
 \mathbf{A}=\begin{bmatrix}1&0&0\\0&2&0\\0&0&3\end{bmatrix},
@@ -1278,9 +1401,9 @@ $$
 \mathbf{T}_3=\begin{bmatrix}2&\sqrt{2/3}&0\\\sqrt{2/3}&2&1/\sqrt3\\0&1/\sqrt3&2\end{bmatrix},
 $$
 
-and their eigenvalues, the Ritz values, are $\{2\}$, then $\{2-\sqrt{2/3},\,2+\sqrt{2/3}\}\approx\{1.18,\,2.82\}$, then $\{1,2,3\}$. The extreme Ritz values move outward toward the extreme eigenvalues $1$ and $3$, as [Lemma 5](#47-lemma-5-variational-characterization-and-monotonicity) guarantees. At $m=3$, they are exactly the eigenvalues of $\mathbf{A}$, as [Proposition 3](#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) guarantees for a starting vector with a nonzero component on every eigenvector. At $m=2$, the eigenvectors of $\mathbf{T}_2$ are $\frac{1}{\sqrt2}[1,\pm1]^\top$, so both Ritz pairs have residual $\beta_2|y_2|=\frac{1}{\sqrt3}\cdot\frac{1}{\sqrt2}\approx0.41$ ([Lemma 4](#46-lemma-4-ritz-pairs-and-their-residuals)). This bounds their actual distances to the spectrum, $0.18$ in both cases ([Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair)). For comparison, power iteration from the same $\mathbf{q}_1$ estimates $\lambda_{\max}(\mathbf{A})=3$ after the same two products by $\mathbf{v}_1^\top\mathbf{A}\mathbf{v}_1=36/14\approx2.57$, with $\mathbf{v}_1=\mathbf{A}\mathbf{q}_1/\|\mathbf{A}\mathbf{q}_1\|$, which is farther from $3$ than the Ritz value $2.82$. In the polynomial reading of [Section 4.2](#42-how-the-method-works), the Ritz values $2\pm\sqrt{2/3}$ are the roots of $\pi_2(t)=(t-2)^2-2/3$, the monic quadratic that makes $\|\pi(\mathbf{A})\mathbf{q}_1\|$ smallest, and at $m=3$ the polynomial $(t-1)(t-2)(t-3)$ makes it zero, which is the breakdown.
+and their eigenvalues, the Ritz values, are $\{2\}$, then $\{2-\sqrt{2/3},\,2+\sqrt{2/3}\}\approx\{1.18,\,2.82\}$, then $\{1,2,3\}$. The extreme Ritz values move outward toward the extreme eigenvalues $1$ and $3$, as [Lemma 5](#48-lemma-5-variational-characterization-and-monotonicity) guarantees. At $m=3$, they are exactly the eigenvalues of $\mathbf{A}$, as [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) guarantees for a starting vector with a nonzero component on every eigenvector. At $m=2$, the eigenvectors of $\mathbf{T}_2$ are $\frac{1}{\sqrt2}[1,\pm1]^\top$, so both Ritz pairs have residual $\beta_2|y_2|=\frac{1}{\sqrt3}\cdot\frac{1}{\sqrt2}\approx0.41$ ([Lemma 4](#47-lemma-4-ritz-pairs-and-their-residuals)). This bounds their actual distances to the spectrum, $0.18$ in both cases ([Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair)). For comparison, power iteration from the same $\mathbf{q}_1$ estimates $\lambda_{\max}(\mathbf{A})=3$ after the same two products by $\mathbf{v}_1^\top\mathbf{A}\mathbf{v}_1=36/14\approx2.57$, with $\mathbf{v}_1=\mathbf{A}\mathbf{q}_1/\|\mathbf{A}\mathbf{q}_1\|$, which is farther from $3$ than the Ritz value $2.82$. In the polynomial reading of [Section 4.3](#43-how-the-lanczos-method-works), the Ritz values $2\pm\sqrt{2/3}$ are the roots of $\pi_2(t)=(t-2)^2-2/3$, the monic quadratic that makes $\|\pi(\mathbf{A})\mathbf{q}_1\|$ smallest, and at $m=3$ the polynomial $(t-1)(t-2)(t-3)$ makes it zero, which is the breakdown.
 
-### 4.4 Definition 2 [Lanczos recurrence and exact breakdown]
+### 4.5 Definition 2 [Lanczos recurrence and exact breakdown]
 
 The Lanczos construction starts with
 
@@ -1311,9 +1434,9 @@ $$
 \end{array}
 $$
 
-The vectors $\mathbf{q}_j$ are basis vectors, not generally eigenvectors of $\mathbf{A}$. Each step orthogonalizes $\mathbf{A}\mathbf{q}_j$ against the two most recent basis vectors only, for the reasons given in [Section 4.2](#42-how-the-method-works). This <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="three-term-recurrence" aria-label="Explain why a three-term recurrence suffices">three-term recurrence</button><span id="three-term-recurrence" class="explanation-popover" popover="auto" role="note" aria-label="Three-term recurrence" data-label="Linear algebra">Orthogonalizing $\mathbf A\mathbf q_j$ against every previous basis vector, as in Gram–Schmidt, would cost more at every step. For symmetric $\mathbf A$, the coefficients against $\mathbf q_1,\dots,\mathbf q_{j-2}$ vanish ([Lemma 3](#45-lemma-3-orthogonality-and-tridiagonal-projection)), so the two coefficients $\alpha_j$ and $\beta_{j-1}$ suffice.</span></span> is enough because $\mathbf{A}$ is symmetric. [Lemma 3](#45-lemma-3-orthogonality-and-tridiagonal-projection) shows that, in exact arithmetic, $\mathbf{A}\mathbf{q}_j$ is automatically orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_{j-2}$, so the projected matrix is tridiagonal and each step costs one product plus $O(d)$ further operations.
+The vectors $\mathbf{q}_j$ are basis vectors, not generally eigenvectors of $\mathbf{A}$. Each step orthogonalizes $\mathbf{A}\mathbf{q}_j$ against the two most recent basis vectors only, for the reasons given in [Section 4.3](#43-how-the-lanczos-method-works). This <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="three-term-recurrence" aria-label="Explain why a three-term recurrence suffices">three-term recurrence</button><span id="three-term-recurrence" class="explanation-popover" popover="auto" role="note" aria-label="Three-term recurrence" data-label="Linear algebra">Orthogonalizing $\mathbf A\mathbf q_j$ against every previous basis vector, as in Gram–Schmidt, would cost more at every step. For symmetric $\mathbf A$, the coefficients against $\mathbf q_1,\dots,\mathbf q_{j-2}$ vanish ([Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection)), so the two coefficients $\alpha_j$ and $\beta_{j-1}$ suffice.</span></span> is enough because $\mathbf{A}$ is symmetric. [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection) shows that, in exact arithmetic, $\mathbf{A}\mathbf{q}_j$ is automatically orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_{j-2}$, so the projected matrix is tridiagonal and each step costs one product plus $O(d)$ further operations.
 
-### 4.5 Lemma 3 [Orthogonality and tridiagonal projection]
+### 4.6 Lemma 3 [Orthogonality and tridiagonal projection]
 
 Before and including the first exact breakdown, the Lanczos vectors satisfy
 
@@ -1359,112 +1482,59 @@ The identity $\mathbf{T}_m=\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m$ says that $\
 **Orthogonality.** We argue by induction. The initial vector is normalized by assumption. Suppose that $\mathbf{q}_1,\dots,\mathbf{q}_j$ are orthonormal and that the previous iterations have been completed. We show that $\mathbf{r}_j$ is orthogonal to each $\mathbf{q}_i$ with $i\le j$.
 
 *The case $i=j$.* Since $\mathbf{q}_j^\top\mathbf{q}_{j-1}=0$, with $\mathbf{q}_0=0$ when $j=1$, we have
-
-$$
-\begin{aligned}
-\alpha_j
-&=\mathbf{q}_j^\top\bigl(\mathbf{A}\mathbf{q}_j-\beta_{j-1}\mathbf{q}_{j-1}\bigr)\\
-&=\mathbf{q}_j^\top\mathbf{A}\mathbf{q}_j .
-\end{aligned}
-$$
-
+$\alpha_j=\mathbf{q}_{j}^\top\mathbf{z}_j=\mathbf{q}_j^\top\bigl(\mathbf{A}\mathbf{q}_j-\beta_{j-1}\mathbf{q}_{j-1}\bigr)=\mathbf{q}_j^\top\mathbf{A}\mathbf{q}_j$.
 Therefore,
-
-$$
-\begin{aligned}
-\mathbf{q}_j^\top\mathbf{r}_j
-&=\mathbf{q}_j^\top\mathbf{z}_j-\alpha_j\mathbf{q}_j^\top\mathbf{q}_j\\
-&=\alpha_j-\alpha_j\\
-&=0 .
-\end{aligned}
-$$
+$\mathbf{q}_j^\top\mathbf{r}_j
+=\mathbf{q}_j^\top\mathbf{z}_j-\alpha_j\mathbf{q}_j^\top\mathbf{q}_j
+=\alpha_j-\alpha_j
+=0$.
 
 *The case $i=j-1$, for $j\ge2$.* The previous recurrence gives
-
-$$
-\mathbf{A}\mathbf{q}_{j-1}=\beta_{j-2}\mathbf{q}_{j-2}+\alpha_{j-1}\mathbf{q}_{j-1}+\beta_{j-1}\mathbf{q}_j .
-$$
-
+$\mathbf{A}\mathbf{q}_{j-1}=\beta_{j-2}\mathbf{q}_{j-2}+\alpha_{j-1}\mathbf{q}_{j-1}+\beta_{j-1}\mathbf{q}_j$.
 Using symmetry,
-
-$$
-\begin{aligned}
-\mathbf{q}_{j-1}^\top\mathbf{r}_j
-&=\mathbf{q}_{j-1}^\top\mathbf{A}\mathbf{q}_j-\beta_{j-1}\\
-&=\textcolor{#2563eb}{(\mathbf{A}\mathbf{q}_{j-1})^\top\mathbf{q}_j}-\beta_{j-1}\\
-&=\beta_{j-1}-\beta_{j-1}\\
-&=0 .
-\end{aligned}
-$$
-
-In the first line, $\mathbf{q}_{j-1}^\top\mathbf{q}_{j-1}=1$ and the term $\alpha_j\mathbf{q}_{j-1}^\top\mathbf{q}_j$ vanishes.
+$\mathbf{q}_{j-1}^\top\mathbf{r}_j
+=\mathbf{q}_{j-1}^\top\mathbf{z}_j-\alpha_j\mathbf{q}_{j-1}^\top\mathbf{q}_j
+=\mathbf{q}_{j-1}^\top \bigl(\mathbf{A}\mathbf{q}_j-\beta_{j-1}\mathbf{q}_{j-1}\bigr) - 0
+=\mathbf{q}_{j-1}^\top\mathbf{A}\mathbf{q}_j-\beta_{j-1}
+=\textcolor{#2563eb}{(\mathbf{A}\mathbf{q}_{j-1})^\top\mathbf{q}_j}-\beta_{j-1}
+=\beta_{j-1}-\beta_{j-1}
+=0$.
 
 *The case $i\le j-2$.* The recurrence at step $i$ shows that
-
-$$
-\mathbf{A}\mathbf{q}_i\in\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{i+1}\}.
-$$
-
+$\mathbf{A}\mathbf{q}_i\in\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{i+1}\}$.
 Since $i+1\le j-1$, this vector is orthogonal to $\mathbf{q}_j$. Hence
 
 $$
 \begin{aligned}
 \mathbf{q}_i^\top\mathbf{r}_j
-&=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j-\beta_{j-1}\mathbf{q}_i^\top\mathbf{q}_{j-1}-\alpha_j\mathbf{q}_i^\top\mathbf{q}_j\\
-&=\textcolor{#2563eb}{(\mathbf{A}\mathbf{q}_i)^\top\mathbf{q}_j}\\
-&=0 .
+&=\mathbf{q}_i^\top\mathbf{z}_j-\alpha_j\mathbf{q}_i^\top\mathbf{q}_j
+=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j-\beta_{j-1}\underbrace{\mathbf{q}_i^\top\mathbf{q}_{j-1}}_{=0}-\alpha_j\underbrace{\mathbf{q}_i^\top\mathbf{q}_j}_{=0}
+=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j\\
+&=\textcolor{#2563eb}{(\mathbf{A}\mathbf{q}_i)^\top\mathbf{q}_j}
+=\beta_{i-1}\underbrace{\mathbf{q}_{i-1}^\top\mathbf{q}_j}_{=0}+\alpha_i\underbrace{\mathbf{q}_i^\top\mathbf{q}_j}_{=0}+\beta_i\underbrace{\mathbf{q}_{i+1}^\top\mathbf{q}_j}_{=0}
+=0 .
 \end{aligned}
 $$
 
+The first line expands $\mathbf{z}_j=\mathbf{A}\mathbf{q}_j-\beta_{j-1}\mathbf{q}_{j-1}$, and the two inner products vanish by the induction hypothesis, since $i$ differs from $j-1$ and $j$. The second line moves $\mathbf{A}$ onto $\mathbf{q}_i$ by symmetry and expands $\mathbf{A}\mathbf{q}_i=\beta_{i-1}\mathbf{q}_{i-1}+\alpha_i\mathbf{q}_i+\beta_i\mathbf{q}_{i+1}$ by the recurrence at step $i$, with $\mathbf{q}_0=0$ when $i=1$, and its three terms are orthogonal to $\mathbf{q}_j$, as noted above.
 The <span style="color:#2563eb">blue terms</span> are where symmetry enters. Moving $\mathbf{A}$ from $\mathbf{q}_j$ onto an older basis vector $\mathbf{q}_i$ turns the inner product into one with $\mathbf{A}\mathbf{q}_i$, and an earlier step of the recurrence has already expanded $\mathbf{A}\mathbf{q}_i$ in the basis. This is why orthogonalizing against the two most recent vectors suffices.
 
 Thus $\mathbf{r}_j$ is orthogonal to every column of $\mathbf{Q}_j$. If $\beta_j>0$, normalizing $\mathbf{r}_j$ extends the orthonormal family.
 
-**Krylov subspaces.** The identity holds at $m=1$. Suppose it holds at iteration $j$ and $\beta_j>0$. Then
-
-$$
-\mathbf{q}_{j+1}=\frac{\mathbf{A}\mathbf{q}_j-\beta_{j-1}\mathbf{q}_{j-1}-\alpha_j\mathbf{q}_j}{\beta_j}\in\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1),
-$$
-
+**Krylov subspaces.** We prove $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_m\}=\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ by induction on $m$. It holds at $m=1$, since both sides equal $\operatorname{span}\{\mathbf{q}_1\}$. Suppose it holds at $m=j$ and $\beta_j>0$. Then 
+$\beta_j \mathbf{q}_{j+1}=\mathbf{A}\mathbf{q}_j-\beta_{j-1}\mathbf{q}_{j-1}-\alpha_j\mathbf{q}_j \in\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$
 because $\mathbf{q}_{j-1}$ and $\mathbf{q}_j$ belong to $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, whose image under $\mathbf{A}$ lies in $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$. Consequently,
-
-$$
-\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}\subseteq\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1).
-$$
-
+$\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}\subseteq\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$.
 The left-hand side has dimension $j+1$, because its vectors are orthonormal. The right-hand side is generated by $j+1$ vectors, so its dimension is at most $j+1$. The two spaces are therefore equal.
 
 **Matrix identity.** For each completed iteration $j<m$,
-
-$$
-\mathbf{A}\mathbf{q}_j=\beta_{j-1}\mathbf{q}_{j-1}+\alpha_j\mathbf{q}_j+\beta_j\mathbf{q}_{j+1}.
-$$
-
+$\mathbf{A}\mathbf{q}_j=\beta_{j-1}\mathbf{q}_{j-1}+\alpha_j\mathbf{q}_j+\beta_j\mathbf{q}_{j+1}$.
 For the final column,
-
-$$
-\mathbf{A}\mathbf{q}_m=\beta_{m-1}\mathbf{q}_{m-1}+\alpha_m\mathbf{q}_m+\mathbf{r}_m .
-$$
-
+$\mathbf{A}\mathbf{q}_m=\beta_{m-1}\mathbf{q}_{m-1}+\alpha_m\mathbf{q}_m+\mathbf{r}_m$.
 Collecting these identities column by column gives
-
-$$
-\mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{T}_m+\mathbf{r}_m\mathbf{e}_m^\top .
-$$
-
+$\mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{T}_m+\mathbf{r}_m\mathbf{e}_m^\top$.
 Multiplying on the left by $\mathbf{Q}_m^\top$, and using
-
-$$
-\mathbf{Q}_m^\top\mathbf{Q}_m=\mathbb{I}_m,
-\qquad
-\mathbf{Q}_m^\top\mathbf{r}_m=0,
-$$
-
-gives
-
-$$
-\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m=\mathbf{T}_m .
-$$
+$\mathbf{Q}_m^\top\mathbf{Q}_m=\mathbb{I}_m$ and $\mathbf{Q}_m^\top\mathbf{r}_m=0$ gives $\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m=\mathbf{T}_m$.
 
 $$
 \begin{array}{r}
@@ -1476,7 +1546,7 @@ The residual form of this identity remains valid when $\beta_m=0$. When $\beta_m
 $\mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{T}_m+\beta_m\mathbf{q}_{m+1}\mathbf{e}_m^\top$.
 No vector $\mathbf{q}_{m+1}$ needs to be defined at an exact breakdown.
 
-### 4.6 Lemma 4 [Ritz pairs and their residuals]
+### 4.7 Lemma 4 [Ritz pairs and their residuals]
 
 Let
 $$
@@ -1516,70 +1586,41 @@ Ritz pairs are the eigenpairs of the compression of $\mathbf{A}$ to the Krylov s
 #### Proof
 
 Orthonormality of the columns of $\mathbf{Q}_m$ gives
-
-$$
-\begin{aligned}
-\|\mathbf{x}\|^2
-&=\mathbf{y}^\top\mathbf{Q}_m^\top\mathbf{Q}_m\mathbf{y}\\
-&=\mathbf{y}^\top\mathbf{y}\\
-&=1 .
-\end{aligned}
-$$
-
+$\|\mathbf{x}\|^2
+=\mathbf{y}^\top\mathbf{Q}_m^\top\mathbf{Q}_m\mathbf{y}
+=\mathbf{y}^\top\mathbf{y}
+=1$.
 Also,
-
-$$
-\begin{aligned}
+$
 \mathbf{x}^\top\mathbf{A}\mathbf{x}
-&=\mathbf{y}^\top\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m\mathbf{y}\\
-&=\mathbf{y}^\top\mathbf{T}_m\mathbf{y}\\
-&=\vartheta\,\mathbf{y}^\top\mathbf{y}\\
-&=\vartheta .
-\end{aligned}
-$$
-
-Using [Lemma 3](#45-lemma-3-orthogonality-and-tridiagonal-projection),
-
-$$
-\begin{aligned}
-\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}
-&=\mathbf{A}\mathbf{Q}_m\mathbf{y}-\vartheta\mathbf{Q}_m\mathbf{y}\\
-&=\mathbf{Q}_m\mathbf{T}_m\mathbf{y}+\mathbf{r}_m\mathbf{e}_m^\top\mathbf{y}-\vartheta\mathbf{Q}_m\mathbf{y}\\
-&=\mathbf{Q}_m\textcolor{#2563eb}{(\mathbf{T}_m\mathbf{y}-\vartheta\mathbf{y})}+\mathbf{r}_m y_m\\
-&=\mathbf{r}_m y_m .
-\end{aligned}
-$$
-
+=\mathbf{y}^\top\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m\mathbf{y}
+=\mathbf{y}^\top\mathbf{T}_m\mathbf{y}
+=\vartheta\,\mathbf{y}^\top\mathbf{y}
+=\vartheta$.
+Using [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection),
+$\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}
+=\mathbf{A}\mathbf{Q}_m\mathbf{y}-\vartheta\mathbf{Q}_m\mathbf{y}
+=\mathbf{Q}_m\mathbf{T}_m\mathbf{y}+\mathbf{r}_m\mathbf{e}_m^\top\mathbf{y}-\vartheta\mathbf{Q}_m\mathbf{y}
+=\mathbf{Q}_m\textcolor{#2563eb}{(\mathbf{T}_m\mathbf{y}-\vartheta\mathbf{y})}+\mathbf{r}_m y_m
+=\mathbf{r}_m y_m$.
 The <span style="color:#2563eb">blue factor</span> vanishes because $\mathbf{y}$ is an eigenvector of $\mathbf{T}_m$. Taking norms gives
+$\|\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}\|=\|\mathbf{r}_m\|\,|y_m|=\beta_m|y_m|$.
 
-$$
-\|\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}\|=\|\mathbf{r}_m\|\,|y_m|=\beta_m|y_m| .
-$$
-
-The eigenvalue bound is [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) applied to the unit vector $\mathbf{x}$, whose Rayleigh quotient is $\vartheta$.
+The eigenvalue bound $\min_{\lambda\in\Lambda(\mathbf{A})}|\vartheta-\lambda|\le\beta_m|y_m|$ is [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) applied to the unit vector $\mathbf{x}$, whose Rayleigh quotient is $\vartheta$.
 
 <details class="article-disclosure">
 <summary>The eigenbasis expansion, written out for the Ritz vector</summary>
 <div class="article-disclosure__body">
 
-Expand $\mathbf{x}$ in an orthonormal eigenbasis $\mathbf{u}_1,\dots,\mathbf{u}_d$ of $\mathbf{A}$:
+[Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) states that every unit vector $\mathbf{q}$, with Rayleigh quotient $\widehat{\lambda}=\mathbf{q}^\top\mathbf{A}\mathbf{q}$ and residual $\mathbf{r}=\mathbf{A}\mathbf{q}-\widehat{\lambda}\mathbf{q}$, satisfies $\min_{\lambda\in\Lambda(\mathbf{A})}|\widehat{\lambda}-\lambda|\le\|\mathbf{r}\|$. Take $\mathbf{q}=\mathbf{x}$. It is a unit vector, its Rayleigh quotient is $\widehat{\lambda}=\mathbf{x}^\top\mathbf{A}\mathbf{x}=\vartheta$, and its residual is $\mathbf{r}=\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}$, all by the computations above. Lemma 2 therefore gives
+$\min_{\lambda\in\Lambda(\mathbf{A})}|\vartheta-\lambda|
+\le\|\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}\|
+=\beta_m|y_m|$.
 
-$$
-\mathbf{x}=\sum_{i=1}^dc_i\mathbf{u}_i,
-\qquad
-\mathbf{A}\mathbf{u}_i=\lambda_i\mathbf{u}_i,
-\qquad
-\sum_{i=1}^dc_i^2=1 .
-$$
-
-Then
-
-$$
-\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}=\sum_{i=1}^dc_i(\lambda_i-\vartheta)\mathbf{u}_i,
-$$
-
+More specifically, expand $\mathbf{x}$ in an orthonormal eigenbasis $\mathbf{u}_1,\dots,\mathbf{u}_d$ of $\mathbf{A}$: $
+\mathbf{x}=\sum_{i=1}^dc_i\mathbf{u}_i$, $\mathbf{A}\mathbf{u}_i=\lambda_i\mathbf{u}_i$, $\sum_{i=1}^dc_i^2=1$.
+Then $\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}=\sum_{i=1}^dc_i(\lambda_i-\vartheta)\mathbf{u}_i$,
 and therefore
-
 $$
 \begin{aligned}
 \|\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}\|^2
@@ -1602,7 +1643,7 @@ $$
 
 This bound certifies proximity to some eigenvalue of $\mathbf{A}$. By itself, a small residual does not certify that the eigenvalue is a global extremum or that all eigenvalues have been found.
 
-### 4.7 Lemma 5 [Variational characterization and monotonicity]
+### 4.8 Lemma 5 [Variational characterization and monotonicity]
 
 Let
 
@@ -1640,38 +1681,18 @@ Moreover,
 $\|\mathbf{x}\|^2=\mathbf{y}^\top\mathbf{Q}_m^\top\mathbf{Q}_m\mathbf{y}=\|\mathbf{y}\|^2,$
 and
 $\mathbf{x}^\top\mathbf{A}\mathbf{x}=\mathbf{y}^\top\mathbf{T}_m\mathbf{y}.$
-Let $\mathbf{s}_1,\dots,\mathbf{s}_m$ be an orthonormal eigenbasis of $\mathbf{T}_m$, with eigenvalues $\vartheta_1,\dots,\vartheta_m$. For any unit vector
-$$
-\mathbf{y}=\sum_{i=1}^mc_i\mathbf{s}_i,
-\qquad
-\sum_{i=1}^mc_i^2=1,
-$$
-
-we have
-
-$$
-\mathbf{y}^\top\mathbf{T}_m\mathbf{y}=\sum_{i=1}^m\vartheta_i c_i^2 .
-$$
-
-Thus
-
-$$
-\min_i\vartheta_i\le\mathbf{y}^\top\mathbf{T}_m\mathbf{y}\le\max_i\vartheta_i .
-$$
-
-The lower and upper bounds are attained by eigenvectors associated with the smallest and largest eigenvalues. This proves the two variational identities.
+Let $\mathbf{s}_1,\dots,\mathbf{s}_m$ be an orthonormal eigenbasis of $\mathbf{T}_m$, with eigenvalues ordered as $\vartheta_1\le\vartheta_2\le\dots\le\vartheta_m$, so that $\vartheta_{\min}^{(m)}=\vartheta_1$ and $\vartheta_{\max}^{(m)}=\vartheta_m$. For any unit vector
+$\mathbf{y}=\sum_{i=1}^mc_i\mathbf{s}_i$, $\sum_{i=1}^mc_i^2=1$,
+we have $\mathbf{y}^\top\mathbf{T}_m\mathbf{y}=\sum_{i=1}^m\vartheta_i c_i^2$.
+Thus $\vartheta_1\le\mathbf{y}^\top\mathbf{T}_m\mathbf{y}\le\vartheta_m$, with equality for $\mathbf{y}=\mathbf{s}_1$ and $\mathbf{y}=\mathbf{s}_m$ respectively. This proves the two variational identities.
 
 Since $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)\subseteq\mathcal{K}_{m+1}(\mathbf{A},\mathbf{q}_1),$
 minimizing over the larger set can only decrease the minimum, while maximizing over the larger set can only increase the maximum. Therefore,
-$$
-\vartheta_{\min}^{(m+1)}\le\vartheta_{\min}^{(m)},
-\qquad
-\vartheta_{\max}^{(m)}\le\vartheta_{\max}^{(m+1)}.
-$$
+$\vartheta_{\min}^{(m+1)}\le\vartheta_{\min}^{(m)}$ and $\vartheta_{\max}^{(m)}\le\vartheta_{\max}^{(m+1)}$.
 
 Finally, every unit vector $\mathbf{x}\in\mathbb{R}^d$ satisfies
 $\lambda_{\min}(\mathbf{A})\le\mathbf{x}^\top\mathbf{A}\mathbf{x}\le\lambda_{\max}(\mathbf{A}),$
-as follows from the same eigenbasis expansion for $\mathbf{A}$. This gives the remaining bounds.
+as follows from the same eigenbasis expansion for $\mathbf{A}$. Apply this to the Ritz vectors $\mathbf{x}=\mathbf{Q}_m\mathbf{s}_1$ and $\mathbf{x}=\mathbf{Q}_m\mathbf{s}_m$. They are unit vectors, since $\|\mathbf{Q}_m\mathbf{s}_i\|=\|\mathbf{s}_i\|=1$, and their Rayleigh quotients are $\mathbf{s}_1^\top\mathbf{T}_m\mathbf{s}_1=\vartheta_1=\vartheta_{\min}^{(m)}$ and $\mathbf{s}_m^\top\mathbf{T}_m\mathbf{s}_m=\vartheta_m=\vartheta_{\max}^{(m)}$. Hence $\lambda_{\min}(\mathbf{A})\le\vartheta_{\min}^{(m)}$ and $\vartheta_{\max}^{(m)}\le\lambda_{\max}(\mathbf{A})$ for every $m$, and with $m+1$ in place of $m$, these are the remaining bounds.
 $$
 \begin{array}{r}
 \blacksquare\Box
@@ -1679,49 +1700,25 @@ $$
 $$
 
 This characterization provides a precise connection with power iteration. Started from $\mathbf{v}_0=\mathbf{q}_1$, and whenever $\mathbf{A}^{m-1}\mathbf{q}_1\neq0$, the normalized power iterate
-
-$$
-\mathbf{v}_{m-1}=\frac{\mathbf{A}^{m-1}\mathbf{q}_1}{\|\mathbf{A}^{m-1}\mathbf{q}_1\|}
-$$
-
-belongs to $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$. Consequently,
-
-$$
-\vartheta_{\min}^{(m)}\le\mathbf{v}_{m-1}^\top\mathbf{A}\mathbf{v}_{m-1}\le\vartheta_{\max}^{(m)}.
-$$
-
+$\mathbf{v}_{m-1}=\mathbf{A}^{m-1}\mathbf{q}_1/\|\mathbf{A}^{m-1}\mathbf{q}_1\|$
+belongs to $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$. Consequently, $\vartheta_{\min}^{(m)}\le\mathbf{v}_{m-1}^\top\mathbf{A}\mathbf{v}_{m-1}\le\vartheta_{\max}^{(m)}$.
 Lanczos optimizes the Rayleigh quotient over all unit vectors in the available Krylov subspace. The normalized power vector is one particular member of that subspace.
-
-Both estimates cost $m$ matrix–vector products: $\mathbf{T}_m$ needs $\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}\mathbf{q}_m$, and the Rayleigh quotient of $\mathbf{v}_{m-1}$ needs $\mathbf{A}\mathbf{v}_0,\dots,\mathbf{A}\mathbf{v}_{m-1}$. The eigenvalue of largest magnitude is $\lambda_{\max}(\mathbf{A})$ or $\lambda_{\min}(\mathbf{A})$. In the first case, $\mathbf{v}_{m-1}^\top\mathbf{A}\mathbf{v}_{m-1}\le\vartheta_{\max}^{(m)}\le\lambda_{\max}(\mathbf{A})$, and in the second, $\lambda_{\min}(\mathbf{A})\le\vartheta_{\min}^{(m)}\le\mathbf{v}_{m-1}^\top\mathbf{A}\mathbf{v}_{m-1}$. Either way, at an equal number of products, the extreme Ritz value on the side of the dominant eigenvalue is at least as close to it as the power-iteration estimate (middle panel of the figure in [Section 4.9](#49-corollary-3-random-initialization-and-repeated-eigenvalues)).
+Both estimates cost $m$ matrix–vector products: $\mathbf{T}_m$ needs $\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}\mathbf{q}_m$, and the Rayleigh quotient of $\mathbf{v}_{m-1}$ needs $\mathbf{A}\mathbf{v}_0,\dots,\mathbf{A}\mathbf{v}_{m-1}$. The eigenvalue of largest magnitude is $\lambda_{\max}(\mathbf{A})$ or $\lambda_{\min}(\mathbf{A})$. In the first case, $\mathbf{v}_{m-1}^\top\mathbf{A}\mathbf{v}_{m-1}\le\vartheta_{\max}^{(m)}\le\lambda_{\max}(\mathbf{A})$, and in the second, $\lambda_{\min}(\mathbf{A})\le\vartheta_{\min}^{(m)}\le\mathbf{v}_{m-1}^\top\mathbf{A}\mathbf{v}_{m-1}$. Either way, at an equal number of products, the extreme Ritz value on the side of the dominant eigenvalue is at least as close to it as the power-iteration estimate (middle panel of the figure in [Section 4.10](#410-corollary-3-random-initialization-and-repeated-eigenvalues)).
 
 This variational statement does not imply that Lanczos has a lower total runtime for every matrix. Constructing and retaining the basis introduces additional work and storage.
 
-### 4.8 Proposition 3 [Exact termination and the eigenvalues recovered by one run]
+### 4.9 Proposition 3 [Exact termination and the eigenvalues recovered by one run]
 
-For each $\lambda\in\Lambda(\mathbf{A})$, let $\Pi_\lambda$ be the orthogonal projection onto $E_\lambda$. Define
-
-$$
-\Lambda_1=\{\lambda\in\Lambda(\mathbf{A}):\Pi_\lambda\mathbf{q}_1\neq0\},
-\qquad
-s=|\Lambda_1| .
-$$
+For each $\lambda\in\Lambda(\mathbf{A})$, let $\Pi_\lambda$ be the orthogonal projection onto the eigenspace $E_\lambda=\ker(\mathbf{A}-\lambda\mathbb{I}_d)$. Define
+$\Lambda_1=\{\lambda\in\Lambda(\mathbf{A}):\Pi_\lambda\mathbf{q}_1\neq0\}$ and let $s=|\Lambda_1|$.
 Here $\Lambda_1$ contains distinct eigenvalues, irrespective of their multiplicities.
-
-A single Lanczos run terminates at exactly iteration $s$:
-
+Then, a single Lanczos run terminates at exactly iteration $s$:
 $$
 \beta_j>0\quad(1\le j<s),
 \qquad
-\beta_s=0 .
+\beta_s=0.
 $$
-
-At termination,
-
-$$
-\mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{T}_s,
-$$
-
-and the eigenvalues of $\mathbf{T}_s$ are precisely the elements of $\Lambda_1$, each appearing once.
+Moreover, at termination, $\mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{T}_s$ and $\Lambda(\mathbf{T}_s)=\Lambda_1$. Since $\mathbf{T}_s$ has size $s=|\Lambda_1|$, each of these eigenvalues is simple for $\mathbf{T}_s$.
 
 #### Remark 15 [One direction per distinct eigenvalue]
 
@@ -1729,175 +1726,63 @@ A run can only discover the eigenvalues present in $\mathbf{q}_1$, and it discov
 
 #### Proof
 
-Write
+Write $\mathbf{p}_\lambda=\Pi_\lambda\mathbf{q}_1$ for $\lambda\in\Lambda_1$,
+and define $W=\operatorname{span}\{\mathbf{p}_\lambda:\lambda\in\Lambda_1\}$.
+The vectors $\mathbf{p}_\lambda$ are nonzero and mutually orthogonal, so $\dim W=s$.
 
-$$
-\mathbf{p}_\lambda=\Pi_\lambda\mathbf{q}_1,
-\qquad
-\lambda\in\Lambda_1,
-$$
-
-and define
-
-$$
-W=\operatorname{span}\{\mathbf{p}_\lambda:\lambda\in\Lambda_1\}.
-$$
-
-The vectors $\mathbf{p}_\lambda$ are nonzero and mutually orthogonal, so
-
-$$
-\dim W=s .
-$$
-
-**The Krylov subspaces lie in $W$.** Every power of $\mathbf{A}$ applied to $\mathbf{q}_1$ belongs to $W$, because
-
-$$
-\mathbf{q}_1=\sum_{\lambda\in\Lambda_1}\mathbf{p}_\lambda
-$$
-
-and, for $k\ge1$,
-
-$$
-\mathbf{A}^k\mathbf{q}_1=\sum_{\lambda\in\Lambda_1}\lambda^k\mathbf{p}_\lambda .
-$$
-
+**The Krylov subspaces lie in $W$.** Every power of $\mathbf{A}$ applied to $\mathbf{q}_1$ belongs to $W$, because $\mathbf{q}_1=\sum_{\lambda\in\Lambda_1}\mathbf{p}_\lambda$ and, for $k\ge1$,
+$\mathbf{A}^k\mathbf{q}_1=\sum_{\lambda\in\Lambda_1}\lambda^k\mathbf{p}_\lambda$.
 Therefore,
-
-$$
-\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)\subseteq W
-\qquad
-\text{for every }m .
-$$
+$\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)\subseteq W$ for every $m$.
 
 **The Krylov subspace of order $s$ equals $W$.** For each $\lambda\in\Lambda_1$, define the <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="lagrange-polynomial" aria-label="Explain the Lagrange interpolation polynomial">Lagrange polynomial</button><span id="lagrange-polynomial" class="explanation-popover" popover="auto" role="note" aria-label="Lagrange interpolation polynomial" data-label="Definition">$\ell_\lambda$ is the unique polynomial of degree at most $s-1$ that equals $1$ at $\lambda$ and $0$ at the other $s-1$ points of $\Lambda_1$. Applied to $\mathbf A$, it keeps the component of $\mathbf q_1$ along $E_\lambda$ and removes every other component present in $\mathbf q_1$.</span></span>
-
 $$
 \ell_\lambda(t)=\prod_{\substack{\mu\in\Lambda_1\\\mu\neq\lambda}}\frac{t-\mu}{\lambda-\mu}.
 $$
-
 When $s=1$, the empty product is defined as $1$. This polynomial has degree at most $s-1$ and satisfies
-
-$$
-\ell_\lambda(\mu)=
-\begin{cases}
-1,&\mu=\lambda,\\
-0,&\mu\neq\lambda,
-\end{cases}
-\qquad\mu\in\Lambda_1 .
-$$
-
+$\ell_\lambda(\mu)=\delta_{\lambda,\mu}$ for all $\mu\in\Lambda_1$, with the Kronecker delta of the [notation](#notation).
 Consequently,
+$\ell_\lambda(\mathbf{A})\mathbf{q}_1
+=\sum_{\mu\in\Lambda_1}\ell_\lambda(\mu)\mathbf{p}_\mu
+=\mathbf{p}_\lambda$.
+Since $\ell_\lambda$ has degree at most $s-1$, $\mathbf{p}_\lambda\in\mathcal{K}_s(\mathbf{A},\mathbf{q}_1)$.
+Thus $W\subseteq\mathcal{K}_s(\mathbf{A},\mathbf{q}_1)$, and hence $\mathcal{K}_s(\mathbf{A},\mathbf{q}_1)=W$.
 
-$$
-\begin{aligned}
-\ell_\lambda(\mathbf{A})\mathbf{q}_1
-&=\sum_{\mu\in\Lambda_1}\ell_\lambda(\mu)\mathbf{p}_\mu\\
-&=\mathbf{p}_\lambda .
-\end{aligned}
-$$
-
-Since $\ell_\lambda$ has degree at most $s-1$,
-
-$$
-\mathbf{p}_\lambda\in\mathcal{K}_s(\mathbf{A},\mathbf{q}_1).
-$$
-
-Thus
-
-$$
-W\subseteq\mathcal{K}_s(\mathbf{A},\mathbf{q}_1),
-$$
-
-and hence
-
-$$
-\mathcal{K}_s(\mathbf{A},\mathbf{q}_1)=W .
-$$
-
-**No breakdown before iteration $s$.** Suppose a breakdown occurred at some $m<s$. [Lemma 3](#45-lemma-3-orthogonality-and-tridiagonal-projection) would give
-
-$$
-\mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{T}_m,
-$$
-
+**No breakdown before iteration $s$.** Suppose a breakdown occurred at some $m<s$. [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection) would give
+$\mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{T}_m$,
 so
-
-$$
-\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)=\operatorname{range}(\mathbf{Q}_m)
-$$
-
-would be invariant under $\mathbf{A}$. Since it contains $\mathbf{q}_1$, it would then contain every power $\mathbf{A}^k\mathbf{q}_1$, and therefore
-
-$$
-\mathcal{K}_s(\mathbf{A},\mathbf{q}_1)\subseteq\mathcal{K}_m(\mathbf{A},\mathbf{q}_1).
-$$
-
-This is impossible, because
-
-$$
-\dim\mathcal{K}_s(\mathbf{A},\mathbf{q}_1)=s>m=\dim\mathcal{K}_m(\mathbf{A},\mathbf{q}_1).
-$$
-
+$\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)=\operatorname{range}(\mathbf{Q}_m)$
+would be invariant under $\mathbf{A}$. Since it contains $\mathbf{q}_1$, it would then contain every power $\mathbf{A}^k\mathbf{q}_1$ with $k\in\{0,1,2,\dots\}$, not only the powers with $k\le m-1$ that span it by definition. In particular, it would contain $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^{s-1}\mathbf{q}_1$, and therefore
+$\mathcal{K}_s(\mathbf{A},\mathbf{q}_1)\subseteq\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$.
+This is impossible, because 
+$\dim\mathcal{K}_s(\mathbf{A},\mathbf{q}_1)=s>m=\dim\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$.
 Thus no breakdown occurs before iteration $s$.
 
 **Breakdown at iteration $s$.** At iteration $s$, all columns of $\mathbf{Q}_s$ belong to $W$. Since $W$ is spanned by eigenvectors, it is invariant under $\mathbf{A}$. Therefore,
-
-$$
-\mathbf{r}_s=\mathbf{A}\mathbf{q}_s-\beta_{s-1}\mathbf{q}_{s-1}-\alpha_s\mathbf{q}_s\in W .
-$$
-
-But [Lemma 3](#45-lemma-3-orthogonality-and-tridiagonal-projection) also gives
-
-$$
-\mathbf{r}_s\perp\operatorname{range}(\mathbf{Q}_s)=W .
-$$
-
-Hence $\mathbf{r}_s=0$, and $\beta_s=0$.
+$\mathbf{r}_s=\mathbf{A}\mathbf{q}_s-\beta_{s-1}\mathbf{q}_{s-1}-\alpha_s\mathbf{q}_s\in W$.
+But [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection) also gives
+$\mathbf{r}_s\perp\operatorname{range}(\mathbf{Q}_s)=W$.
+Hence $\mathbf{r}_s=0$, and $\beta_s=0$. The identity $\mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{T}_s+\mathbf{r}_s\mathbf{e}_s^\top$ of [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection) then becomes $\mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{T}_s$.
 
 **The eigenvalues of $\mathbf{T}_s$.** The normalized vectors
-
-$$
-\mathbf{u}_\lambda=\frac{\mathbf{p}_\lambda}{\|\mathbf{p}_\lambda\|},
-\qquad
-\lambda\in\Lambda_1,
-$$
-
-form an orthonormal eigenbasis of $W$. Set
-
-$$
-\mathbf{y}_\lambda=\mathbf{Q}_s^\top\mathbf{u}_\lambda .
-$$
-
-Because $\mathbf{u}_\lambda\in W=\operatorname{range}(\mathbf{Q}_s)$,
-
-$$
-\mathbf{Q}_s\mathbf{Q}_s^\top\mathbf{u}_\lambda=\mathbf{u}_\lambda .
-$$
-
-It follows that
-
-$$
-\begin{aligned}
+$\mathbf{u}_\lambda=\mathbf{p}_\lambda/\|\mathbf{p}_\lambda\|$ for 
+$\lambda\in\Lambda_1$ form an orthonormal eigenbasis of $W$. 
+Set $\mathbf{y}_\lambda=\mathbf{Q}_s^\top\mathbf{u}_\lambda$.
+Transposing $\mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{T}_s$, with $\mathbf{A}$ and $\mathbf{T}_s$ symmetric, gives $\mathbf{Q}_s^\top\mathbf{A}=\mathbf{T}_s\mathbf{Q}_s^\top$, so
+$
 \mathbf{T}_s\mathbf{y}_\lambda
-&=\mathbf{Q}_s^\top\mathbf{A}\mathbf{Q}_s\mathbf{Q}_s^\top\mathbf{u}_\lambda\\
-&=\mathbf{Q}_s^\top\mathbf{A}\mathbf{u}_\lambda\\
-&=\lambda\,\mathbf{Q}_s^\top\mathbf{u}_\lambda\\
-&=\lambda\,\mathbf{y}_\lambda .
-\end{aligned}
-$$
-
-Moreover, for $\lambda,\mu\in\Lambda_1$,
-
-$$
-\begin{aligned}
-\mathbf{y}_\lambda^\top\mathbf{y}_\mu
-&=\mathbf{u}_\lambda^\top\mathbf{Q}_s\mathbf{Q}_s^\top\mathbf{u}_\mu\\
-&=\mathbf{u}_\lambda^\top\mathbf{u}_\mu\\
-&=\delta_{\lambda\mu} .
-\end{aligned}
-$$
-
-Thus the $s$ vectors $\mathbf{y}_\lambda$ form an orthonormal basis of $\mathbb{R}^s$. The corresponding elements of $\Lambda_1$ are therefore all the eigenvalues of $\mathbf{T}_s$, each appearing once.
+=\mathbf{T}_s\mathbf{Q}_s^\top\mathbf{u}_\lambda
+=\mathbf{Q}_s^\top\mathbf{A}\mathbf{u}_\lambda
+=\lambda\,\mathbf{Q}_s^\top\mathbf{u}_\lambda
+=\lambda\,\mathbf{y}_\lambda$.
+Moreover, $\mathbf{u}_\mu\in W=\operatorname{range}(\mathbf{Q}_s)$, so $\mathbf{Q}_s\mathbf{Q}_s^\top\mathbf{u}_\mu=\mathbf{u}_\mu$, and for $\lambda,\mu\in\Lambda_1$,
+$\mathbf{y}_\lambda^\top\mathbf{y}_\mu
+=\mathbf{u}_\lambda^\top\mathbf{Q}_s\mathbf{Q}_s^\top\mathbf{u}_\mu
+=\mathbf{u}_\lambda^\top\mathbf{u}_\mu
+=\delta_{\lambda,\mu}$.
+Thus the $s$ vectors $\mathbf{y}_\lambda$, $\lambda\in\Lambda_1$, are orthonormal, hence an orthonormal basis of $\mathbb{R}^s$, and each of them is an eigenvector of $\mathbf{T}_s$. Every $\lambda\in\Lambda_1$ is therefore an eigenvalue of $\mathbf{T}_s$, with the nonzero eigenvector $\mathbf{y}_\lambda$. Conversely, let $\mathbf{T}_s\mathbf{z}=\xi\mathbf{z}$ with $\mathbf{z}\neq0$, and expand $\mathbf{z}=\sum_{\lambda\in\Lambda_1}c_\lambda\mathbf{y}_\lambda$ in this basis. Then
+$0=\mathbf{T}_s\mathbf{z}-\xi\mathbf{z}=\sum_{\lambda\in\Lambda_1}c_\lambda(\lambda-\xi)\,\mathbf{y}_\lambda$,
+so $c_\lambda(\lambda-\xi)=0 \ \forall \lambda\in\Lambda_1$, by linear independence. Some $c_\lambda$ is nonzero, since $\mathbf{z}\neq0$, so $\xi$ equals that $\lambda$. The elements of $\Lambda_1$ being distinct, $c_\mu=0 \ \forall \mu\neq\xi$, and $\mathbf{z}$ is a multiple of $\mathbf{y}_\xi$. Hence $\Lambda(\mathbf{T}_s)=\Lambda_1$, and each eigenvalue of $\mathbf{T}_s$ is simple, with eigenvectors the multiples of a single $\mathbf{y}_\lambda$.
 
 $$
 \begin{array}{r}
@@ -1905,32 +1790,22 @@ $$
 \end{array}
 $$
 
-### 4.9 Corollary 3 [Random initialization and repeated eigenvalues]
+### 4.10 Corollary 3 [Random initialization and repeated eigenvalues]
 
 If $\mathbf{g}\sim\mathcal{N}(0,\mathbb{I}_d)$ and $\mathbf{q}_1=\mathbf{g}/\|\mathbf{g}\|$, then, with probability one, a terminating Lanczos run recovers every distinct eigenvalue of $\mathbf{A}$. If $\mathbf{A}$ has $d$ distinct eigenvalues, the run reaches $s=d$ and yields a complete eigenbasis. If eigenvalues are repeated, a single run yields only one eigenvector from each corresponding eigenspace. With probability one, the eigenvector found in $E_\lambda$ at termination is the normalized projection of $\mathbf{q}_1$ onto $E_\lambda$.
 
 #### Proof
 
 For each $\lambda\in\Lambda(\mathbf{A})$, the event $\Pi_\lambda\mathbf{g}=0$ means that $\mathbf{g}$ lies in the proper linear subspace $E_\lambda^\perp$, which has Gaussian probability zero. Since there are finitely many distinct eigenvalues, the <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="union-bound" aria-label="State the union bound">union bound</button><span id="union-bound" class="explanation-popover" popover="auto" role="note" aria-label="Union bound" data-label="Fact">For finitely many events, the probability that at least one of them occurs is at most the sum of their probabilities. A finite union of probability-zero events therefore has probability zero.</span></span> gives
+$\mathbb{P}\bigl(\exists\lambda\in\Lambda(\mathbf{A}):\Pi_\lambda\mathbf{g}=0\bigr)
+\le\sum_{\lambda\in\Lambda(\mathbf{A})}\mathbb{P}(\Pi_\lambda\mathbf{g}=0)
+=0$.
+Thus $\Lambda_1=\Lambda(\mathbf{A})$ with probability one, and [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) applies.
 
-$$
-\begin{aligned}
-\mathbb{P}\bigl(\exists\lambda\in\Lambda(\mathbf{A}):\Pi_\lambda\mathbf{g}=0\bigr)
-&\le\sum_{\lambda\in\Lambda(\mathbf{A})}\mathbb{P}(\Pi_\lambda\mathbf{g}=0)\\
-&=0 .
-\end{aligned}
-$$
-
-Thus $\Lambda_1=\Lambda(\mathbf{A})$ with probability one, and [Proposition 3](#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) applies.
-
-For any polynomial $p$, $\Pi_\lambda p(\mathbf{A})\mathbf{q}_1=p(\lambda)\Pi_\lambda\mathbf{q}_1$. Therefore, the projection of the entire Krylov subspace onto $E_\lambda$ is contained in $\operatorname{span}\{\Pi_\lambda\mathbf{q}_1\}$, which is one-dimensional when $\Pi_\lambda\mathbf{q}_1\neq0$. A single run cannot recover additional independent directions in that eigenspace. At termination, the eigenvectors $\mathbf{y}_\lambda$ of $\mathbf{T}_s$ from the proof of [Proposition 3](#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) lift to the Ritz vectors $\mathbf{Q}_s\mathbf{y}_\lambda=\mathbf{u}_\lambda$, the normalized projections of $\mathbf{q}_1$.
+For any polynomial $p$, $\Pi_\lambda p(\mathbf{A})\mathbf{q}_1=p(\lambda)\Pi_\lambda\mathbf{q}_1$. Therefore, the projection of the entire Krylov subspace onto $E_\lambda$ is contained in $\operatorname{span}\{\Pi_\lambda\mathbf{q}_1\}$, which is one-dimensional when $\Pi_\lambda\mathbf{q}_1\neq0$. A single run cannot recover additional independent directions in that eigenspace. At termination, the eigenvectors $\mathbf{y}_\lambda$ of $\mathbf{T}_s$ from the proof of [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) lift to the Ritz vectors $\mathbf{Q}_s\mathbf{y}_\lambda=\mathbf{u}_\lambda$, the normalized projections of $\mathbf{q}_1$.
 
 When the spectrum is simple and every eigenvalue is present in the initialization, $s=d$. In this case, $\mathbf{Q}_d$ is an orthogonal matrix, and
-
-$$
-\mathbf{A}=\mathbf{Q}_d\mathbf{T}_d\mathbf{Q}_d^\top .
-$$
-
+$\mathbf{A}=\mathbf{Q}_d\mathbf{T}_d\mathbf{Q}_d^\top$.
 An orthonormal eigenbasis of $\mathbf{T}_d$ therefore yields a complete orthonormal eigenbasis of $\mathbf{A}$ after multiplication by $\mathbf{Q}_d$.
 
 $$
@@ -1940,15 +1815,14 @@ $$
 $$
 
 An early exact breakdown does not necessarily mean that a complete eigenbasis of $\mathbf{A}$ has been found. It means that the current Krylov subspace has become invariant. For example, when $\mathbf{A}=c\,\mathbb{I}_d$, every initialization produces a breakdown after one iteration, even though the eigenspace has dimension $d$.
-
 To recover all eigendirections, the construction can continue with new starting vectors orthogonal to the previously generated basis.
 
 <figure class="article-figure article-figure-wide" id="figure-lanczos">
   <img src="/images/blog/matrix-vector-products/lanczos.svg" width="1400" height="450" alt="Three panels. Left: Ritz values at each Lanczos step spreading outward until, at step 12, they coincide with the 12 distinct eigenvalues of a 60 by 60 matrix. Middle: error of the largest Ritz value against the power-iteration estimate at equal numbers of products, Lanczos reaching rounding level at step 12. Right: the coefficient beta dropping by about eleven orders of magnitude at step 12." loading="lazy" />
-  <figcaption><strong>Figure 6.</strong> The Lanczos method on a symmetric matrix of size $d=60$ with random eigenvectors and only $s=12$ distinct eigenvalues, of multiplicities 1 to 9 (labels on the right of panel a), including the eigenvalue 0 with multiplicity 8. (a) One run: Ritz values at each step $m$ (<span style="color:#27322f">black dots</span>) against the distinct eigenvalues (<span style="color:#7d8783">grey lines</span>). The extreme Ritz values (<span style="color:#16a34a">green</span>) move outward monotonically (<a href="#47-lemma-5-variational-characterization-and-monotonicity">Lemma 5</a>), the power-iteration estimate after the same number of products (<span style="color:#ea580c">orange</span>) stays between them, and at $m=s=12$ the Ritz values are exactly the 12 distinct eigenvalues, each appearing once (<a href="#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run">Proposition 3</a>). (b) Distance from $\lambda_{\max}(\mathbf A)=2$ of the largest Ritz value (<span style="color:#16a34a">green</span>) and of the power-iteration estimate (<span style="color:#ea580c">orange</span>), at equal numbers of matrix–vector products. (c) The coefficient $\beta_m$ falls from about $0.3$ at $m=11$ to about $10^{-12}$ at $m=12$: the exact breakdown of <a href="#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run">Proposition 3</a>, up to floating-point error. For every starting vector, the 12 Ritz values at $m=12$ match the 12 distinct eigenvalues to within $3\cdot10^{-15}$. Panels (b) and (c) show medians over 200 Gaussian starting vectors, with bands containing the middle half of the runs (the interquartile range), and all runs use full reorthogonalization.</figcaption>
+  <figcaption><strong>Figure 6.</strong> The Lanczos method on a symmetric matrix $\mathbf A=\mathbf U\operatorname{diag}(\lambda_1,\dots,\lambda_{60})\mathbf U^\top$ of size $d=60$ with only $s=12$ distinct eigenvalues, of multiplicities 1 to 9 (labels on the right of panel a), including the eigenvalue 0 with multiplicity 8. The numbers $\lambda_1,\dots,\lambda_{60}$ are these eigenvalues, each repeated according to its multiplicity, and the eigenvectors, the columns of $\mathbf U$, are random: $\mathbf U$ is uniformly distributed over the orthogonal matrices, and is sampled as the orthogonal factor of the QR decomposition of a $60\times60$ matrix with independent standard Gaussian entries (with the signs chosen so that the triangular factor has a positive diagonal). (a) One run: Ritz values at each step $m$ (<span style="color:#27322f">black dots</span>) against the distinct eigenvalues (<span style="color:#7d8783">grey lines</span>). The extreme Ritz values (<span style="color:#16a34a">green</span>) move outward monotonically (<a href="#48-lemma-5-variational-characterization-and-monotonicity">Lemma 5</a>), the power-iteration estimate after the same number of products (<span style="color:#ea580c">orange</span>) stays between them, and at $m=s=12$ the Ritz values are exactly the 12 distinct eigenvalues, each appearing once (<a href="#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run">Proposition 3</a>). (b) Distance from $\lambda_{\max}(\mathbf A)=2$ of the largest Ritz value (<span style="color:#16a34a">green</span>) and of the power-iteration estimate (<span style="color:#ea580c">orange</span>), at equal numbers of matrix–vector products. (c) The coefficient $\beta_m$ falls from about $0.3$ at $m=11$ to about $10^{-12}$ at $m=12$: the exact breakdown of <a href="#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run">Proposition 3</a>, up to floating-point error. For every starting vector, the 12 Ritz values at $m=12$ match the 12 distinct eigenvalues to within $3\cdot10^{-15}$. Panels (b) and (c) show medians over 200 Gaussian starting vectors, with bands containing the middle half of the runs (the interquartile range), and all runs use full reorthogonalization.</figcaption>
 </figure>
 
-### 4.10 Proposition 4 [Complete decomposition by continuation with new starting vectors]
+### 4.11 Proposition 4 [Complete decomposition by continuation with new starting vectors]
 
 Let $\mathbf{A}\in\mathbb{R}^{d\times d}$ be symmetric. Initialize $\mathbf{q}_0=0$, $\beta_0=0$, and any unit vector $\mathbf{q}_1$. Run the Lanczos recurrence for $j=1,\dots,d$, with the following rule whenever $j<d$:
 
@@ -1962,115 +1836,47 @@ $$
 
 At a breakdown, retain $\beta_j=0$ and all previously generated basis vectors.
 
-Then $\mathbf{Q}_d=[\mathbf{q}_1,\dots,\mathbf{q}_d]$ is orthogonal,
+Then the following hold.
 
-$$
-\beta_d=0,
-\qquad
-\mathbf{A}\mathbf{Q}_d=\mathbf{Q}_d\mathbf{T}_d,
-$$
-
-and
-
-$$
-\mathbf{A}=\mathbf{Q}_d\mathbf{T}_d\mathbf{Q}_d^\top .
-$$
-
-The matrix $\mathbf{T}_d$ is symmetric and tridiagonal, with a zero off-diagonal entry at every boundary between runs.
-
-If
-
-$$
-\mathbf{T}_d=\mathbf{Z}\mathbf{D}\mathbf{Z}^\top,
-\qquad
-\mathbf{Z}^\top\mathbf{Z}=\mathbb{I}_d,
-$$
-
-with $\mathbf{D}\in\mathbb{R}^{d\times d}$ the diagonal matrix of the eigenvalues of $\mathbf{T}_d$, then
-
-$$
-\mathbf{V}=\mathbf{Q}_d\mathbf{Z}
-$$
-
-is a complete orthogonal eigenvector matrix of $\mathbf{A}$:
-
-$$
-\mathbf{V}^\top\mathbf{V}=\mathbb{I}_d,
-\qquad
-\mathbf{A}\mathbf{V}=\mathbf{V}\mathbf{D}.
-$$
+1. **Orthogonal basis.** The matrix $\mathbf{Q}_d=[\mathbf{q}_1,\dots,\mathbf{q}_d]$ is orthogonal, $\mathbf{Q}_d^\top\mathbf{Q}_d=\mathbb{I}_d$.
+2. **Tridiagonal form.** $\beta_d=0$ and $\mathbf{A}\mathbf{Q}_d=\mathbf{Q}_d\mathbf{T}_d$, hence $\mathbf{A}=\mathbf{Q}_d\mathbf{T}_d\mathbf{Q}_d^\top$. The matrix $\mathbf{T}_d$ is symmetric and tridiagonal, with a zero off-diagonal entry at every boundary between runs.
+3. **Complete eigenbasis.** If $\mathbf{T}_d=\mathbf{Z}\mathbf{D}\mathbf{Z}^\top$ with $\mathbf{Z}^\top\mathbf{Z}=\mathbb{I}_d$ and $\mathbf{D}\in\mathbb{R}^{d\times d}$ the diagonal matrix of the eigenvalues of $\mathbf{T}_d$, then $\mathbf{V}=\mathbf{Q}_d\mathbf{Z}$ is a complete orthogonal eigenvector matrix of $\mathbf{A}$:
+$\mathbf{V}^\top\mathbf{V}=\mathbb{I}_d$,
+and $\mathbf{A}\mathbf{V}=\mathbf{V}\mathbf{D}$.
 
 #### Remark 16 [Why continuation completes the basis]
 
-Each run discovers one direction in every eigenspace that its starting vector reaches, then stops at an invariant subspace ([Proposition 3](#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run)). Continuing with a new starting vector in the orthogonal complement, which is invariant as well, lets the next run find the directions that the previous runs could not see.
+Each run discovers one direction in every eigenspace that its starting vector reaches, then stops at an invariant subspace ([Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run)). Continuing with a new starting vector in the orthogonal complement, which is invariant as well, lets the next run find the directions that the previous runs could not see.
 
 #### Proof
 
-At an exact breakdown after iteration $j$,
-
-$$
-\mathbf{A}\mathbf{Q}_j=\mathbf{Q}_j\mathbf{T}_j .
-$$
-
+At an exact breakdown after iteration $j$, $\mathbf{A}\mathbf{Q}_j=\mathbf{Q}_j\mathbf{T}_j$.
 Thus $\operatorname{range}(\mathbf{Q}_j)$ is invariant under $\mathbf{A}$.
-
 Its orthogonal complement is also invariant. Indeed, if $\mathbf{Q}_j^\top\mathbf{x}=0$, symmetry gives
-
-$$
-\begin{aligned}
-\mathbf{Q}_j^\top\mathbf{A}\mathbf{x}
-&=(\mathbf{A}\mathbf{Q}_j)^\top\mathbf{x}\\
-&=(\mathbf{Q}_j\mathbf{T}_j)^\top\mathbf{x}\\
-&=\mathbf{T}_j\mathbf{Q}_j^\top\mathbf{x}\\
-&=0 .
-\end{aligned}
-$$
-
+$\mathbf{Q}_j^\top\mathbf{A}\mathbf{x}
+=(\mathbf{A}\mathbf{Q}_j)^\top\mathbf{x}
+=(\mathbf{Q}_j\mathbf{T}_j)^\top\mathbf{x}
+=\mathbf{T}_j\mathbf{Q}_j^\top\mathbf{x}
+=0$.
 A new unit vector in this complement therefore starts another Lanczos run entirely within the complement. Since $\beta_j=0$, the first recurrence of that run contains no contribution from the preceding block.
 
-Within each run, [Lemma 3](#45-lemma-3-orthogonality-and-tridiagonal-projection) ensures orthogonality. Vectors from different runs are orthogonal because they lie in orthogonal invariant subspaces. Each run adds at least one vector, and the construction can continue whenever fewer than $d$ vectors have been obtained. Thus it produces $d$ orthonormal vectors.
+Within each run, [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection) ensures orthogonality. Vectors from different runs are orthogonal because they lie in orthogonal invariant subspaces. Each run adds at least one vector, and the construction can continue whenever fewer than $d$ vectors have been obtained. Thus it produces $d$ orthonormal vectors.
 
 At the final iteration, $\mathbf{r}_d$ is orthogonal to every column of $\mathbf{Q}_d$. These columns form a basis of $\mathbb{R}^d$, so
-
-$$
-\mathbf{r}_d=0,
-\qquad
-\beta_d=0 .
-$$
-
+$\mathbf{r}_d=0$ and $\beta_d=0$.
 Collecting all recurrences, including the zero couplings at block boundaries, gives
-
-$$
-\mathbf{A}\mathbf{Q}_d=\mathbf{Q}_d\mathbf{T}_d .
-$$
-
-Multiplying on the right by $\mathbf{Q}_d^\top$ gives
-
-$$
-\mathbf{A}=\mathbf{Q}_d\mathbf{T}_d\mathbf{Q}_d^\top .
-$$
+$\mathbf{A}\mathbf{Q}_d=\mathbf{Q}_d\mathbf{T}_d$.
+Multiplying on the right by $\mathbf{Q}_d^\top$ gives $\mathbf{A}=\mathbf{Q}_d\mathbf{T}_d\mathbf{Q}_d^\top$.
 
 Finally,
-
-$$
-\begin{aligned}
-\mathbf{A}(\mathbf{Q}_d\mathbf{Z})
-&=\mathbf{Q}_d\mathbf{T}_d\mathbf{Z}\\
-&=\mathbf{Q}_d\mathbf{Z}\mathbf{D},
-\end{aligned}
-$$
-
+$\mathbf{A}(\mathbf{Q}_d\mathbf{Z})
+=\mathbf{Q}_d\mathbf{T}_d\mathbf{Z}
+=\mathbf{Q}_d\mathbf{Z}\mathbf{D}$
 and
-
-$$
-\begin{aligned}
-(\mathbf{Q}_d\mathbf{Z})^\top(\mathbf{Q}_d\mathbf{Z})
-&=\mathbf{Z}^\top\mathbf{Q}_d^\top\mathbf{Q}_d\mathbf{Z}\\
-&=\mathbf{Z}^\top\mathbf{Z}\\
-&=\mathbb{I}_d .
-\end{aligned}
-$$
-
+$(\mathbf{Q}_d\mathbf{Z})^\top(\mathbf{Q}_d\mathbf{Z})
+=\mathbf{Z}^\top\mathbf{Q}_d^\top\mathbf{Q}_d\mathbf{Z}
+=\mathbf{Z}^\top\mathbf{Z}
+=\mathbb{I}_d$.
 Therefore, $\mathbf{V}=\mathbf{Q}_d\mathbf{Z}$ is a complete orthonormal eigenbasis.
 
 $$
@@ -2090,25 +1896,29 @@ $$
 $$
 
 When $j<d$, a fresh Gaussian draw gives $\mathbf{u}\neq0$ with probability one.
-
 This continuation retains the entire existing basis. It is different from restarting schemes that discard or compress basis vectors to limit memory use.
 
-### 4.11 Algorithm 2 [Lanczos with reorthogonalization and residual checks]
+### 4.12 Algorithm 2 [Lanczos with reorthogonalization and residual checks]
 
-For finite computations, the preceding identities require additional care. In particular, the short recurrence does not maintain exact orthogonality in floating-point arithmetic. A direct implementation can reorthogonalize each newly computed residual against the stored basis,
+[Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) and [Proposition 4](#411-proposition-4-complete-decomposition-by-continuation-with-new-starting-vectors) recover eigenpairs exactly, but only at exact breakdowns and in exact arithmetic. The algorithm below is their finite version. It keeps the recurrence of [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown) and the Ritz pairs of [Lemma 4](#47-lemma-4-ritz-pairs-and-their-residuals), with three changes.
 
-$$
-\mathbf{r}_j\leftarrow\mathbf{r}_j-\mathbf{Q}_j(\mathbf{Q}_j^\top\mathbf{r}_j),
-$$
+* **The basis is reorthogonalized.** In floating-point arithmetic, the short recurrence gradually loses orthogonality, as measured in [Section 4.3](#43-how-the-lanczos-method-works). Each new remainder is therefore projected once more against all the stored basis vectors, $\mathbf{r}_j\leftarrow\mathbf{r}_j-\mathbf{Q}_j(\mathbf{Q}_j^\top\mathbf{r}_j)$,
+  before $\beta_j$ is computed. Such <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="full-reorthogonalization" aria-label="Show the source on full reorthogonalization">full reorthogonalization</button><span id="full-reorthogonalization" class="explanation-popover" popover="auto" role="note" aria-label="Full reorthogonalization" data-label="Source">See the discussion of full reorthogonalization in Bai et al., <a href="https://netlib.org/utk/people/JackDongarra/etemplates/node109.html"><em>Templates for the Solution of Algebraic Eigenvalue Problems</em></a>. The projection is carried out with classical or modified Gram–Schmidt, and it is repeated when the norm of the new vector drops below about $1/\sqrt2$ of its previous value, which rarely happens.</span></span> is a standard part of practical Lanczos implementations ([Bai et al., 2000](#ref-bai2000)).
+* **Ritz pairs are accepted on a certificate.** Instead of waiting for an exact breakdown, the algorithm tests the Ritz pairs as the basis grows, and accepts a pair as soon as its residual with $\mathbf{A}$ is below a tolerance, which by [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) places its Rayleigh quotient near an eigenvalue of $\mathbf{A}$.
+* **Breakdowns are detected with a tolerance.** A computed $\beta_j$ is almost never exactly zero. A step is treated as a breakdown when $\beta_j$ falls below a small threshold, and for a complete decomposition the basis is then continued from a new starting vector, as in [Proposition 4](#411-proposition-4-complete-decomposition-by-continuation-with-new-starting-vectors).
 
-repeating the projection when needed before computing $\beta_j$ and normalizing. Such <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="full-reorthogonalization" aria-label="Show the source on full reorthogonalization">full reorthogonalization</button><span id="full-reorthogonalization" class="explanation-popover" popover="auto" role="note" aria-label="Full reorthogonalization" data-label="Source">See the discussion of full reorthogonalization in Bai et al., <a href="https://netlib.org/utk/people/JackDongarra/etemplates/node109.html"><em>Templates for the Solution of Algebraic Eigenvalue Problems</em></a>. The projection is carried out with classical or modified Gram–Schmidt, and it is repeated when the norm of the new vector drops below about $1/\sqrt2$ of its previous value, which rarely happens.</span></span> is a standard part of practical Lanczos implementations ([Bai et al., 2000](#ref-bai2000)). An implementable procedure for estimating selected eigenpairs is therefore the following.
+The algorithm uses three tolerances.
+* The tolerances $\varepsilon_{\mathrm{abs}}>0$ and $\varepsilon_{\mathrm{rel}}\ge0$ play the same roles as in [Algorithm 1](#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation). Step 5 accepts a candidate $(\widehat\lambda,\mathbf{x})$ when $\|\mathbf{A}\mathbf{x}-\widehat\lambda\mathbf{x}\|\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\|\mathbf{A}\mathbf{x}\|$, and by [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) the accepted $\widehat\lambda$ then lies within this threshold of an eigenvalue of $\mathbf{A}$. With $\varepsilon_{\mathrm{rel}}=0$, every eigenvalue is found to within the same distance $\varepsilon_{\mathrm{abs}}$, and a positive $\varepsilon_{\mathrm{rel}}$ asks instead for about the same number of correct digits on every eigenvalue, as explained for [Algorithm 1](#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation). One difference makes the relative rule safer here. Algorithm 2 does not deflate, so the residual of an accepted pair does not enter the test of any other pair, and the [stall of Algorithm 1](#tolerance-stall), where residuals inherited from earlier stages exceed the threshold, cannot occur. The floor remains: rounding errors keep computed residuals of the order of the unit roundoff times $\|\mathbf{A}\|$, so $\varepsilon_{\mathrm{abs}}$ must exceed that level. [Figure 7](#figure-lanczos-vs-deflation) uses the constant threshold $\varepsilon_{\mathrm{abs}}=10^{-10}\|\mathbf{A}\|$ and $\varepsilon_{\mathrm{rel}}=0$, the same as for Algorithm 1, so that the two algorithms are compared on equal terms.
+* The breakdown tolerance $\tau>0$ decides when $\beta_j$ counts as zero in step 3. Even when the Krylov subspace is invariant, rounding errors leave a computed $\beta_j$ of the order of the unit roundoff times $\|\mathbf{A}\|$, so $\tau$ must exceed that level. The runs of [Figure 7](#figure-lanczos-vs-deflation) use $\tau=10^{-10}$ times the largest $|\alpha_i|$ or $\beta_i$ computed so far, an estimate of $\|\mathbf{A}\|$ that costs nothing.
+
+Choose a maximum number of steps, and run the following steps.
 
 1. **Fix the operator.** Provide a routine computing $\mathbf{x}\mapsto\mathbf{A}\mathbf{x}$, and keep everything that defines $\mathbf{A}$ fixed throughout the run. For a Hessian $\nabla_\theta^2f(\theta)$, these are $\theta$ and the function $f$, including the data it is evaluated on.
-2. **Initialize the basis.** Choose a unit vector $\mathbf{q}_1$, and set $\mathbf{q}_0=0$ and $\beta_0=0$.
-3. **Extend the basis.** Compute the Lanczos recurrence, reorthogonalize the residual, and obtain the next basis vector when its norm is sufficiently large.
-4. **Solve the small eigenvalue problem.** At selected iterations, assemble $\mathbf{T}_m$ and compute its desired eigenpairs $\mathbf{T}_m\mathbf{y}_i=\vartheta_i\mathbf{y}_i$.
-5. **Check candidates using the original operator.** Form $\mathbf{x}_i=\mathbf{Q}_m\mathbf{y}_i/\|\mathbf{Q}_m\mathbf{y}_i\|$, and recompute $\widehat{\lambda}_i=\mathbf{x}_i^\top\mathbf{A}\mathbf{x}_i$ and $\varepsilon_i=\|\mathbf{A}\mathbf{x}_i-\widehat{\lambda}_i\mathbf{x}_i\|$. Accept an approximate eigenpair when $\varepsilon_i\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\|\mathbf{A}\mathbf{x}_i\|$, where $\varepsilon_{\mathrm{abs}}>0$ and $\varepsilon_{\mathrm{rel}}\ge0$ are chosen tolerances.
-6. **Stop or continue.** Stop when the requested candidates satisfy the tolerance or an iteration limit is reached. If the objective is a complete decomposition, use additional orthogonal starting vectors when a run terminates ([Proposition 4](#410-proposition-4-complete-decomposition-by-continuation-with-new-starting-vectors)).
+2. **Initialize the basis.** Choose a unit vector $\mathbf{q}_1$, for instance $\mathbf{q}_1=\mathbf{g}/\|\mathbf{g}\|$ with $\mathbf{g}\sim\mathcal{N}(0,\mathbb{I}_d)$, which by [Corollary 3](#410-corollary-3-random-initialization-and-repeated-eigenvalues) has a component in every eigenspace of $\mathbf{A}$ with probability one. Set $\mathbf{q}_0=0$, $\beta_0=0$, $\mathbf{Q}_1=[\mathbf{q}_1]$ and $j=1$.
+3. **Extend the basis (one product).** Compute $\mathbf{z}_j=\mathbf{A}\mathbf{q}_j-\beta_{j-1}\mathbf{q}_{j-1}$, $\alpha_j=\mathbf{q}_j^\top\mathbf{z}_j$ and $\mathbf{r}_j=\mathbf{z}_j-\alpha_j\mathbf{q}_j$, as in [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown). Reorthogonalize, $\mathbf{r}_j\leftarrow\mathbf{r}_j-\mathbf{Q}_j(\mathbf{Q}_j^\top\mathbf{r}_j)$, repeating the projection once when needed, and set $\beta_j=\|\mathbf{r}_j\|$. If $\beta_j>\tau$, set $\mathbf{q}_{j+1}=\mathbf{r}_j/\beta_j$ and $\mathbf{Q}_{j+1}=[\mathbf{Q}_j,\mathbf{q}_{j+1}]$. Otherwise, the run has broken down, and $\beta_j$ is set to $0$.
+4. **Solve the small eigenvalue problem.** At selected steps, assemble $\mathbf{T}_m$ with $m=j$, and compute its desired eigenpairs $\mathbf{T}_m\mathbf{y}_i=\vartheta_i\mathbf{y}_i$ with $\|\mathbf{y}_i\|=1$, for instance the $k$ of largest absolute value. Screen them with the inexpensive estimate $\beta_m|(\mathbf{y}_i)_m|$ of their residual ([Lemma 4](#47-lemma-4-ritz-pairs-and-their-residuals)), which costs no product: a pair whose estimate exceeds $\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}|\vartheta_i|$ is not yet a candidate.
+5. **Check the candidates with the original operator (one product each).** For each remaining pair, form $\mathbf{x}_i=\mathbf{Q}_m\mathbf{y}_i/\|\mathbf{Q}_m\mathbf{y}_i\|$, compute $\widehat{\lambda}_i=\mathbf{x}_i^\top\mathbf{A}\mathbf{x}_i$ and $\varepsilon_i=\|\mathbf{A}\mathbf{x}_i-\widehat{\lambda}_i\mathbf{x}_i\|$, and accept $(\widehat\lambda_i,\mathbf{x}_i)$ when $\varepsilon_i\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\|\mathbf{A}\mathbf{x}_i\|$.
+6. **Stop or continue.** Stop when the requested pairs have been accepted, and report nonconvergence when the maximum number of steps is reached first. Otherwise, if the run has not broken down, increase $j$ by one and return to step 3. If it has broken down and a complete decomposition is requested, continue as in [Proposition 4](#411-proposition-4-complete-decomposition-by-continuation-with-new-starting-vectors): draw $\mathbf{g}\sim\mathcal{N}(0,\mathbb{I}_d)$, set $\mathbf{q}_{j+1}=\mathbf{P}\mathbf{g}/\|\mathbf{P}\mathbf{g}\|$ with $\mathbf{P}\mathbf{g}=\mathbf{g}-\mathbf{Q}_j(\mathbf{Q}_j^\top\mathbf{g})$, keep $\beta_j=0$, set $\mathbf{Q}_{j+1}=[\mathbf{Q}_j,\mathbf{q}_{j+1}]$, increase $j$ by one, and return to step 3.
 
 $$
 \begin{array}{r}
@@ -2116,22 +1926,27 @@ $$
 \end{array}
 $$
 
-In exact arithmetic, the inexpensive quantity
+#### How the steps implement the theory
 
-$$
-\beta_m\bigl|(\mathbf{y}_i)_m\bigr|
-$$
+The table lists what each step computes and the result it implements. The paragraphs after it justify the three points where the finite computation departs from the exact theory.
 
-equals the residual norm ([Lemma 4](#46-lemma-4-ritz-pairs-and-their-residuals)). In floating-point arithmetic, loss of orthogonality and the corrections introduced by reorthogonalization perturb the exact tridiagonal identity. The inexpensive expression can be used to screen candidates, while the residual computed with the original operator supplies the final accuracy check. The normalization by $\|\mathbf{Q}_m\mathbf{y}_i\|$ in step 5 matters for the same reason: when the computed basis is not exactly orthonormal, $\mathbf{Q}_m\mathbf{y}_i$ need not have unit norm, and the inexpensive estimate can then be too optimistic (see the implementation discussion of the [Lanczos algorithm](https://netlib.org/utk/people/JackDongarra/etemplates/node104.html) in [Bai et al., 2000](#ref-bai2000)).
+| Step | Computes | Implements |
+| --- | --- | --- |
+| 3. Extend | $\alpha_j$, $\beta_j$ and $\mathbf{q}_{j+1}$ | one step of the recurrence of [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown) |
+| 3. Reorthogonalize | $\mathbf{r}_j\leftarrow\mathbf{r}_j-\mathbf{Q}_j(\mathbf{Q}_j^\top\mathbf{r}_j)$ | the orthogonality $\mathbf{Q}_j^\top\mathbf{r}_j=0$ of [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection), which rounding errors would otherwise erode |
+| 3. Breakdown | $\beta_j\le\tau$ | the exact breakdown of [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown) and [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) |
+| 4. Small problem | $\mathbf{T}_m\mathbf{y}_i=\vartheta_i\mathbf{y}_i$ and $\beta_m\lvert(\mathbf{y}_i)_m\rvert$ | the Ritz pairs of [Lemma 4](#47-lemma-4-ritz-pairs-and-their-residuals) and the norm of their residual |
+| 5. Check | $\lVert\mathbf{A}\mathbf{x}_i-\widehat\lambda_i\mathbf{x}_i\rVert\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\lVert\mathbf{A}\mathbf{x}_i\rVert$ | the certificate of [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair), with the Rayleigh quotient of [Remark 11](#remark-11-any-scalar-and-the-best-one) |
+| 6. Continue | a new unit vector orthogonal to $\mathbf{Q}_j$, with $\beta_j=0$ | the continuation of [Proposition 4](#411-proposition-4-complete-decomposition-by-continuation-with-new-starting-vectors) |
 
-A small computed $\beta_j$ indicates an approximate breakdown. It is not an exact proof of invariance or spectral completeness. Likewise, satisfying a residual tolerance certifies an approximate eigenpair, not that no more extreme eigenvalue has been missed.
+**Reorthogonalization restores what the theory assumes.** [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection), and through it [Lemma 4](#47-lemma-4-ritz-pairs-and-their-residuals) and Propositions [3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run) and [4](#411-proposition-4-complete-decomposition-by-continuation-with-new-starting-vectors), assume that the basis vectors are exactly orthonormal. The short recurrence keeps them orthogonal only up to errors that accumulate from step to step, and the projection of step 3 removes these errors at every step. In the example of [Section 4.3](#43-how-the-lanczos-method-works), it keeps $\|\mathbf{Q}_m^\top\mathbf{Q}_m-\mathbb{I}_m\|$ at about $10^{-15}$ up to $m=200$, against $10^{-6}$ without it.
+
+**The inexpensive estimate screens, the explicit residual certifies.** In exact arithmetic, $\beta_m|(\mathbf{y}_i)_m|$ equals the residual norm $\|\mathbf{A}\mathbf{x}_i-\vartheta_i\mathbf{x}_i\|$ ([Lemma 4](#47-lemma-4-ritz-pairs-and-their-residuals)). In floating-point arithmetic, the remaining loss of orthogonality and the corrections of the reorthogonalization perturb the identity $\mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{T}_m+\mathbf{r}_m\mathbf{e}_m^\top$ on which this equality rests. Step 4 therefore uses the estimate only to decide which pairs are worth a product, and step 5 computes the residual with $\mathbf{A}$ itself, which [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) turns into a guarantee however $\mathbf{x}_i$ was obtained. The normalization by $\|\mathbf{Q}_m\mathbf{y}_i\|$ in step 5 matters for the same reason: when the computed basis is not exactly orthonormal, $\mathbf{Q}_m\mathbf{y}_i$ need not have unit norm, and the inexpensive estimate can then be too optimistic (see the implementation discussion of the [Lanczos algorithm](https://netlib.org/utk/people/JackDongarra/etemplates/node104.html) in [Bai et al., 2000](#ref-bai2000)).
+
+**A small $\beta_j$ is an approximate breakdown.** By [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection), $\|\mathbf{A}\mathbf{Q}_j-\mathbf{Q}_j\mathbf{T}_j\|=\|\mathbf{r}_j\mathbf{e}_j^\top\|=\beta_j$, so $\beta_j\le\tau$ means that $\mathbf{A}$ maps $\operatorname{range}(\mathbf{Q}_j)$ into itself up to an error $\tau$. It is not an exact proof of invariance or spectral completeness. Likewise, satisfying a residual tolerance certifies an approximate eigenpair, not that no more extreme eigenvalue has been missed.
 
 Each basis-extension step requires one matrix–vector product. If $C_{\mathbf{A}}$ denotes its cost, $m$ steps require $m$ such products, with total cost $mC_{\mathbf{A}}$, in addition to any products used for explicit residual checks. Retaining $\mathbf{Q}_m$ requires $O(dm)$ storage. Full reorthogonalization costs $O(dj)$ operations at iteration $j$, and therefore
-
-$$
-\sum_{j=1}^mO(dj)=O(dm^2)
-$$
-
+$\sum_{j=1}^mO(dj)=O(dm^2)$
 operations over the run, in addition to solving the projected eigenvalue problems.
 
 When $\mathbf{A}$ is available only through products, as in the examples of [Section 2](#2-matrices-known-only-through-their-products), the run never forms $\mathbf{A}$. Nevertheless, a complete decomposition with $m=d$ still requires $O(d^2)$ storage for the basis, and full reorthogonalization then costs $O(d^3)$ operations. The practical benefit is greatest when the required eigenpairs reach the desired accuracy with $m\ll d$.
@@ -2140,14 +1955,14 @@ When $\mathbf{A}$ is available only through products, as in the examples of [Sec
 
 <figure class="article-figure" id="figure-lanczos-vs-deflation">
   <img src="/images/blog/matrix-vector-products/lanczos-vs-deflation.svg" width="1040" height="430" alt="Two panels comparing Algorithm 2 (Lanczos) with Algorithm 1. Left: Hessian-vector products needed to certify the j largest eigenpairs of a network Hessian, from about 13 to 35 for Lanczos and from about 220 to 1100 for Algorithm 1. Right: eigenpairs certified against products for a 50-node bipartite graph; Lanczos with continuation reaches all 50 after 50 products, Algorithm 1 after about fifteen thousand." loading="lazy" />
-  <figcaption><strong>Figure 7.</strong> <a href="#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks">Algorithm 2</a> (<span style="color:#16a34a">green</span>) against <a href="#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation">Algorithm 1</a> (<span style="color:#2563eb">blue</span>), with the same constant threshold $10^{-10}\|\mathbf A\|$ on the residuals for $\mathbf A$. (a) The network Hessian of <a href="#figure-hessian-deflation">Figure 5</a>: Hessian–vector products used until the $j$ eigenpairs of largest absolute value are certified, medians over 20 starting vectors with bands containing the middle half of the runs. For <a href="#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation">Algorithm 1</a>, the count runs over stages 1 to $j$. For <a href="#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks">Algorithm 2</a>, it is the number of Lanczos steps until the $j$ Ritz pairs of largest absolute value pass the inexpensive test $\beta_m|(\mathbf y_i)_m|\le10^{-10}\|\mathbf A\|$ of <a href="#46-lemma-4-ritz-pairs-and-their-residuals">Lemma 4</a>, plus one product per pair for the explicit check of step 5, whose residuals were all below $5.6\cdot10^{-10}$. The eight pairs cost 35 products with <a href="#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks">Algorithm 2</a> and about 1,100 with <a href="#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation">Algorithm 1</a>. (b) The complete eigenbasis of the bipartite graph of <a href="#figure-bipartite-graph">Figure 2</a>. The first Lanczos run breaks down at step 41, the number of distinct eigenvalues (<a href="#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run">Proposition 3</a>), where its 41 Ritz pairs all pass the test. Each of the nine continuation runs of <a href="#410-proposition-4-complete-decomposition-by-continuation-with-new-starting-vectors">Proposition 4</a> starts in the eigenspace of $0$, orthogonally to the basis built so far, and breaks down after one step. The 50 products, plus 50 explicit checks (<span style="color:#16a34a">green square</span>), give all 50 eigenpairs with residuals below $1.2\cdot10^{-11}$, against 15,296 products for <a href="#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation">Algorithm 1</a> with every stage taken to its limit, as in <a href="#figure-complete-eigenbasis">Figure 3</a>.</figcaption>
+  <figcaption><strong>Figure 7.</strong> <a href="#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks">Algorithm 2</a> (<span style="color:#16a34a">green</span>) against <a href="#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation">Algorithm 1</a> (<span style="color:#2563eb">blue</span>), with the same constant threshold $10^{-10}\|\mathbf A\|$ on the residuals for $\mathbf A$. (a) The network Hessian of <a href="#figure-hessian-deflation">Figure 5</a>: Hessian–vector products used until the $j$ eigenpairs of largest absolute value are certified, medians over 20 starting vectors with bands containing the middle half of the runs. For <a href="#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation">Algorithm 1</a>, the count runs over stages 1 to $j$. For <a href="#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks">Algorithm 2</a>, it is the number of Lanczos steps until the $j$ Ritz pairs of largest absolute value pass the inexpensive test $\beta_m|(\mathbf y_i)_m|\le10^{-10}\|\mathbf A\|$ of <a href="#47-lemma-4-ritz-pairs-and-their-residuals">Lemma 4</a>, plus one product per pair for the explicit check of step 5, whose residuals were all below $5.6\cdot10^{-10}$. The eight pairs cost 35 products with <a href="#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks">Algorithm 2</a> and about 1,100 with <a href="#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation">Algorithm 1</a>. (b) The complete eigenbasis of the bipartite graph of <a href="#figure-bipartite-graph">Figure 2</a>. The first Lanczos run breaks down at step 41, the number of distinct eigenvalues (<a href="#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run">Proposition 3</a>), where its 41 Ritz pairs all pass the test. Each of the nine continuation runs of <a href="#411-proposition-4-complete-decomposition-by-continuation-with-new-starting-vectors">Proposition 4</a> starts in the eigenspace of $0$, orthogonally to the basis built so far, and breaks down after one step. The 50 products, plus 50 explicit checks (<span style="color:#16a34a">green square</span>), give all 50 eigenpairs with residuals below $1.2\cdot10^{-11}$, against 15,296 products for <a href="#38-algorithm-1-deflated-squared-power-iteration-with-sign-separation">Algorithm 1</a> with every stage taken to its limit, as in <a href="#figure-complete-eigenbasis">Figure 3</a>.</figcaption>
 </figure>
 
 ## 5. The Arnoldi method
 
 All the matrices of [Section 2](#2-matrices-known-only-through-their-products) are symmetric, and every proof so far uses the spectral theorem. Many matrices known through their products are not symmetric, and for them three facts of [Section 1](#1-notation-and-preliminaries) fail. First, the eigenvalues of a real matrix can be complex, and then they come in conjugate pairs $\lambda,\bar\lambda$. Second, eigenvectors of distinct eigenvalues need not be orthogonal. Third, the eigenvectors need not span the whole space: the matrix $\left[\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\right]$ has the double eigenvalue $0$, but its only eigenvectors are the multiples of $[1,0]^\top$.
 
-The Krylov subspace of [Definition 1](#41-definition-1-krylov-subspace) and the Gram–Schmidt process need no symmetry. The **Arnoldi method** ([Arnoldi, 1951](#ref-arnoldi1951)) runs Gram–Schmidt on $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ for any square matrix, as the Lanczos method does for a symmetric one, and [Saad (1980)](#ref-saad1980) developed it into a method for approximating a few eigenvalues of a large nonsymmetric matrix. This section follows the plan of [Section 4](#4-the-lanczos-method): examples first, then the method worked by hand, its exact properties, the certificate that replaces [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair), and an implementable procedure.
+The Krylov subspace of [Definition 1](#41-definition-1-krylov-subspace) and the [Gram–Schmidt process](#42-the-gramschmidt-process) need no symmetry. The **Arnoldi method** ([Arnoldi, 1951](#ref-arnoldi1951)) runs Gram–Schmidt on $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ for any square matrix, as the Lanczos method does for a symmetric one, and [Saad (1980)](#ref-saad1980) developed it into a method for approximating a few eigenvalues of a large nonsymmetric matrix. This section follows the plan of [Section 4](#4-the-lanczos-method): examples first, then the method worked by hand, its exact properties, the certificate that replaces [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair), and an implementable procedure.
 
 From here on, $\mathbf{A}\in\mathbb{R}^{d\times d}$ is any real square matrix, and $\Lambda(\mathbf{A})\subset\mathbb{C}$ is the set of its distinct eigenvalues. For a complex vector $\mathbf{y}$, $\mathbf{y}^*$ is its conjugate transpose and $\|\mathbf{y}\|=(\mathbf{y}^*\mathbf{y})^{1/2}$, which is the Euclidean norm when $\mathbf{y}$ is real.
 
@@ -2166,15 +1981,15 @@ From here on, $\mathbf{A}\in\mathbb{R}^{d\times d}$ is any real square matrix, a
   \qquad
   \gamma=\frac{ch}{2},
   $$
-  for $i\in\{1,\dots,d\}$. When $c=0$, this is the symmetric matrix $(\mathbf{A}\mathbf{x})_i=(2x_i-x_{i-1}-x_{i+1})/h^2$ of that example. When $c\neq0$, it is not symmetric, because its entry $A_{i,i-1}=-(1+\gamma)/h^2$ below the diagonal differs from the entry $A_{i-1,i}=-(1-\gamma)/h^2$ above it. For $0<\gamma<1$, it is similar to a symmetric matrix. With $s=\sqrt{(1+\gamma)/(1-\gamma)}$ and $\mathbf{S}=\operatorname{diag}(1,s,s^2,\dots,s^{d-1})$, the matrix $\widetilde{\mathbf{A}}=\mathbf{S}^{-1}\mathbf{A}\mathbf{S}$ is symmetric and tridiagonal, with $2/h^2$ on its diagonal and $-\sqrt{1-\gamma^2}/h^2$ on both neighboring diagonals. The eigenvalues of $\mathbf{A}$ are therefore real, equal to $\bigl(2-2\sqrt{1-\gamma^2}\cos(k\pi/(d+1))\bigr)/h^2$ for $k=1,\dots,d$. The eigenvectors of $\mathbf{A}$, however, are those of $\widetilde{\mathbf{A}}$ with entry $i$ multiplied by $s^{i-1}$. They are all concentrated near the end of the grid toward which the flow goes, and they are far from orthogonal. A product costs $O(d)$ operations, as for $-u''$.
-* **Jacobians of dynamical systems.** A system that evolves by $\dot{\mathbf{x}}=F(\mathbf{x})$, for a map $F:\mathbb{R}^d\to\mathbb{R}^d$, is at rest at a point $\mathbf{x}^\star$ where $F(\mathbf{x}^\star)=0$. A small perturbation $\mathbf{y}=\mathbf{x}-\mathbf{x}^\star$ then evolves approximately by $\dot{\mathbf{y}}=\mathbf{J}\mathbf{y}$, where $\mathbf{J}$ is the Jacobian of $F$ at $\mathbf{x}^\star$, with entries $J_{ij}=\partial F_i(\mathbf{x}^\star)/\partial x_j$, because $F(\mathbf{x}^\star+\mathbf{y})\approx\mathbf{J}\mathbf{y}$ to first order. If $\mathbf{J}$ has a basis of eigenvectors, $\mathbf{J}\mathbf{v}=\lambda\mathbf{v}$, the solution is a combination of the terms $e^{\lambda t}\mathbf{v}$, which decay when the real part of $\lambda$ is negative and grow when it is positive. The equilibrium is therefore stable when every eigenvalue has a negative real part, and the eigenvalues with the largest real part decide. The matrix $\mathbf{J}$ is not symmetric in general. A product with it is a directional derivative, $\mathbf{J}\mathbf{x}=\frac{d}{d\varepsilon}F(\mathbf{x}^\star+\varepsilon\mathbf{x})\big|_{\varepsilon=0}$, which forward-mode automatic differentiation computes at the cost of a few evaluations of $F$. In machine learning, simultaneous gradient steps on the two players of a game, such as the generator and the discriminator of a generative adversarial network, follow such a vector field, and eigenvalues of its Jacobian with large imaginary parts make the iterates circle around an equilibrium rather than approach it ([Mescheder et al., 2017](#ref-mescheder2017)). The simplest case is $\min_\theta\max_\phi\theta\phi$, where $\dot\theta=-\phi$ and $\dot\phi=\theta$, so that $\mathbf{J}=\left[\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right]$, whose eigenvalues $\pm i$ describe a pure rotation.
+  for $i\in\{1,\dots,d\}$. When $c=0$, this is the symmetric matrix $(\mathbf{A}\mathbf{x})_i=(2x_i-x_{i-1}-x_{i+1})/h^2$ of that example. When $c\neq0$, it is not symmetric, because its entry $A_{i,i-1}=-(1+\gamma)/h^2$ below the diagonal differs from the entry $A_{i-1,i}=-(1-\gamma)/h^2$ above it. For $0<\gamma<1$, it is similar to a symmetric matrix. With $s=\sqrt{(1+\gamma)/(1-\gamma)}$ and $\mathbf{S}=\operatorname{diag}(1,s,s^2,\dots,s^{d-1})$, the matrix $\widetilde{\mathbf{A}}=\mathbf{S}^{-1}\mathbf{A}\mathbf{S}$ is <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="convection-symmetrization" aria-label="Show why the rescaled convection-diffusion matrix is symmetric">symmetric and tridiagonal</button><span id="convection-symmetrization" class="explanation-popover" popover="auto" role="note" aria-label="Symmetrizing the convection-diffusion matrix" data-label="Derivation">Since $\mathbf{S}$ is diagonal with $S_{ii}=s^{i-1}$, the entries of $\widetilde{\mathbf{A}}=\mathbf{S}^{-1}\mathbf{A}\mathbf{S}$ are $\widetilde A_{ik}=s^{k-i}A_{ik}$. The diagonal is unchanged, $\widetilde A_{ii}=A_{ii}=2/h^2$, and the entries beyond the neighboring diagonals stay zero. On the two neighboring diagonals, <span class="explanation-popover__equation">$\widetilde A_{i,i-1}=\frac{A_{i,i-1}}{s}=-\frac{1+\gamma}{h^2}\sqrt{\frac{1-\gamma}{1+\gamma}}=-\frac{\sqrt{1-\gamma^2}}{h^2},\qquad \widetilde A_{i-1,i}=s\,A_{i-1,i}=-\frac{1-\gamma}{h^2}\sqrt{\frac{1+\gamma}{1-\gamma}}=-\frac{\sqrt{1-\gamma^2}}{h^2}.$</span> The two are equal, so $\widetilde{\mathbf{A}}$ is symmetric. The rescaling makes the weight $1+\gamma$ of the upstream neighbor and the weight $1-\gamma$ of the downstream one meet at their geometric mean.</span></span>, with $2/h^2$ on its diagonal and $-\sqrt{1-\gamma^2}/h^2$ on both neighboring diagonals. The eigenvalues of $\mathbf{A}$ are therefore real, equal to $\bigl(2-2\sqrt{1-\gamma^2}\cos(k\pi/(d+1))\bigr)/h^2$ for $k=1,\dots,d$. The eigenvectors of $\mathbf{A}$, however, are those of $\widetilde{\mathbf{A}}$ with entry $i$ multiplied by $s^{i-1}$. They are all concentrated near the end of the grid toward which the flow goes, and they are far from orthogonal. A product costs $O(d)$ operations, as for $-u''$.
+* **Jacobians of dynamical systems.** A system that evolves by $\dot{\mathbf{x}}=F(\mathbf{x})$, for a map $F:\mathbb{R}^d\to\mathbb{R}^d$, is at rest at a point $\mathbf{x}^\star$ where $F(\mathbf{x}^\star)=0$. A small perturbation $\mathbf{y}=\mathbf{x}-\mathbf{x}^\star$ then evolves approximately by $\dot{\mathbf{y}}=\mathbf{J}\mathbf{y}$, where $\mathbf{J}$ is the Jacobian of $F$ at $\mathbf{x}^\star$, with entries $J_{ij}=\partial F_i(\mathbf{x}^\star)/\partial x_j$, because $F(\mathbf{x}^\star+\mathbf{y})\approx\mathbf{J}\mathbf{y}$ to first order. If $\mathbf{J}$ has a basis of eigenvectors, $\mathbf{J}\mathbf{v}=\lambda\mathbf{v}$, the solution is a combination of the terms $e^{\lambda t}\mathbf{v}$, which decay when the real part of $\lambda$ is negative and grow when it is positive. The equilibrium is therefore stable when every eigenvalue has a negative real part, and the eigenvalues with the largest real part decide. The matrix $\mathbf{J}$ is not symmetric in general. A product with it is a directional derivative, $\mathbf{J}\mathbf{x}=\frac{d}{d\varepsilon}F(\mathbf{x}^\star+\varepsilon\mathbf{x})\big|_{\varepsilon=0}$, which forward-mode automatic differentiation computes at the cost of a few evaluations of $F$. In machine learning, simultaneous gradient steps on the two players of a game, such as the generator and the discriminator of a generative adversarial network (GAN), follow such a vector field, and eigenvalues of its Jacobian with large imaginary parts make the iterates circle around an equilibrium rather than approach it ([Mescheder et al., 2017](#ref-mescheder2017)). The simplest case is $\min_\theta\max_\phi\theta\phi$, where $\dot\theta=-\phi$ and $\dot\phi=\theta$, so that $\mathbf{J}=\left[\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\right]$, whose eigenvalues $\pm i$ describe a pure rotation.
 
 <figure class="article-figure article-figure-wide" id="figure-directed-graph">
   <img src="/images/blog/matrix-vector-products/directed-graph.svg" width="1200" height="860" alt="Four panels on a random walk. Top left: a directed graph with three groups of twenty nodes on the corners of a triangle, with most edges going from each group to the next, counterclockwise. Top right: its transition matrix, with three dense blocks above the block diagonal and in the bottom-left corner. Bottom left: the probability of each group over thirty steps, oscillating with period three and settling at one third. Bottom right: the eigenvalues in the complex plane, with the eigenvalue 1, a complex pair of modulus 0.81 at angles plus and minus 119 degrees, and the others within radius 0.45." loading="lazy" />
-  <figcaption><strong>Figure 8.</strong> The random walk on a directed graph used in this section (<a href="#51-nonsymmetric-matrices-known-through-their-products">Section 5.1</a>). (a) The graph: 60 nodes in three groups of 20, <span style="color:#0d9488">teal</span>, <span style="color:#ca8a04">gold</span> and <span style="color:#db2777">pink</span>, arranged in the cycle 1 → 2 → 3 → 1 that the large arrows show. Every node has five outgoing edges, four to random nodes of the next group and one to a random node anywhere else. The 259 edges that end in the next group are drawn in the color of the group they leave, and the other 41 in <span style="color:#27322f">black</span> (<span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>). (b) The transition matrix $\mathbf P$, with rows and columns ordered by group and $P_{ij}=1/5$ for every edge $i\to j$: the edges into the next group fill three colored blocks, and the other edges are the scattered <span style="color:#27322f">black</span> entries. (c) The probability of each group under the distribution $\mathbf p_k=(\mathbf P^\top)^k\mathbf p_0$ of the walker, started uniformly on group 1. It circulates through the groups with period three and settles at the stationary values 0.335, 0.331 and 0.334, close to $1/3$ (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>). Between steps 10 and 30, the largest gap to these values shrinks by a factor of 0.80 per step. (d) The eigenvalues of $\mathbf P$ in the complex plane, all inside the unit circle (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>). The eigenvalue 1 has the eigenvector $\mathbf 1$ for $\mathbf P$, and the stationary distribution for $\mathbf P^\top$. The pair $\lambda_2,\bar\lambda_2=0.81\,e^{\pm i\,119^\circ}$ produces the circulation of panel (c), a third of a turn per step damped by the factor 0.81. The other 57 eigenvalues have modulus below 0.45.</figcaption>
+  <figcaption><strong>Figure 8.</strong> The random walk on a directed graph used in this section (<a href="#51-nonsymmetric-matrices-known-through-their-products">Section 5.1</a>). (a) The graph: 60 nodes in three groups of 20, <span style="color:#0d9488">teal</span>, <span style="color:#ca8a04">gold</span> and <span style="color:#db2777">pink</span>, arranged in the cycle 1 → 2 → 3 → 1 that the large arrows show. Every node has five outgoing edges: four to distinct nodes of the next group, and one to a node anywhere else, other than itself and these four, all drawn uniformly at random. The 259 edges that end in the next group are drawn in the color of the group they leave, and the other 41 in <span style="color:#27322f">black</span> (<span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>). (b) The transition matrix $\mathbf P$, with rows and columns ordered by group and $P_{ij}=1/5$ for every edge $i\to j$: the edges into the next group fill three colored blocks, and the other edges are the scattered <span style="color:#27322f">black</span> entries. (c) The probability of each group under the distribution $\mathbf p_k=(\mathbf P^\top)^k\mathbf p_0$ of the walker, started uniformly on group 1. It circulates through the groups with period three and settles at the stationary values 0.335, 0.331 and 0.334, close to $1/3$ (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>). Between steps 10 and 30, the largest gap to these values shrinks by a factor of 0.80 per step. (d) The eigenvalues of $\mathbf P$ in the complex plane, all inside the unit circle (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>). The eigenvalue 1 has the eigenvector $\mathbf 1$ for $\mathbf P$, and the stationary distribution for $\mathbf P^\top$. The pair $\lambda_2,\bar\lambda_2=0.81\,e^{\pm i\,119^\circ}$ produces the circulation of panel (c), a third of a turn per step damped by the factor 0.81. The other 57 eigenvalues have modulus below 0.45.</figcaption>
 </figure>
 
-The figures of this section use a random walk on a graph with three groups of 20 nodes arranged in a cycle, shown in [Figure 8](#figure-directed-graph) below. Every node has five outgoing edges, four to random nodes of the next group and one to a random node anywhere else, and the walk follows one of them, chosen uniformly. The walk therefore tends to move from group 1 to group 2, then to group 3, and back to group 1. Started in group 1, its distribution circulates through the groups while it settles (panel c), and the eigenvalues explain how. If $\mathbf{P}^\top$ has a basis of eigenvectors, the distribution expands as
+The figures of this section use a random walk on a graph with three groups of 20 nodes arranged in a cycle, shown in [Figure 8](#figure-directed-graph) below. Every node has five outgoing edges, four to distinct nodes of the next group and one to another node anywhere, all drawn uniformly at random, and the walk follows one of them, chosen uniformly. The walk therefore tends to move from group 1 to group 2, then to group 3, and back to group 1. Started in group 1, its distribution circulates through the groups while it settles (panel c), and the eigenvalues explain how. If $\mathbf{P}^\top$ has a basis of eigenvectors, the distribution expands as
 
 $$
 \mathbf{p}_k=\boldsymbol{\pi}+c\,\lambda_2^k\,\mathbf{w}+\bar c\,\bar\lambda_2^k\,\bar{\mathbf{w}}+\cdots=\boldsymbol{\pi}+2\operatorname{Re}\bigl(c\,\lambda_2^k\,\mathbf{w}\bigr)+\cdots,
@@ -2185,21 +2000,25 @@ where $\mathbf{P}^\top\mathbf{w}=\lambda_2\mathbf{w}$, the number $c$ depends on
 
 **Power iteration without symmetry.** The iteration $\mathbf{v}_{k+1}=\mathbf{A}\mathbf{v}_k/\|\mathbf{A}\mathbf{v}_k\|$ of [Section 3](#3-power-iteration) needs no symmetry. For $\mathbf{A}=\mathbf{P}^\top$ started from a distribution, it is the walk itself, rescaled: $\mathbf{v}_k=\mathbf{p}_k/\|\mathbf{p}_k\|$. When a single real eigenvalue $\lambda_1$ has the largest modulus, as $1$ does here, the expansion above shows that the iterates approach its eigenvector, with an error that shrinks like $(|\lambda_2|/|\lambda_1|)^k$. Two features of [Section 3](#3-power-iteration) are lost. The Rayleigh quotient $\mathbf{v}_k^\top\mathbf{A}\mathbf{v}_k$ converges at that same rate, not at its square as in [Theorem 1](#32-theorem-1-rate-of-convergence), because the error of the iterate is no longer orthogonal to the eigenvector. And the next eigenvalues can form a conjugate pair of equal modulus, which defeats power iteration in the way the opposite eigenvalues of [Remark 5](#remark-5-failure-for-opposite-eigenvalues-of-equal-dominant-magnitude) do. Once the eigenvector of $1$ is deflated, the pair dominates, and the iterates keep turning in the real plane that carries $\lambda_2$ and $\bar\lambda_2$, without settling on a direction. Panel (b) of [Figure 9](#figure-arnoldi) below shows both effects, and the Arnoldi method removes them.
 
-### 5.2 How the method works
+### 5.2 How the Arnoldi method works
 
-> <span class="article-kicker article-kicker--theorem">The idea</span> The Arnoldi method runs the Gram–Schmidt process on the Krylov subspace 
-> $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)=\bigl\{p(\mathbf{A})\mathbf{q}_1:p\text{ is a polynomial of degree at most }m-1\bigr\}$, one matrix–vector product per step, exactly as the Lanczos method does, but for a matrix that need not be symmetric. 
+> <span class="article-kicker article-kicker--theorem">The idea</span> The Arnoldi method runs the [Gram–Schmidt process](#42-the-gramschmidt-process) on the Krylov subspace 
+> $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^{m-1}\mathbf{q}_1\}=\bigl\{p(\mathbf{A})\mathbf{q}_1:p\text{ is a polynomial of degree at most }m-1\bigr\}$, one matrix–vector product per step, exactly as the Lanczos method does, but for a matrix that need not be symmetric. 
 > Without symmetry, no coefficient vanishes for free: each step removes the components of the new vector along all the previous basis vectors. The coefficients fill a small upper Hessenberg matrix, and its eigenvalues, real or complex, approximate eigenvalues of $\mathbf{A}$.
 
-After $m-1$ products, the Krylov subspace contains every vector $p(\mathbf{A})\mathbf{q}_1$ with $p$ of degree at most $m-1$, whatever $\mathbf{A}$ is. To search it, we again need an orthonormal basis $\mathbf{q}_1,\dots,\mathbf{q}_m$, the columns of $\mathbf{Q}_m$, and the coordinates of $\mathbf{A}\mathbf{q}_j$ in that basis, which form the matrix $\mathbf{H}_m=\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m$ with entries $(\mathbf{H}_m)_{ij}=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j$. The search itself changes. Without symmetry, the eigenvalues are no longer the extreme values of the Rayleigh quotient, so we look instead for a vector $\mathbf{x}=\mathbf{Q}_m\mathbf{y}$ of the subspace and a number $\vartheta$ whose residual $\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}$ is orthogonal to the subspace. An exact eigenpair satisfies this condition, since its residual is zero. Multiplying the residual by $\mathbf{Q}_m^\top$ turns this condition into $\mathbf{H}_m\mathbf{y}=\vartheta\mathbf{y}$, an $m\times m$ eigenvalue problem. Gram–Schmidt on $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\mathbf{A}^2\mathbf{q}_1,\dots$ computes the basis and the matrix $\mathbf{H}_m$ together, and its first steps, compared with those of [Section 4.2](#42-how-the-method-works), show what symmetry was providing. The colors are those of [Section 4.2](#42-how-the-method-works): a <span style="color:#7c3aed">purple</span> coefficient is computed by an inner product at the current step, a <span style="color:#16a34a">green</span> one is the length of the new direction, and a <span style="color:#7d8783">grey</span> one vanishes.
+After $m-1$ products, the Krylov subspace contains every vector $p(\mathbf{A})\mathbf{q}_1$ with $p$ of degree at most $m-1$, whatever $\mathbf{A}$ is. To search it, we again need an orthonormal basis $\mathbf{q}_1,\dots,\mathbf{q}_m$, the columns of $\mathbf{Q}_m$, and the coordinates of $\mathbf{A}\mathbf{q}_j$ in that basis, which form the matrix $\mathbf{H}_m=\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m$ with entries $(\mathbf{H}_m)_{ij}=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j$. The search itself changes. Without symmetry, the eigenvalues are no longer the extreme values of the Rayleigh quotient, so we look instead for a vector $\mathbf{x}=\mathbf{Q}_m\mathbf{y}$ of the subspace and a number $\vartheta$ whose residual $\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}$ is orthogonal to the subspace. An exact eigenpair satisfies this condition, since its residual is zero. Multiplying the residual by $\mathbf{Q}_m^\top$ turns this condition into $\mathbf{H}_m\mathbf{y}=\vartheta\mathbf{y}$, an $m\times m$ eigenvalue problem. Gram–Schmidt on $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\mathbf{A}^2\mathbf{q}_1,\dots$ computes the basis and the matrix $\mathbf{H}_m$ together, and its first steps, compared with those of [Section 4.3](#43-how-the-lanczos-method-works), show what symmetry was providing. The colors are those of [Section 4.3](#43-how-the-lanczos-method-works): a <span style="color:#7c3aed">purple</span> coefficient is computed by an inner product at the current step, a <span style="color:#16a34a">green</span> one is the length of the new direction, and a <span style="color:#7d8783">grey</span> one vanishes.
 
-**Step 1: Gram–Schmidt on $\mathcal{K}_2(\mathbf{A},\mathbf{q}_1)$.** The unit vector $\mathbf{q}_1$ spans $\mathcal{K}_1(\mathbf{A},\mathbf{q}_1)$. The first product gives $\mathbf{A}\mathbf{q}_1$, and Gram–Schmidt removes its component $\textcolor{#7c3aed}{h_{11}}=\mathbf{q}_1^\top\mathbf{A}\mathbf{q}_1$ along $\mathbf{q}_1$ and divides the rest by its length $\textcolor{#16a34a}{h_{21}}$. This is Step 1 of [Section 4.2](#42-how-the-method-works), where these numbers were called $\alpha_1$ and $\beta_1$:
+**Step 0: Gram–Schmidt on $\mathcal{K}_1(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1\}$.** There is nothing to do, as in Step 0 of [Section 4.3](#43-how-the-lanczos-method-works): the unit vector $\mathbf{q}_1$ is an orthonormal basis of $\mathcal{K}_1(\mathbf{A},\mathbf{q}_1)$.
+
+**Step 1: Gram–Schmidt on $\mathcal{K}_2(\mathbf{A},\mathbf{q}_1)$.** The first product gives $\mathbf{A}\mathbf{q}_1$, and Gram–Schmidt removes its component $\textcolor{#7c3aed}{h_{11}}=\mathbf{q}_1^\top\mathbf{A}\mathbf{q}_1$ along $\mathbf{q}_1$ and divides the remainder $\mathbf{r}_1=\mathbf{A}\mathbf{q}_1-h_{11}\mathbf{q}_1$ by its length $\textcolor{#16a34a}{h_{21}}=\|\mathbf{r}_1\|$. This is Step 1 of [Section 4.3](#43-how-the-lanczos-method-works), where these numbers were called $\alpha_1$ and $\beta_1$:
 
 $$
-\mathbf{A}\mathbf{q}_1=\textcolor{#7c3aed}{h_{11}\mathbf{q}_1}+\textcolor{#16a34a}{h_{21}\mathbf{q}_2}.
+\mathbf{A}\mathbf{q}_1=\textcolor{#7c3aed}{h_{11}\mathbf{q}_1}+\textcolor{#16a34a}{h_{21}\mathbf{q}_2},
+\qquad
+\mathbf{q}_2=\frac{\mathbf{r}_1}{h_{21}}=\frac{\mathbf{A}-h_{11}\mathbb{I}_d}{h_{21}}\,\mathbf{q}_1 .
 $$
 
-**Step 2: Gram–Schmidt on $\mathcal{K}_3(\mathbf{A},\mathbf{q}_1)$.** The second product gives $\mathbf{A}\mathbf{q}_2$, which brings the same new direction as $\mathbf{A}^2\mathbf{q}_1$, by the argument of Step 2 of [Section 4.2](#42-how-the-method-works), which used no symmetry. Its component along $\mathbf{q}_1$ is where the two methods part. For a symmetric matrix, this component was $(\mathbf{A}\mathbf{q}_1)^\top\mathbf{q}_2=\beta_1$, the length found in Step 1. In general,
+**Step 2: Gram–Schmidt on $\mathcal{K}_3(\mathbf{A},\mathbf{q}_1)$.** The second product gives $\mathbf{A}\mathbf{q}_2$, which brings the same new direction as $\mathbf{A}^2\mathbf{q}_1$, by the argument of Step 2 of [Section 4.3](#43-how-the-lanczos-method-works), which used no symmetry. Its component along $\mathbf{q}_1$ is where the two methods part. For a symmetric matrix, this component was $(\mathbf{A}\mathbf{q}_1)^\top\mathbf{q}_2=\beta_1$, the length found in Step 1. In general,
 
 $$
 \mathbf{q}_1^\top\mathbf{A}\mathbf{q}_2=(\mathbf{A}^\top\mathbf{q}_1)^\top\mathbf{q}_2,
@@ -2211,7 +2030,9 @@ $$
 \mathbf{A}\mathbf{q}_2=\textcolor{#7c3aed}{h_{12}\mathbf{q}_1}+\textcolor{#7c3aed}{h_{22}\mathbf{q}_2}+\textcolor{#16a34a}{h_{32}\mathbf{q}_3}.
 $$
 
-**Step 3: Gram–Schmidt on $\mathcal{K}_4(\mathbf{A},\mathbf{q}_1)$.** The third product gives $\mathbf{A}\mathbf{q}_3$. In [Section 4.2](#42-how-the-method-works), its component along $\mathbf{q}_1$ vanished because $\mathbf{q}_1^\top\mathbf{A}\mathbf{q}_3=(\mathbf{A}\mathbf{q}_1)^\top\mathbf{q}_3=0$. Here this component is $(\mathbf{A}^\top\mathbf{q}_1)^\top\mathbf{q}_3$, nonzero in general, and all three components have to be computed and removed:
+The coefficients found so far give $\mathbf{H}_2=\mathbf{Q}_2^\top\mathbf{A}\mathbf{Q}_2=\left[\begin{smallmatrix}h_{11}&h_{12}\\h_{21}&h_{22}\end{smallmatrix}\right]$, which has the shape of $\mathbf{T}_2$ in [Section 4.3](#43-how-the-lanczos-method-works), except that its entry $h_{12}$ above the diagonal is a new number, not the length $h_{21}$ found in Step 1.
+
+**Step 3: Gram–Schmidt on $\mathcal{K}_4(\mathbf{A},\mathbf{q}_1)$.** The third product gives $\mathbf{A}\mathbf{q}_3$. In [Section 4.3](#43-how-the-lanczos-method-works), its component along $\mathbf{q}_1$ vanished because $\mathbf{q}_1^\top\mathbf{A}\mathbf{q}_3=(\mathbf{A}\mathbf{q}_1)^\top\mathbf{q}_3=0$. Here this component is $(\mathbf{A}^\top\mathbf{q}_1)^\top\mathbf{q}_3$, nonzero in general, and all three components have to be computed and removed:
 
 $$
 \mathbf{A}\mathbf{q}_3=\textcolor{#7c3aed}{h_{13}\mathbf{q}_1}+\textcolor{#7c3aed}{h_{23}\mathbf{q}_2}+\textcolor{#7c3aed}{h_{33}\mathbf{q}_3}+\textcolor{#16a34a}{h_{43}\mathbf{q}_4}.
@@ -2235,7 +2056,15 @@ $$
 
 In $\mathbf{T}_3$, symmetry made each entry above the diagonal either a length already found (<span style="color:#ea580c">orange</span>) or zero (<span style="color:#7d8783">grey</span>). In $\mathbf{H}_3$, these entries are new numbers (<span style="color:#7c3aed">purple</span>). The zeros below the first subdiagonal remain in both matrices, because they come from the nesting of Krylov subspaces. A matrix whose entries below the first subdiagonal are zero is called **upper Hessenberg**.
 
-**The general step.** At step $j$, the product $\mathbf{A}\mathbf{q}_j$ lies in $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}$, so it has no component beyond $\mathbf{q}_{j+1}$, while its components along all of $\mathbf{q}_1,\dots,\mathbf{q}_j$ have to be computed and removed:
+**The general step.** The same reasoning holds at every step $j\in\{1,2,3,\dots\}$, as long as the previous steps have produced $\mathbf{q}_j$, which for $j\ge2$ means that $h_{j,j-1}>0$. The product $\mathbf{A}\mathbf{q}_j$ lies in $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)=\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}$, because $\mathbf{q}_j\in\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, so it has no component beyond $\mathbf{q}_{j+1}$. Its components $\textcolor{#7c3aed}{h_{ij}}=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j$ along all of $\mathbf{q}_1,\dots,\mathbf{q}_j$, on the other hand, have to be computed and removed. What remains is orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_j$, and when its length $\textcolor{#16a34a}{h_{j+1,j}}$ is positive, dividing by it gives the next basis vector:
+
+$$
+\mathbf{r}_j=\mathbf{A}\mathbf{q}_j\textcolor{#7c3aed}{-\sum_{i=1}^jh_{ij}\mathbf{q}_i}=\textcolor{#16a34a}{h_{j+1,j}\mathbf{q}_{j+1}},
+\qquad
+\textcolor{#16a34a}{h_{j+1,j}}=\|\mathbf{r}_j\| .
+$$
+
+Step $j$ of [Definition 3](#53-definition-3-arnoldi-recurrence-and-exact-breakdown) below is therefore the following Gram–Schmidt step.
 
 $$
 \mathbf{q}_j
@@ -2247,17 +2076,35 @@ $$
 \textcolor{#16a34a}{\mathbf{q}_{j+1}}.
 $$
 
-Step $j$ costs one product, $j$ inner products and $j$ vector updates, that is, $O(dj)$ operations besides the product, and every basis vector has to be kept. After $m$ steps, the method has used $m$ products, $O(dm^2)$ further operations and $O(dm)$ storage. This is the price of nonsymmetry. It equals the cost of the Lanczos method with full reorthogonalization ([Algorithm 2](#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks)), which subtracts all the components anyway, to protect orthogonality in floating-point arithmetic.
+Step $j$ costs one product, $j$ inner products and $j$ vector updates, that is, $O(dj)$ operations besides the product, and every basis vector has to be kept. After $m$ steps, the method has used $m$ products, $O(dm^2)$ further operations and $O(dm)$ storage. This is the price of nonsymmetry. It equals the cost of the Lanczos method with full reorthogonalization ([Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks)), which subtracts all the components anyway, to protect orthogonality in floating-point arithmetic.
 
-**Eigenvalues and eigenvectors from the coefficients.** Writing the relations $\mathbf{A}\mathbf{q}_j=\sum_{i=1}^{j+1}h_{ij}\mathbf{q}_i$ for $j=1,\dots,m$ as the columns of one matrix identity gives
+**Eigenvalues and eigenvectors from the coefficients.** Writing the relations $\mathbf{A}\mathbf{q}_j=\sum_{i=1}^{j+1}h_{ij}\mathbf{q}_i$ for $j=1,\dots,m$ as the columns of <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="arnoldi-matrix-identity" aria-label="Explain why the relations combine into this matrix identity">one matrix identity</button><span id="arnoldi-matrix-identity" class="explanation-popover" popover="auto" role="note" aria-label="Checking the Arnoldi matrix identity column by column" data-label="Derivation">Compare the columns. Column $j$ of $\mathbf{A}\mathbf{Q}_m$ is $\mathbf{A}\mathbf{q}_j$. Column $j$ of $\mathbf{Q}_m\mathbf{H}_m$ is $\mathbf{Q}_m$ times column $j$ of $\mathbf{H}_m$, whose nonzero entries are $h_{1j},\dots,h_{j+1,j}$, in rows $1$ to $j+1$. For $j<m$, it is therefore $\sum_{i=1}^{j+1}h_{ij}\mathbf{q}_i=\mathbf{A}\mathbf{q}_j$. The last column is the exception: $\mathbf{H}_m$ has no row $m+1$, so column $m$ of $\mathbf{Q}_m\mathbf{H}_m$ stops at $\sum_{i=1}^{m}h_{im}\mathbf{q}_i$ and misses the term $h_{m+1,m}\mathbf{q}_{m+1}$. The <span style="color:#16a34a">green matrix</span> $h_{m+1,m}\mathbf{q}_{m+1}\mathbf{e}_m^\top$ adds it back: its columns are zero except the last, which is $h_{m+1,m}\mathbf{q}_{m+1}$.</span></span> gives
 
 $$
 \mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{H}_m+\textcolor{#16a34a}{h_{m+1,m}\mathbf{q}_{m+1}\mathbf{e}_m^\top},
 $$
 
-the analogue of the Lanczos identity, with the same leak through the last basis vector. Every eigenpair $(\vartheta,\mathbf{y})$ of $\mathbf{H}_m$, with $\|\mathbf{y}\|=1$, gives a Ritz pair $(\vartheta,\mathbf{Q}_m\mathbf{y})$, and multiplying the identity by $\mathbf{y}$ shows again that the residual of the Ritz pair is the leak, of norm $\textcolor{#16a34a}{h_{m+1,m}|y_m|}$. Since $\mathbf{H}_m$ is a real matrix that is not symmetric, its eigenvalues can be complex, in conjugate pairs, which is how the method finds the complex eigenvalues of $\mathbf{A}$.
+the analogue of the Lanczos identity, with the same leak through the last basis vector. Every eigenpair $(\vartheta,\mathbf{y})$ of $\mathbf{H}_m$, with $\mathbf{y}\in\mathbb{C}^m$ and $\|\mathbf{y}\|=1$, gives a Ritz pair $(\vartheta,\mathbf{Q}_m\mathbf{y})$, as in [Section 4.3](#43-how-the-lanczos-method-works). Multiplying the identity by $\mathbf{y}$ gives
 
-The polynomial reading of [Section 4.2](#42-how-the-method-works) carries over. Up to the factor $h_{21}h_{32}\cdots h_{m+1,m}$, the vector $\mathbf{q}_{m+1}$ is what remains of $\mathbf{A}^m\mathbf{q}_1$ after removing its orthogonal projection onto $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, and the Ritz values at step $m$ are the roots of the monic polynomial $\pi_m$ of degree $m$ that makes $\|\pi(\mathbf{A})\mathbf{q}_1\|$ smallest ([Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination)). What changes is the size of $\|\pi(\mathbf{A})\mathbf{q}_1\|$. If $\mathbf{A}$ has a basis of eigenvectors and $\mathbf{q}_1=\sum_\lambda\mathbf{q}_\lambda$ with $\mathbf{A}\mathbf{q}_\lambda=\lambda\mathbf{q}_\lambda$, then $\pi(\mathbf{A})\mathbf{q}_1=\sum_\lambda\pi(\lambda)\,\mathbf{q}_\lambda$ as before, but the vectors $\mathbf{q}_\lambda$ are no longer orthogonal, so the norm is no longer $\bigl(\sum_\lambda|\pi(\lambda)|^2\|\mathbf{q}_\lambda\|^2\bigr)^{1/2}$. Large components can cancel, and a polynomial can make $\|\pi(\mathbf{A})\mathbf{q}_1\|$ small without being small at the eigenvalues. The Ritz values can then stay far from every eigenvalue until $m$ is large, and in panel (c) of [Figure 9](#figure-arnoldi) below they leave the real axis although every eigenvalue is real.
+$$
+\mathbf{A}\mathbf{Q}_m\mathbf{y}
+=\mathbf{Q}_m\mathbf{H}_m\mathbf{y}+h_{m+1,m}\mathbf{q}_{m+1}(\mathbf{e}_m^\top\mathbf{y})
+=\vartheta\,\mathbf{Q}_m\mathbf{y}+\textcolor{#16a34a}{h_{m+1,m}\,y_m\,\mathbf{q}_{m+1}},
+$$
+
+so the residual of the Ritz pair is again the leak, of norm $\textcolor{#16a34a}{h_{m+1,m}|y_m|}$. The matrix $\mathbf{H}_m$ is real but, in general, not symmetric, so its eigenvalues can be complex, in conjugate pairs, which is how the method finds the complex eigenvalues of $\mathbf{A}$.
+
+The polynomial reading of [Section 4.3](#43-how-the-lanczos-method-works) carries over, with one change. Its first two steps used no symmetry: the green term of $\mathbf{A}^m\mathbf{q}_1$ is now $h_{21}h_{32}\cdots h_{m+1,m}\,\mathbf{q}_{m+1}$, it has the smallest norm among the vectors $\pi(\mathbf{A})\mathbf{q}_1$ with $\pi$ monic of degree $m$, and the Ritz values at step $m$ are the roots of the minimizing polynomial $\pi_m$ ([Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination)). What changes is how $\|\pi(\mathbf{A})\mathbf{q}_1\|$ depends on the eigenvalues. Suppose that $\mathbf{A}=\mathbf{V}\mathbf{D}\mathbf{V}^{-1}$ as in [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) below, with the eigenvalues $\lambda_1,\dots,\lambda_d$ on the diagonal of $\mathbf{D}$, and write $\mathbf{q}_1=\mathbf{V}\mathbf{c}$. Then $\pi(\mathbf{A})\mathbf{q}_1=\mathbf{V}\pi(\mathbf{D})\mathbf{c}$, and since $\|\mathbf{z}\|=\|\mathbf{V}^{-1}\mathbf{V}\mathbf{z}\|\le\|\mathbf{V}^{-1}\|\,\|\mathbf{V}\mathbf{z}\|$ for every $\mathbf{z}$,
+
+$$
+\frac{\|\pi(\mathbf{D})\mathbf{c}\|}{\|\mathbf{V}^{-1}\|}
+\le\|\pi(\mathbf{A})\mathbf{q}_1\|
+\le\|\mathbf{V}\|\,\|\pi(\mathbf{D})\mathbf{c}\|,
+\qquad
+\|\pi(\mathbf{D})\mathbf{c}\|^2=\sum_{i=1}^d|\pi(\lambda_i)|^2\,|c_i|^2 .
+$$
+
+For a symmetric matrix, $\mathbf{V}$ can be chosen orthogonal, both factors equal $1$, and $\|\pi(\mathbf{A})\mathbf{q}_1\|$ is exactly the weighted sum over the eigenvalues of [Section 4.3](#43-how-the-lanczos-method-works). Otherwise, the two bounds differ by the factor $\kappa(\mathbf{V})=\|\mathbf{V}\|\,\|\mathbf{V}^{-1}\|$, which is large when the eigenvectors are nearly parallel. The terms $\pi(\lambda_i)c_i\mathbf{v}_i$ of $\pi(\mathbf{A})\mathbf{q}_1=\sum_{i=1}^d\pi(\lambda_i)c_i\mathbf{v}_i$, where $\mathbf{v}_i$ is column $i$ of $\mathbf{V}$, can then cancel, and a polynomial can make $\|\pi(\mathbf{A})\mathbf{q}_1\|$ small without being small at the eigenvalues that $\mathbf{q}_1$ contains. The Ritz values can then stay far from every eigenvalue until $m$ is large, and in panel (c) of [Figure 9](#figure-arnoldi) below they leave the real axis although every eigenvalue is real.
 
 ### 5.3 Definition 3 [Arnoldi recurrence and exact breakdown]
 
@@ -2271,7 +2118,7 @@ h_{j+1,j}&=\|\mathbf{r}_j\| .
 \end{aligned}
 $$
 
-If $h_{j+1,j}>0$, define $\mathbf{q}_{j+1}=\mathbf{r}_j/h_{j+1,j}$ and continue. If $h_{j+1,j}=0$, stop the run, an **exact breakdown** as in [Definition 2](#44-definition-2-lanczos-recurrence-and-exact-breakdown). For $m\ge1$, $\mathbf{H}_m\in\mathbb{R}^{m\times m}$ is the matrix with entries $(\mathbf{H}_m)_{ij}=h_{ij}$ for $i\le j+1$ and $(\mathbf{H}_m)_{ij}=0$ for $i>j+1$.
+If $h_{j+1,j}>0$, define $\mathbf{q}_{j+1}=\mathbf{r}_j/h_{j+1,j}$ and continue. If $h_{j+1,j}=0$, stop the run, an **exact breakdown** as in [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown). For $m\ge1$, $\mathbf{H}_m\in\mathbb{R}^{m\times m}$ is the matrix with entries $(\mathbf{H}_m)_{ij}=h_{ij}$ for $i\le j+1$ and $(\mathbf{H}_m)_{ij}=0$ for $i>j+1$.
 
 $$
 \begin{array}{r}
@@ -2279,7 +2126,7 @@ $$
 \end{array}
 $$
 
-The coefficients can equally be computed one at a time: starting from $\mathbf{w}=\mathbf{A}\mathbf{q}_j$, compute $h_{ij}=\mathbf{q}_i^\top\mathbf{w}$ and update $\mathbf{w}\leftarrow\mathbf{w}-h_{ij}\mathbf{q}_i$ for $i=1,\dots,j$. This is the modified Gram–Schmidt process. Each update leaves the inner products of $\mathbf{w}$ with the other basis vectors unchanged, since the basis vectors are orthogonal, so in exact arithmetic both orders give the same numbers. In floating-point arithmetic, the one-at-a-time order loses less orthogonality, and implementations repeat the subtraction when needed, as in [Algorithm 2](#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks).
+The coefficients can equally be computed one at a time: starting from $\mathbf{w}=\mathbf{A}\mathbf{q}_j$, compute $h_{ij}=\mathbf{q}_i^\top\mathbf{w}$ and update $\mathbf{w}\leftarrow\mathbf{w}-h_{ij}\mathbf{q}_i$ for $i=1,\dots,j$. This is the modified Gram–Schmidt process. Each update leaves the inner products of $\mathbf{w}$ with the other basis vectors unchanged, since the basis vectors are orthogonal, so in exact arithmetic both orders give the same numbers. In floating-point arithmetic, the one-at-a-time order loses less orthogonality, and implementations repeat the subtraction when needed, as in [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks).
 
 ### 5.4 Lemma 6 [Orthogonality and Hessenberg projection]
 
@@ -2301,7 +2148,7 @@ $$
 \mathbf{H}_m=\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m .
 $$
 
-If $\mathbf{A}$ is symmetric, then $\mathbf{H}_m$ is the symmetric tridiagonal matrix $\mathbf{T}_m$ of [Lemma 3](#45-lemma-3-orthogonality-and-tridiagonal-projection), and the Arnoldi vectors are the Lanczos vectors.
+If $\mathbf{A}$ is symmetric, then $\mathbf{H}_m$ is the symmetric tridiagonal matrix $\mathbf{T}_m$ of [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection), and the Arnoldi vectors are the Lanczos vectors.
 
 #### Remark 17 [Where the zeros of the projected matrix come from]
 
@@ -2309,19 +2156,19 @@ The zeros of $\mathbf{T}_m$ have two sources. Those below the first subdiagonal 
 
 #### Proof
 
-**Orthogonality.** Suppose that $\mathbf{q}_1,\dots,\mathbf{q}_j$ are orthonormal. For each $i\le j$,
+**Orthogonality.** We argue by induction, as for [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection). The initial vector is normalized by assumption. Suppose that $\mathbf{q}_1,\dots,\mathbf{q}_j$ are orthonormal. For each $i\le j$, by the definition of $h_{ij}$ and since $\mathbf{q}_i^\top\mathbf{q}_l=\delta_{il}$,
 
 $$
 \mathbf{q}_i^\top\mathbf{r}_j=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j-\sum_{l=1}^jh_{lj}\,\mathbf{q}_i^\top\mathbf{q}_l=h_{ij}-h_{ij}=0 .
 $$
 
-Thus $\mathbf{r}_j$ is orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_j$, and if $h_{j+1,j}>0$, normalizing it extends the orthonormal family. Unlike the proof of [Lemma 3](#45-lemma-3-orthogonality-and-tridiagonal-projection), this one needs no symmetry, because every component is removed explicitly.
+Thus $\mathbf{r}_j$ is orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_j$, and if $h_{j+1,j}>0$, normalizing it extends the orthonormal family. Unlike the proof of [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection), this one needs no symmetry, because every component is removed explicitly.
 
-**Krylov subspaces.** The identity holds at $m=1$. Suppose that $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_j\}=\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ and $h_{j+1,j}>0$. The vector $\mathbf{q}_{j+1}$ is a combination of $\mathbf{A}\mathbf{q}_j$ and $\mathbf{q}_1,\dots,\mathbf{q}_j$, all of which lie in $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$, since $\mathbf{q}_j\in\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ and $\mathbf{A}$ maps $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ into $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$. Hence $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}\subseteq\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$. The left-hand side has dimension $j+1$, because its spanning vectors are orthonormal, and the right-hand side is spanned by $j+1$ vectors, so the two spaces are equal.
+**Krylov subspaces.** We prove $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_m\}=\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ by induction on $m$. It holds at $m=1$, since both sides equal $\operatorname{span}\{\mathbf{q}_1\}$. Suppose that it holds at $m=j$ and that $h_{j+1,j}>0$. The vector $\mathbf{q}_{j+1}$ is a combination of $\mathbf{A}\mathbf{q}_j$ and $\mathbf{q}_1,\dots,\mathbf{q}_j$, all of which lie in $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$, since $\mathbf{q}_j\in\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ and $\mathbf{A}$ maps $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$ into $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$. Hence $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}\subseteq\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$. The left-hand side has dimension $j+1$, because its spanning vectors are orthonormal, and the right-hand side is spanned by $j+1$ vectors, so the two spaces are equal.
 
 **Matrix identity.** The definition of $\mathbf{r}_j$ gives $\mathbf{A}\mathbf{q}_j=\sum_{i=1}^jh_{ij}\mathbf{q}_i+\mathbf{r}_j$, where $\mathbf{r}_j=h_{j+1,j}\mathbf{q}_{j+1}$ for $j<m$. These identities, for $j=1,\dots,m$, are the columns of $\mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{H}_m+\mathbf{r}_m\mathbf{e}_m^\top$. Multiplying on the left by $\mathbf{Q}_m^\top$, and using $\mathbf{Q}_m^\top\mathbf{Q}_m=\mathbb{I}_m$ and $\mathbf{Q}_m^\top\mathbf{r}_m=0$ from the orthogonality part, gives $\mathbf{H}_m=\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m$.
 
-**The symmetric case.** If $\mathbf{A}$ is symmetric, then so is $\mathbf{H}_m=\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m$. Its entries below the first subdiagonal vanish, so by symmetry its entries above the first superdiagonal vanish too, and $h_{j-1,j}=h_{j,j-1}$. Step $j$ therefore subtracts only $h_{j,j-1}\mathbf{q}_{j-1}$ and $h_{jj}\mathbf{q}_j$ from $\mathbf{A}\mathbf{q}_j$, which is the Lanczos step of [Definition 2](#44-definition-2-lanczos-recurrence-and-exact-breakdown) with $\alpha_j=h_{jj}$ and $\beta_{j-1}=h_{j,j-1}$. By induction on $j$, both methods produce the same vectors and the same coefficients, and $\mathbf{H}_m=\mathbf{T}_m$.
+**The symmetric case.** If $\mathbf{A}$ is symmetric, then so is $\mathbf{H}_m=\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m$. Its entries below the first subdiagonal vanish, so by symmetry its entries above the first superdiagonal vanish too, and $h_{j-1,j}=h_{j,j-1}$. Step $j$ therefore subtracts only $h_{j,j-1}\mathbf{q}_{j-1}$ and $h_{jj}\mathbf{q}_j$ from $\mathbf{A}\mathbf{q}_j$, which is the Lanczos step of [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown) with $\alpha_j=h_{jj}$ and $\beta_{j-1}=h_{j,j-1}$. By induction on $j$, both methods produce the same vectors and the same coefficients, and $\mathbf{H}_m=\mathbf{T}_m$.
 
 $$
 \begin{array}{r}
@@ -2348,7 +2195,7 @@ Suppose that the run has reached iteration $m$, that is, $h_{j+1,j}>0$ for $1\le
    \pi_m(\mathbf{A})\mathbf{q}_1=h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .
    $$
    The Ritz values at step $m$ are the roots of $\pi_m$.
-3. **Exact termination.** Let $\mu$ be the monic polynomial of smallest degree $s$ such that $\mu(\mathbf{A})\mathbf{q}_1=0$, called the minimal polynomial of $\mathbf{q}_1$. A run reaches iteration $s$ and breaks down there: $h_{j+1,j}>0$ for $j<s$, and $h_{s+1,s}=0$. At termination,
+3. **Exact termination.** Let $\mu$ be the monic polynomial of smallest degree $s$ such that $\mu(\mathbf{A})\mathbf{q}_1=0$, called the minimal polynomial of $\mathbf{q}_1$. A run reaches iteration $s$ and breaks down there: $h_{j+1,j}>0$ for $j<s$, and $h_{s+1,s}=0$. Moreover, at termination,
    $$
    \mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{H}_s,
    \qquad
@@ -2362,7 +2209,7 @@ Suppose that the run has reached iteration $m$, that is, $h_{j+1,j}>0$ for $1\le
    \qquad
    s=|\Lambda_1|,
    $$
-   as in [Proposition 3](#48-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run).
+   as in [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run).
 
 #### Remark 18 [Ritz values lie in the field of values]
 
@@ -2372,11 +2219,11 @@ $$
 W(\mathbf{A})=\bigl\{\mathbf{x}^*\mathbf{A}\mathbf{x}:\mathbf{x}\in\mathbb{C}^d,\ \|\mathbf{x}\|=1\bigr\},
 $$
 
-which also contains every eigenvalue, since $\mathbf{x}^*\mathbf{A}\mathbf{x}=\lambda$ for a unit eigenvector $\mathbf{x}$. For a symmetric matrix, $W(\mathbf{A})$ is the interval $[\lambda_{\min}(\mathbf{A}),\lambda_{\max}(\mathbf{A})]$, and the Ritz values stay between the extreme eigenvalues ([Lemma 5](#47-lemma-5-variational-characterization-and-monotonicity)). For a nonsymmetric matrix, $W(\mathbf{A})$ is a convex region of the complex plane that can be much larger than the smallest convex set containing the eigenvalues, and the Ritz values can lie anywhere in it. In panel (c) of [Figure 9](#figure-arnoldi) below, every eigenvalue is real, but the field of values is an oval around them, and the Ritz values spread over it.
+which also contains every eigenvalue, since $\mathbf{x}^*\mathbf{A}\mathbf{x}=\lambda$ for a unit eigenvector $\mathbf{x}$. For a symmetric matrix, $W(\mathbf{A})$ is the interval $[\lambda_{\min}(\mathbf{A}),\lambda_{\max}(\mathbf{A})]$, and the Ritz values stay between the extreme eigenvalues ([Lemma 5](#48-lemma-5-variational-characterization-and-monotonicity)). For a nonsymmetric matrix, $W(\mathbf{A})$ is a convex region of the complex plane that can be much larger than the smallest convex set containing the eigenvalues, and the Ritz values can lie anywhere in it. In panel (c) of [Figure 9](#figure-arnoldi) below, every eigenvalue is real, but the field of values is an oval around them, and the Ritz values spread over it.
 
 #### Proof
 
-**Ritz pairs.** As in the proof of [Lemma 4](#46-lemma-4-ritz-pairs-and-their-residuals), the orthonormality of the columns of $\mathbf{Q}_m$ gives $\|\mathbf{x}\|^2=\mathbf{y}^*\mathbf{Q}_m^\top\mathbf{Q}_m\mathbf{y}=\|\mathbf{y}\|^2=1$, and [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) gives $\mathbf{x}^*\mathbf{A}\mathbf{x}=\mathbf{y}^*\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m\mathbf{y}=\mathbf{y}^*\mathbf{H}_m\mathbf{y}=\vartheta$ and
+**Ritz pairs.** As in the proof of [Lemma 4](#47-lemma-4-ritz-pairs-and-their-residuals), the orthonormality of the columns of $\mathbf{Q}_m$ gives $\|\mathbf{x}\|^2=\mathbf{y}^*\mathbf{Q}_m^\top\mathbf{Q}_m\mathbf{y}=\|\mathbf{y}\|^2=1$, and [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) gives $\mathbf{x}^*\mathbf{A}\mathbf{x}=\mathbf{y}^*\mathbf{Q}_m^\top\mathbf{A}\mathbf{Q}_m\mathbf{y}=\mathbf{y}^*\mathbf{H}_m\mathbf{y}=\vartheta$ and
 
 $$
 \begin{aligned}
@@ -2397,7 +2244,7 @@ $$
 \mathbf{A}^m\mathbf{q}_1=\mathbf{Q}_m\mathbf{H}_m^m\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .
 $$
 
-Because $\mathbf{H}_m$ is upper Hessenberg, multiplying a vector by $\mathbf{H}_m$ moves its last nonzero entry down by at most one position. Hence $\mathbf{H}_m^k\mathbf{e}_1$ has nonzero entries only in its first $k+1$ positions, and its entry in position $k+1$ is the product $h_{21}h_{32}\cdots h_{k+1,k}$ of the subdiagonal entries met on the way. If $\mathbf{A}^k\mathbf{q}_1=\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1$ for some $k\le m-1$, then the identity of [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) gives
+Because $\mathbf{H}_m$ is upper Hessenberg, $h_{il}=0$ for $i>l+1$, so $(\mathbf{H}_m\mathbf{v})_i=\sum_{l\ge i-1}h_{il}v_l$ for every vector $\mathbf{v}\in\mathbb{C}^m$. If the last nonzero entry of $\mathbf{v}$ is in position $p$, this sum is zero for $i\ge p+2$, and for $i=p+1$ it reduces to $(\mathbf{H}_m\mathbf{v})_{p+1}=h_{p+1,p}\,v_p$: multiplying by $\mathbf{H}_m$ moves the last nonzero entry down by one position and multiplies it by a subdiagonal entry. Starting from $\mathbf{e}_1$, by induction on $k$, the vector $\mathbf{H}_m^k\mathbf{e}_1$ has nonzero entries only in its first $k+1$ positions, and its entry in position $k+1$ is the product $h_{21}h_{32}\cdots h_{k+1,k}$ of the subdiagonal entries met on the way. If $\mathbf{A}^k\mathbf{q}_1=\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1$ for some $k\le m-1$, then the identity of [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) gives
 
 $$
 \mathbf{A}^{k+1}\mathbf{q}_1=\mathbf{A}\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1=\mathbf{Q}_m\mathbf{H}_m^{k+1}\mathbf{e}_1+\mathbf{r}_m\,\bigl(\mathbf{e}_m^\top\mathbf{H}_m^k\mathbf{e}_1\bigr).
@@ -2405,10 +2252,15 @@ $$
 
 The last factor is the entry of $\mathbf{H}_m^k\mathbf{e}_1$ in position $m$. It vanishes for $k\le m-2$ and equals $h_{21}h_{32}\cdots h_{m,m-1}$ for $k=m-1$, which proves both identities by induction from $k=0$.
 
-Now let $\pi$ be a monic polynomial of degree $m$. Combining the identities term by term gives
+Now let $\pi(t)=t^m+\sum_{k=0}^{m-1}c_kt^k$ be a monic polynomial of degree $m$. Applying the two identities to each power gives
 
 $$
-\pi(\mathbf{A})\mathbf{q}_1=\mathbf{Q}_m\,\pi(\mathbf{H}_m)\,\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .
+\begin{aligned}
+\pi(\mathbf{A})\mathbf{q}_1
+&=\mathbf{A}^m\mathbf{q}_1+\sum_{k=0}^{m-1}c_k\mathbf{A}^k\mathbf{q}_1
+=\mathbf{Q}_m\mathbf{H}_m^m\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m+\sum_{k=0}^{m-1}c_k\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1\\
+&=\mathbf{Q}_m\,\pi(\mathbf{H}_m)\,\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .
+\end{aligned}
 $$
 
 For $\pi=\pi_m$, the Cayley–Hamilton theorem gives $\pi_m(\mathbf{H}_m)=0$, hence $\pi_m(\mathbf{A})\mathbf{q}_1=h_{21}\cdots h_{m,m-1}\,\mathbf{r}_m$, which is orthogonal to $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ by [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection). For any monic $\pi$ of degree $m$, the difference $\pi-\pi_m$ has degree at most $m-1$, so $(\pi-\pi_m)(\mathbf{A})\mathbf{q}_1$ lies in $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, and Pythagoras' theorem gives
@@ -2435,7 +2287,7 @@ $$
 \end{array}
 $$
 
-Item 2 also proves, for the Lanczos method, the statement of [Section 4.2](#42-how-the-method-works) that the Ritz values are the roots of the minimizing polynomial, since $\mathbf{H}_m=\mathbf{T}_m$ for a symmetric matrix ([Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection)). Without a basis of eigenvectors, $\mu$ can have repeated roots, and $\mathbf{H}_s$ then has them as repeated eigenvalues.
+Item 2 also proves, for the Lanczos method, the statement of [Section 4.3](#43-how-the-lanczos-method-works) that the Ritz values are the roots of the minimizing polynomial, since $\mathbf{H}_m=\mathbf{T}_m$ for a symmetric matrix ([Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection)). Without a basis of eigenvectors, $\mu$ can have repeated roots, and $\mathbf{H}_s$ then has them as repeated eigenvalues.
 
 ### 5.6 Lemma 7 [Residual certificate without symmetry]
 
@@ -2492,19 +2344,27 @@ For the convection–diffusion matrix of [Section 5.1](#51-nonsymmetric-matrices
 
 <figure class="article-figure article-figure-wide" id="figure-arnoldi">
   <img src="/images/blog/matrix-vector-products/arnoldi.svg" width="1200" height="860" alt="Four panels on the Arnoldi method. Top left: Ritz values of a random walk at steps 5, 10 and 20 in the complex plane, converging to the eigenvalue 1 and to a complex pair, inside the field of values. Top right: distance to the eigenvalue against matrix-vector products, where power iteration decreases slowly and the Arnoldi Ritz values reach rounding level by 40 products. Bottom left: Ritz values of a convection-diffusion matrix with real eigenvalues, spread off the real axis inside an oval field of values. Bottom right: a log-log scatter of distance against residual, blue points of the symmetric matrix all below the diagonal, orange points of the nonsymmetric one partly above it." loading="lazy" />
-  <figcaption><strong>Figure 9.</strong> The Arnoldi method on the two nonsymmetric matrices of <a href="#51-nonsymmetric-matrices-known-through-their-products">Section 5.1</a>. (a) The random walk of <a href="#figure-directed-graph">Figure 8</a>, through products with $\mathbf P^\top$: its eigenvalues (<span style="color:#7d8783">grey</span> dots), its field of values (<span style="color:#7d8783">grey</span> line, <a href="#remark-18-ritz-values-lie-in-the-field-of-values">Remark 18</a>), the unit circle (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>), and the Ritz values of one run at $m=5$, 10 and 20, colored from <span style="background:linear-gradient(90deg,#b0dd2f,#481d6f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent">light to dark</span>. At $m=5$, the Ritz values $0.75$ and $-0.23\pm0.51i$ already point to the eigenvalue 1 and to the pair $\lambda_2,\bar\lambda_2$. They are within $6\cdot10^{-4}$ and $3\cdot10^{-4}$ of them at $m=10$, and within $1.1\cdot10^{-8}$ and $5.7\cdot10^{-7}$ at $m=20$, while the other Ritz values lie among the remaining eigenvalues. (b) Distance to an eigenvalue against the number of products, as medians over 200 Gaussian starting vectors, with bands containing the middle half of the runs. The Rayleigh quotient of power iteration on $\mathbf P^\top$ (<span style="color:#ea580c">orange</span>) approaches 1 at the rate $|\lambda_2|=0.81$ per product (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dotted;text-decoration-thickness:0.12em;text-underline-offset:0.2em">dotted</span>), with a median error of $1.2\cdot10^{-3}$ after 20 products and $1.2\cdot10^{-5}$ after 40, and power iteration never approaches $\lambda_2$. After 20 products, the Ritz value nearest to 1 (<span style="color:#16a34a">green</span>) is within $4.4\cdot10^{-9}$ of it, and the one nearest to $\lambda_2$ (<span style="color:#16a34a">green</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>) within $4.4\cdot10^{-7}$. Both reach rounding level, about $10^{-15}$, by 40 products. (c) The convection–diffusion matrix with $d=40$ and $\gamma=0.2$, multiplied by $h^2$. Its eigenvalues are real, between 0.046 and 3.954 (<span style="color:#27322f">black</span> ticks), and its field of values (<span style="color:#7d8783">grey</span>) is an oval that reaches $\pm0.40\,i$. The Ritz values of one run at $m=10$, 20 and 30 (<span style="background:linear-gradient(90deg,#b0dd2f,#481d6f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent">light to dark</span>) are all real at $m=10$, but 14 of them at $m=20$ and 24 at $m=30$ are not, with imaginary parts up to $0.32$. (d) Distance from each Ritz value to the spectrum against its residual $\|\mathbf A\mathbf x-\vartheta\mathbf x\|$, for all the Ritz pairs of steps $m=1,\dots,30$ from 5 starting vectors, 2,325 pairs per matrix. For the symmetric matrix of $-u''$ ($\gamma=0$, <span style="color:#2563eb">blue</span>), every point lies below the diagonal, as <a href="#37-lemma-2-residual-certificate-for-an-approximate-eigenpair">Lemma 2</a> requires, and the largest ratio of distance to residual is 0.49. For convection–diffusion (<span style="color:#ea580c">orange</span>), 311 points lie above the diagonal, with distances up to 5.2 times the residual. <a href="#56-lemma-7-residual-certificate-without-symmetry">Lemma 7</a> holds, with $\kappa(\mathbf V)=s^{d-1}=2.7\cdot10^3$, but it overestimates every distance by a factor of at least 520. The inexpensive residual $h_{m+1,m}|y_m|$ of <a href="#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination">Proposition 5</a> agrees with the explicit one to a relative $2\cdot10^{-14}$.</figcaption>
+  <figcaption><strong>Figure 9.</strong> The Arnoldi method on the two nonsymmetric matrices of <a href="#51-nonsymmetric-matrices-known-through-their-products">Section 5.1</a>. (a) The random walk of <a href="#figure-directed-graph">Figure 8</a>, through products with $\mathbf P^\top$: its eigenvalues (<span style="color:#7d8783">grey</span> dots), its field of values (<span style="color:#7d8783">grey</span> line, <a href="#remark-18-ritz-values-lie-in-the-field-of-values">Remark 18</a>), the unit circle (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>), and the Ritz values of one run, from a Gaussian starting vector, at $m=5$, 10 and 20, colored from <span style="background:linear-gradient(90deg,#b0dd2f,#481d6f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent">light to dark</span>. At $m=5$, the Ritz values $0.75$ and $-0.23\pm0.51i$ already point to the eigenvalue 1 and to the pair $\lambda_2,\bar\lambda_2$. They are within $6\cdot10^{-4}$ and $3\cdot10^{-4}$ of them at $m=10$, and within $1.1\cdot10^{-8}$ and $5.7\cdot10^{-7}$ at $m=20$, while the other Ritz values lie among the remaining eigenvalues. (b) Distance to an eigenvalue against the number of products, as medians over 200 Gaussian starting vectors, with bands containing the middle half of the runs. The Rayleigh quotient of power iteration on $\mathbf P^\top$ (<span style="color:#ea580c">orange</span>) approaches 1 at the rate $|\lambda_2|=0.81$ per product (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dotted;text-decoration-thickness:0.12em;text-underline-offset:0.2em">dotted</span>), with a median error of $1.2\cdot10^{-3}$ after 20 products and $1.2\cdot10^{-5}$ after 40, and power iteration never approaches $\lambda_2$. After 20 products, the Ritz value nearest to 1 (<span style="color:#16a34a">green</span>) is within $4.4\cdot10^{-9}$ of it, and the one nearest to $\lambda_2$ (<span style="color:#16a34a">green</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>) within $4.4\cdot10^{-7}$. Both reach rounding level, about $10^{-15}$, by 40 products. (c) The convection–diffusion matrix with $d=40$ and $\gamma=0.2$, multiplied by $h^2$. Its eigenvalues are real, between 0.046 and 3.954 (<span style="color:#27322f">black</span> ticks), and its field of values (<span style="color:#7d8783">grey</span>) is an oval that reaches $\pm0.40\,i$. The Ritz values of one run, from a Gaussian starting vector, at $m=10$, 20 and 30 (<span style="background:linear-gradient(90deg,#b0dd2f,#481d6f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent">light to dark</span>) are all real at $m=10$, but 14 of them at $m=20$ and 24 at $m=30$ are not, with imaginary parts up to $0.32$. (d) Distance from each Ritz value to the spectrum against its residual $\|\mathbf A\mathbf x-\vartheta\mathbf x\|$, for all the Ritz pairs of steps $m=1,\dots,30$ from 5 Gaussian starting vectors, 2,325 pairs per matrix. For the symmetric matrix of $-u''$ ($\gamma=0$, <span style="color:#2563eb">blue</span>), every point lies below the diagonal, as <a href="#37-lemma-2-residual-certificate-for-an-approximate-eigenpair">Lemma 2</a> requires, and the largest ratio of distance to residual is 0.49. For convection–diffusion (<span style="color:#ea580c">orange</span>), 311 points lie above the diagonal, with distances up to 5.2 times the residual. <a href="#56-lemma-7-residual-certificate-without-symmetry">Lemma 7</a> holds, with $\kappa(\mathbf V)=s^{d-1}=2.7\cdot10^3$, but it overestimates every distance by a factor of at least 520. The inexpensive residual $h_{m+1,m}|y_m|$ of <a href="#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination">Proposition 5</a> agrees with the explicit one to a relative $2\cdot10^{-14}$.</figcaption>
 </figure>
 
 ### 5.7 Algorithm 3 [Arnoldi with reorthogonalization and residual checks]
 
-The procedure follows [Algorithm 2](#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks), with three differences: every component is removed, the small eigenvalue problem is not symmetric, and the residual certifies less.
+[Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination) recovers eigenvalues exactly, but only at an exact breakdown and in exact arithmetic. The algorithm below is its finite version. It follows [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks), with three differences.
+
+* **Every component is removed.** Step 3 subtracts the components along all the stored basis vectors, as [Definition 3](#53-definition-3-arnoldi-recurrence-and-exact-breakdown) requires, and repeating this subtraction once is the reorthogonalization. A step therefore costs the same as a step of [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks).
+* **The small eigenvalue problem is not symmetric.** The matrix $\mathbf{H}_m$ needs a dense eigensolver for nonsymmetric matrices, and its eigenpairs can be complex.
+* **The residual certifies less.** By [Remark 19](#remark-19-a-small-residual-far-from-the-spectrum), an accepted pair is an exact eigenpair of a matrix close to $\mathbf{A}$, but by [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry), its distance to the spectrum of $\mathbf{A}$ can exceed the residual by the factor $\kappa(\mathbf{V})$, which the run does not compute.
+
+The tolerances $\varepsilon_{\mathrm{abs}}>0$, $\varepsilon_{\mathrm{rel}}\ge0$ and $\tau>0$ play the same roles as in [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks). Step 5 accepts a candidate $(\widehat\lambda,\mathbf{x})$ when its residual $\mathbf{r}=\mathbf{A}\mathbf{x}-\widehat\lambda\mathbf{x}$ satisfies $\|\mathbf{r}\|\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\|\mathbf{A}\mathbf{x}\|$, and step 3 treats $h_{j+1,j}\le\tau$ as a breakdown. Only the meaning of an accepted pair changes: $(\widehat\lambda,\mathbf{x})$ is then an exact eigenpair of $\mathbf{A}-\mathbf{r}\mathbf{x}^*$, a matrix within $\|\mathbf{r}\|$ of $\mathbf{A}$, and when $\mathbf{A}=\mathbf{V}\mathbf{D}\mathbf{V}^{-1}$, its $\widehat\lambda$ lies within $\kappa(\mathbf{V})\,\|\mathbf{r}\|$ of an eigenvalue of $\mathbf{A}$.
+
+Choose a maximum number of steps, and run the following steps.
 
 1. **Fix the operator.** Provide a routine computing $\mathbf{x}\mapsto\mathbf{A}\mathbf{x}$, and keep everything that defines $\mathbf{A}$ fixed throughout the run.
-2. **Initialize the basis.** Choose a unit vector $\mathbf{q}_1$, for instance a normalized Gaussian vector.
-3. **Extend the basis.** At step $j$, compute $\mathbf{w}=\mathbf{A}\mathbf{q}_j$, remove its components along $\mathbf{q}_1,\dots,\mathbf{q}_j$, and repeat the removal once, adding the second coefficients to the first. Store the coefficients in column $j$ of $\mathbf{H}_m$, set $h_{j+1,j}=\|\mathbf{w}\|$, and, when this norm is not negligible, $\mathbf{q}_{j+1}=\mathbf{w}/h_{j+1,j}$.
-4. **Solve the small eigenvalue problem.** At selected steps, compute the eigenpairs $\mathbf{H}_m\mathbf{y}_i=\vartheta_i\mathbf{y}_i$, with $\|\mathbf{y}_i\|=1$, by a dense eigensolver for nonsymmetric matrices, and select the wanted ones, for instance those of largest modulus or of largest real part. Nonreal Ritz values come in conjugate pairs, and one member of each pair suffices.
-5. **Check candidates using the original operator.** Screen each candidate with the inexpensive residual $h_{m+1,m}|(\mathbf{y}_i)_m|$ of [Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination). For those that pass, form $\mathbf{x}_i=\mathbf{Q}_m\mathbf{y}_i/\|\mathbf{Q}_m\mathbf{y}_i\|$ and compute $\widehat\lambda_i=\mathbf{x}_i^*\mathbf{A}\mathbf{x}_i$ and $\varepsilon_i=\|\mathbf{A}\mathbf{x}_i-\widehat\lambda_i\mathbf{x}_i\|$, at the cost of one product for a real $\mathbf{x}_i$ and two for a complex one, applied to its real and imaginary parts. Accept the pair when $\varepsilon_i\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\|\mathbf{A}\mathbf{x}_i\|$.
-6. **Stop, continue or restart.** Stop when the wanted candidates are accepted or a budget is exhausted. When storing $\mathbf{Q}_m$ or orthogonalizing against it becomes too expensive, restart as described below.
+2. **Initialize the basis.** Choose a unit vector $\mathbf{q}_1$, for instance $\mathbf{q}_1=\mathbf{g}/\|\mathbf{g}\|$ with $\mathbf{g}\sim\mathcal{N}(0,\mathbb{I}_d)$. Set $\mathbf{Q}_1=[\mathbf{q}_1]$ and $j=1$.
+3. **Extend the basis (one product).** Compute $\mathbf{w}=\mathbf{A}\mathbf{q}_j$, the coefficients $\mathbf{h}=\mathbf{Q}_j^\top\mathbf{w}$, whose entries are $h_{1j},\dots,h_{jj}$, and $\mathbf{w}\leftarrow\mathbf{w}-\mathbf{Q}_j\mathbf{h}$. Repeat the projection once, with $\mathbf{c}=\mathbf{Q}_j^\top\mathbf{w}$, $\mathbf{w}\leftarrow\mathbf{w}-\mathbf{Q}_j\mathbf{c}$ and $\mathbf{h}\leftarrow\mathbf{h}+\mathbf{c}$, and store $\mathbf{h}$ in column $j$ of $\mathbf{H}$. Set $h_{j+1,j}=\|\mathbf{w}\|$. If $h_{j+1,j}>\tau$, set $\mathbf{q}_{j+1}=\mathbf{w}/h_{j+1,j}$ and $\mathbf{Q}_{j+1}=[\mathbf{Q}_j,\mathbf{q}_{j+1}]$. Otherwise, the run has broken down, and $h_{j+1,j}$ is set to $0$.
+4. **Solve the small eigenvalue problem.** At selected steps, with $m=j$, compute the eigenpairs $\mathbf{H}_m\mathbf{y}_i=\vartheta_i\mathbf{y}_i$, with $\mathbf{y}_i\in\mathbb{C}^m$ and $\|\mathbf{y}_i\|=1$, by a dense eigensolver for nonsymmetric matrices, and select the wanted ones, for instance those of largest modulus or of largest real part. Nonreal Ritz values come in conjugate pairs, and one member of each pair suffices: since $\mathbf{H}_m$ is real, $\mathbf{H}_m\bar{\mathbf{y}}_i=\bar\vartheta_i\bar{\mathbf{y}}_i$, and the conjugate pair has the same residual norm. Screen the wanted pairs with the inexpensive estimate $h_{m+1,m}|(\mathbf{y}_i)_m|$ of their residual ([Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination)), which costs no product: a pair whose estimate exceeds $\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}|\vartheta_i|$ is not yet a candidate.
+5. **Check the candidates with the original operator.** For each remaining pair, form $\mathbf{x}_i=\mathbf{Q}_m\mathbf{y}_i/\|\mathbf{Q}_m\mathbf{y}_i\|$, compute $\widehat\lambda_i=\mathbf{x}_i^*\mathbf{A}\mathbf{x}_i$ and $\varepsilon_i=\|\mathbf{A}\mathbf{x}_i-\widehat\lambda_i\mathbf{x}_i\|$, and accept $(\widehat\lambda_i,\mathbf{x}_i)$ when $\varepsilon_i\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\|\mathbf{A}\mathbf{x}_i\|$. This costs one product for a real $\mathbf{x}_i$, and two for a complex one, since $\mathbf{A}\mathbf{x}_i=\mathbf{A}\operatorname{Re}(\mathbf{x}_i)+i\,\mathbf{A}\operatorname{Im}(\mathbf{x}_i)$.
+6. **Stop, continue or restart.** Stop when the wanted pairs have been accepted, and report nonconvergence when the maximum number of steps is reached first. Otherwise, if the run has not broken down, increase $j$ by one and return to step 3. If it has broken down, $\operatorname{range}(\mathbf{Q}_m)$ is invariant up to $\tau$, and the other eigenvalues require a new run from a new starting vector. When storing $\mathbf{Q}_m$ or orthogonalizing against it becomes too expensive, restart as described below.
 
 $$
 \begin{array}{r}
@@ -2512,9 +2372,22 @@ $$
 \end{array}
 $$
 
-An accepted pair $(\widehat\lambda_i,\mathbf{x}_i)$ is an exact eigenpair of a matrix within $\varepsilon_i$ of $\mathbf{A}$ ([Remark 19](#remark-19-a-small-residual-far-from-the-spectrum)). Whether $\widehat\lambda_i$ is within $\varepsilon_i$ of an eigenvalue of $\mathbf{A}$ depends on the sensitivity of the eigenvalues, such as the factor $\kappa(\mathbf{V})$ of [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry), which the run does not compute. When the eigenvalue itself must be accurate, for instance when the sign of a real part decides the stability of an equilibrium, the residual should be read together with an estimate of that sensitivity, as discussed by [Saad (2011)](#ref-saad2011) and by [Trefethen and Embree (2005)](#ref-trefethen2005).
+#### How the steps implement the theory
 
-Since step $j$ costs $O(dj)$ operations and every basis vector is stored, $m$ cannot grow indefinitely. A restart runs the method again from a new starting vector that combines the wanted Ritz vectors, so that the next Krylov subspace concentrates on them. The implicitly restarted Arnoldi method of [Sorensen (1992)](#ref-sorensen1992) restarts without any new product. It applies to $\mathbf{H}_m$ a few shifted QR steps, with the unwanted Ritz values as shifts, which amounts to multiplying the starting vector by the polynomial $\prod(t-\vartheta)$ over those values, a polynomial filter in the sense of [Section 4.1](#41-definition-1-krylov-subspace) that damps the unwanted eigencomponents. It then keeps a basis of $k<m$ vectors and extends it again. This is the method of the ARPACK software ([Lehoucq, Sorensen and Yang, 1998](#ref-lehoucq1998)), on which the sparse eigenvalue routines of several scientific computing environments are built. For a symmetric matrix, the procedure computes, in exact arithmetic, the same vectors and coefficients as the Lanczos method ([Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection)), at the cost of [Algorithm 2](#411-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks).
+| Step | Computes | Implements |
+| --- | --- | --- |
+| 3. Extend | $h_{1j},\dots,h_{j+1,j}$ and $\mathbf{q}_{j+1}$ | one step of the recurrence of [Definition 3](#53-definition-3-arnoldi-recurrence-and-exact-breakdown) |
+| 3. Repeat the projection | the correction $\mathbf{c}$, added to column $j$ of $\mathbf{H}$ | the orthogonality $\mathbf{Q}_j^\top\mathbf{r}_j=0$ of [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection), which rounding errors would otherwise erode |
+| 3. Breakdown | $h_{j+1,j}\le\tau$ | the exact breakdown of [Definition 3](#53-definition-3-arnoldi-recurrence-and-exact-breakdown) and the exact termination of [Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination) |
+| 4. Small problem | $\mathbf{H}_m\mathbf{y}_i=\vartheta_i\mathbf{y}_i$ and $h_{m+1,m}\lvert(\mathbf{y}_i)_m\rvert$ | the Ritz pairs of [Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination) and the norm of their residual |
+| 5. Check | $\lVert\mathbf{A}\mathbf{x}_i-\widehat\lambda_i\mathbf{x}_i\rVert\le\varepsilon_{\mathrm{abs}}+\varepsilon_{\mathrm{rel}}\lVert\mathbf{A}\mathbf{x}_i\rVert$ | the certificate of [Remark 19](#remark-19-a-small-residual-far-from-the-spectrum) and [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) |
+| 6. Restart | a new starting vector built from the wanted Ritz vectors | a polynomial filter, in the sense of [Section 4.1](#41-definition-1-krylov-subspace), applied to the starting vector |
+
+**The repeated projection.** In exact arithmetic, the second projection of step 3 finds $\mathbf{c}=0$, since $\mathbf{w}$ is already orthogonal to $\mathbf{Q}_j$, and $\mathbf{h}$ is unchanged. In floating-point arithmetic, the first projection leaves in $\mathbf{w}$ components along the stored vectors of the order of the unit roundoff $u$ times $\|\mathbf{A}\mathbf{q}_j\|$. Relative to $\|\mathbf{w}\|=h_{j+1,j}$, this is of the order of $u/f$ with $f=h_{j+1,j}/\|\mathbf{A}\mathbf{q}_j\|$, by the cancellation explained in [Section 4.3](#43-how-the-lanczos-method-works), and the second projection removes these components. Adding $\mathbf{c}$ to $\mathbf{h}$ keeps the identity $\mathbf{A}\mathbf{q}_j=\mathbf{Q}_j\mathbf{h}+h_{j+1,j}\mathbf{q}_{j+1}$ exact up to rounding, so that $\mathbf{H}_m$ is still the matrix of [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection).
+
+**The residual certifies a nearby matrix.** An accepted pair $(\widehat\lambda_i,\mathbf{x}_i)$ is an exact eigenpair of a matrix within $\varepsilon_i$ of $\mathbf{A}$ ([Remark 19](#remark-19-a-small-residual-far-from-the-spectrum)). Whether $\widehat\lambda_i$ is within $\varepsilon_i$ of an eigenvalue of $\mathbf{A}$ depends on the sensitivity of the eigenvalues, such as the factor $\kappa(\mathbf{V})$ of [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry), which the run does not compute. When the eigenvalue itself must be accurate, for instance when the sign of a real part decides the stability of an equilibrium, the residual should be read together with an estimate of that sensitivity, as discussed by [Saad (2011)](#ref-saad2011) and by [Trefethen and Embree (2005)](#ref-trefethen2005).
+
+**Restarts bound the cost.** Since step $j$ costs $O(dj)$ operations and every basis vector is stored, $m$ cannot grow indefinitely. A restart runs the method again from a new starting vector that combines the wanted Ritz vectors, so that the next Krylov subspace concentrates on them. The implicitly restarted Arnoldi method of [Sorensen (1992)](#ref-sorensen1992) restarts without any new product. It applies to $\mathbf{H}_m$ a few shifted QR steps, with the unwanted Ritz values as shifts, which amounts to multiplying the starting vector by the polynomial $\prod(t-\vartheta)$ over those values, a polynomial filter in the sense of [Section 4.1](#41-definition-1-krylov-subspace) that damps the unwanted eigencomponents. It then keeps a basis of $k<m$ vectors and extends it again. This is the method of the ARPACK software ([Lehoucq, Sorensen and Yang, 1998](#ref-lehoucq1998)), on which the sparse eigenvalue routines of several scientific computing environments are built. For a symmetric matrix, the procedure computes, in exact arithmetic, the same vectors and coefficients as the Lanczos method ([Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection)), at the cost of [Algorithm 2](#412-algorithm-2-lanczos-with-reorthogonalization-and-residual-checks).
 
 ## References
 

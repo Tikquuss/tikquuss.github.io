@@ -20,7 +20,8 @@ into the images of the post (`agent/public/images/blog/matrix-vector-products/`)
 | `mvp/operators.py` | Matrices known through their products (Sections 2 and 5 of the post): the adjacency matrix of a bipartite graph, a sample covariance matrix, matrices with prescribed spectra, the transition matrix of a random walk on a directed graph, and a discretized convection–diffusion operator |
 | `mvp/hessian.py` | Hessian–vector products of the training loss of a small tanh network, by automatic differentiation (PyTorch) |
 | `figures/` | One script per figure of the post |
-| `summaries/` | For each figure, a JSON file with the numbers quoted in its caption |
+| `checks/` | Scripts for numbers quoted in the text of the post outside the figures |
+| `summaries/` | For each figure, a JSON file with the numbers quoted in its caption, and for each script of `checks/`, the numbers it reports |
 | `../../public/images/blog/matrix-vector-products/` | The published figures (SVG) |
 
 Every solver accesses the matrix only through a function `apply_a(x)` that returns `A @ x`.
@@ -50,6 +51,14 @@ python make_figures.py                       # all figures, written to agent/pub
 python make_figures.py --only lanczos_ritz   # a single figure
 python make_figures.py --preview previews    # PNG copies as well
 python make_figures.py --out drafts          # write the SVG files elsewhere, leaving the published ones untouched
+```
+
+The numbers that Section 4.3 of the post quotes for Gram–Schmidt on the powers **A**ʲ**q**₁ against the
+Lanczos recurrence (the new direction's share of each vector and the loss of orthogonality of each basis)
+come from
+
+```bash
+python -m checks.gram_schmidt_on_powers      # writes summaries/gram-schmidt-on-powers.json
 ```
 
 All random draws are seeded, so the outputs are deterministic for a given software stack. The ten
