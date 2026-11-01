@@ -1,0 +1,31 @@
+{
+  "two_by_two_jordan_block": [
+    {
+      "eps": 0.1,
+      "residual": 0.00995037,
+      "residual_over_eps_squared": 0.995037,
+      "distance_over_residual": 10.0499,
+      "bound_sqrt_2_residual": 0.14107
+    },
+    {
+      "eps": 0.01,
+      "residual": 9.9995e-05,
+      "residual_over_eps_squared": 0.99995,
+      "distance_over_residual": 100.005,
+      "bound_sqrt_2_residual": 0.0141418
+    },
+    {
+      "eps": 0.001,
+      "residual": 1e-06,
+      "residual_over_eps_squared": 1.0,
+      "distance_over_residual": 1000.0,
+      "bound_sqrt_2_residual": 0.00141421
+    }
+  ],
+  "largest_distance_over_bound": {
+    "p=1": 1.0,
+    "p=2": 0.802743,
+    "p=3": 0.754099,
+    "p=4": 0.726886
+  }
+}

@@ -84,6 +84,14 @@ come from
 python -m checks.walk_circulation            # writes summaries/walk-circulation.json
 ```
 
+The bound of Remark 20 in Section 5.6 for matrices without a basis of eigenvectors (the distance to the spectrum
+is at most max(η, η^(1/p)), with p the size of the largest Jordan block) is checked on random Jordan forms,
+together with the norm of the residual and the distance for the block [[0, 1], [0, 0]], by
+
+```bash
+python -m checks.jordan_residual_bound       # writes summaries/jordan-residual-bound.json
+```
+
 All random draws are seeded, so the outputs are deterministic for a given software stack. The fifteen
 figures take about three minutes on a laptop CPU, most of it for the network Hessian; the schematics and
 execution diagrams take a second each.

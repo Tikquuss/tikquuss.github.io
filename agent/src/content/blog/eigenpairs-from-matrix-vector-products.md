@@ -2185,7 +2185,7 @@ $$
 
 so the residual of the Ritz pair is again the leak, of norm $\textcolor{#16a34a}{h_{m+1,m}|y_m|}$. The matrix $\mathbf{H}_m$ is real but, in general, not symmetric, so its eigenvalues can be complex, in conjugate pairs, which is how the method finds the complex eigenvalues of $\mathbf{A}$.
 
-The polynomial reading of [Section 4.3](#43-how-the-lanczos-method-works) carries over, with one change. Its first two steps used no symmetry: the green term of $\mathbf{A}^m\mathbf{q}_1$ is now $h_{21}h_{32}\cdots h_{m+1,m}\,\mathbf{q}_{m+1}$, it has the smallest norm among the vectors $\pi(\mathbf{A})\mathbf{q}_1$ with $\pi$ monic of degree $m$, and the Ritz values at step $m$ are the roots of the minimizing polynomial $\pi_m$ ([Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination)). What changes is how $\|\pi(\mathbf{A})\mathbf{q}_1\|$ depends on the eigenvalues. Suppose that $\mathbf{A}=\mathbf{V}\mathbf{D}\mathbf{V}^{-1}$ as in [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) below, with the eigenvalues $\lambda_1,\dots,\lambda_d$ on the diagonal of $\mathbf{D}$, and write $\mathbf{q}_1=\mathbf{V}\mathbf{c}$. Then $\pi(\mathbf{A})\mathbf{q}_1=\mathbf{V}\pi(\mathbf{D})\mathbf{c}$, and since $\|\mathbf{z}\|=\|\mathbf{V}^{-1}\mathbf{V}\mathbf{z}\|\le\|\mathbf{V}^{-1}\|\,\|\mathbf{V}\mathbf{z}\|$ for every $\mathbf{z}$,
+The polynomial reading of [Section 4.3](#43-how-the-lanczos-method-works) carries over, with one change. Its first two steps used no symmetry: the green term of $\mathbf{A}^m\mathbf{q}_1$ is now $h_{21}h_{32}\cdots h_{m+1,m}\,\mathbf{q}_{m+1}$, it has the smallest norm among the vectors $\pi(\mathbf{A})\mathbf{q}_1$ with $\pi$ monic of degree $m$, and the Ritz values at step $m$ are the roots of the minimizing polynomial $\pi_m$ ([Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination)). What changes is how $\|\pi(\mathbf{A})\mathbf{q}_1\|$ depends on the eigenvalues. Suppose that $\mathbf{A}=\mathbf{V}\mathbf{D}\mathbf{V}^{-1}$ as in [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) below, with the eigenvalues $\lambda_1,\dots,\lambda_d$ on the diagonal of $\mathbf{D}$, and write $\mathbf{q}_1=\mathbf{V}\mathbf{c}$. Then $\pi(\mathbf{D})\mathbf{c} = \mathbf{V}^{-1} \mathbf{V}\pi(\mathbf{D})\mathbf{V}^{-1} \mathbf{q}_1 = \mathbf{V}^{-1}\pi(\mathbf{A})\mathbf{q}_1$, and so $\mathbf{V} \pi(\mathbf{D})\mathbf{c} = \pi(\mathbf{A})\mathbf{q}_1$. Since $\|\mathbf{z}\|=\|\mathbf{V}^{-1}\mathbf{V}\mathbf{z}\|\le\|\mathbf{V}^{-1}\|\,\|\mathbf{V}\mathbf{z}\|$ for every $\mathbf{z}$,
 
 $$
 \frac{\|\pi(\mathbf{D})\mathbf{c}\|}{\|\mathbf{V}^{-1}\|}
@@ -2209,7 +2209,17 @@ h_{j+1,j}&=\|\mathbf{r}_j\| .
 \end{aligned}
 $$
 
-If $h_{j+1,j}>0$, define $\mathbf{q}_{j+1}=\mathbf{r}_j/h_{j+1,j}$ and continue. If $h_{j+1,j}=0$, stop the run, an **exact breakdown** as in [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown). For $m\ge1$, $\mathbf{H}_m\in\mathbb{R}^{m\times m}$ is the matrix with entries $(\mathbf{H}_m)_{ij}=h_{ij}$ for $i\le j+1$ and $(\mathbf{H}_m)_{ij}=0$ for $i>j+1$.
+If $h_{j+1,j}>0$, define $\mathbf{q}_{j+1}=\mathbf{r}_j/h_{j+1,j}$ and continue. If $h_{j+1,j}=0$, stop the run, an **exact breakdown** as in [Definition 2](#45-definition-2-lanczos-recurrence-and-exact-breakdown). For $m\ge1$, $\mathbf{H}_m\in\mathbb{R}^{m\times m}$ is the matrix with entries $(\mathbf{H}_m)_{ij}=h_{ij}$ for $i\le j+1$ and $(\mathbf{H}_m)_{ij}=0$ for $i>j+1$:
+
+$$
+\mathbf{H}_m=\begin{bmatrix}
+h_{11}&h_{12}&h_{13}&\cdots&h_{1m}\\
+h_{21}&h_{22}&h_{23}&\cdots&h_{2m}\\
+0&h_{32}&h_{33}&\cdots&h_{3m}\\
+\vdots&\ddots&\ddots&\ddots&\vdots\\
+0&\cdots&0&h_{m,m-1}&h_{mm}
+\end{bmatrix}.
+$$
 
 $$
 \begin{array}{r}
@@ -2248,11 +2258,7 @@ The zeros of $\mathbf{T}_m$ have two sources. Those below the first subdiagonal 
 #### Proof
 
 **Orthogonality.** We argue by induction, as for [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection). The initial vector is normalized by assumption. Suppose that $\mathbf{q}_1,\dots,\mathbf{q}_j$ are orthonormal. For each $i\le j$, by the definition of $h_{ij}$ and since $\mathbf{q}_i^\top\mathbf{q}_l=\delta_{il}$,
-
-$$
-\mathbf{q}_i^\top\mathbf{r}_j=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j-\sum_{l=1}^jh_{lj}\,\mathbf{q}_i^\top\mathbf{q}_l=h_{ij}-h_{ij}=0 .
-$$
-
+$\mathbf{q}_i^\top\mathbf{r}_j=\mathbf{q}_i^\top\mathbf{A}\mathbf{q}_j-\sum_{l=1}^jh_{lj}\,\mathbf{q}_i^\top\mathbf{q}_l=h_{ij}-h_{ij}=0$.
 Thus $\mathbf{r}_j$ is orthogonal to $\mathbf{q}_1,\dots,\mathbf{q}_j$, and if $h_{j+1,j}>0$, normalizing it extends the orthonormal family. Unlike the proof of [Lemma 3](#46-lemma-3-orthogonality-and-tridiagonal-projection), this one needs no symmetry, because every component is removed explicitly.
 
 **Krylov subspaces.** We prove $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_m\}=\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ by induction on $m$. It holds at $m=1$, since both sides equal $\operatorname{span}\{\mathbf{q}_1\}$. Suppose that it holds at $m=j$ and that $h_{j+1,j}>0$. The vector $\mathbf{q}_{j+1}$ is a combination of $\mathbf{A}\mathbf{q}_j$ and $\mathbf{q}_1,\dots,\mathbf{q}_j$, all of which lie in $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$. Indeed, $\mathbf{q}_1,\dots,\mathbf{q}_j$ belong to $\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)\subseteq\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$, and $\mathbf{A}\mathbf{q}_j$ <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="arnoldi-krylov-step" aria-label="Show why A q_j belongs to the next Krylov subspace">belongs to $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$</button><span id="arnoldi-krylov-step" class="explanation-popover" popover="auto" role="note" aria-label="Why A q_j belongs to the next Krylov subspace" data-label="Derivation">Since $\mathbf{q}_j\in\mathcal{K}_j(\mathbf{A},\mathbf{q}_1)$, there are numbers $c_0,\dots,c_{j-1}$ with $\mathbf{q}_j=\sum_{k=0}^{j-1}c_k\mathbf{A}^k\mathbf{q}_1$, so $\mathbf{A}\mathbf{q}_j=\sum_{k=0}^{j-1}c_k\mathbf{A}^{k+1}\mathbf{q}_1$ is a combination of $\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^j\mathbf{q}_1$, which belong to $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$ by [Definition 1](#41-definition-1-krylov-subspace).</span></span>. Hence $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}\subseteq\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$. The left-hand side has dimension $j+1$, because its vectors are orthonormal, so $j+1\le\dim\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$. We also have $\dim\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)\le j+1$, since $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$ is generated by the $j+1$ vectors $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^j\mathbf{q}_1$. We thus have $\dim\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)=\dim\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}=j+1$. The two spaces are therefore equal, since $\operatorname{span}\{\mathbf{q}_1,\dots,\mathbf{q}_{j+1}\}$ is contained in $\mathcal{K}_{j+1}(\mathbf{A},\mathbf{q}_1)$ and both have the same finite dimension.
@@ -2281,26 +2287,22 @@ Suppose that the run has reached iteration $m$, that is, $h_{j+1,j}>0$ for $1\le
    \qquad
    \|\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}\|=h_{m+1,m}|y_m| .
    $$
-2. **The minimizing polynomial.** The characteristic polynomial $\pi_m(t)=\det(t\,\mathbb{I}_m-\mathbf{H}_m)$ is the unique monic polynomial of degree $m$ that minimizes $\|\pi(\mathbf{A})\mathbf{q}_1\|$, and
-   $$
-   \pi_m(\mathbf{A})\mathbf{q}_1=h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .
-   $$
-   The Ritz values at step $m$ are the roots of $\pi_m$.
+2. **The minimizing polynomial.** The characteristic polynomial $\pi_m(t)=\det(t\,\mathbb{I}_m-\mathbf{H}_m)$ satisfies
+   $\pi_m(\mathbf{A})\mathbf{q}_1=h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m$. Moreover, $\pi_m$ is the unique monic polynomial of degree $m$ that minimizes $\|\pi(\mathbf{A})\mathbf{q}_1\|$, and the Ritz values at step $m$ are its roots.
 3. **Exact termination.** Let $\mu$ be the monic polynomial of smallest degree $s$ such that $\mu(\mathbf{A})\mathbf{q}_1=0$, called the minimal polynomial of $\mathbf{q}_1$. A run reaches iteration $s$ and breaks down there: $h_{j+1,j}>0$ for $j<s$, and $h_{s+1,s}=0$. Moreover, at termination,
    $$
-   \mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{H}_s,
-   \qquad
    \det(t\,\mathbb{I}_s-\mathbf{H}_s)=\mu(t),
+   \qquad
+   \mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{H}_s,
    $$
-   so the Ritz values are exactly the roots of $\mu$, and every one of them is an eigenvalue of $\mathbf{A}$. If $\mathbf{A}$ has a basis of eigenvectors and $\mathbf{q}_1=\sum_{\lambda\in\Lambda(\mathbf{A})}\mathbf{q}_\lambda$ with $\mathbf{A}\mathbf{q}_\lambda=\lambda\mathbf{q}_\lambda$, then
+   so the Ritz values are exactly the roots of $\mu$, and every one of them is an eigenvalue of $\mathbf{A}$. If $\mathbf{A}$ has a basis of eigenvectors and $\mathbf{q}_1=\sum_{\lambda\in\Lambda(\mathbf{A})}\mathbf{q}_\lambda$ with $\mathbf{A}\mathbf{q}_\lambda=\lambda\mathbf{q}_\lambda$, then, as in [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run),
    $$
    \mu(t)=\prod_{\lambda\in\Lambda_1}(t-\lambda),
    \qquad
    \Lambda_1=\{\lambda\in\Lambda(\mathbf{A}):\mathbf{q}_\lambda\neq0\},
    \qquad
-   s=|\Lambda_1|,
+   s=|\Lambda_1|.
    $$
-   as in [Proposition 3](#49-proposition-3-exact-termination-and-the-eigenvalues-recovered-by-one-run).
 
 #### Remark 18 [Ritz values lie in the field of values]
 
@@ -2327,48 +2329,65 @@ $$
 
 where the <span style="color:#2563eb">blue factor</span> vanishes because $\mathbf{y}$ is an eigenvector of $\mathbf{H}_m$. Taking norms gives $\|\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}\|=\|\mathbf{r}_m\|\,|y_m|=h_{m+1,m}|y_m|$.
 
-**The minimizing polynomial.** Let $\mathbf{e}_1=[1,0,\dots,0]^\top$ be the first standard basis vector of $\mathbb{R}^m$, so that $\mathbf{q}_1=\mathbf{Q}_m\mathbf{e}_1$. We first show that
+**The minimizing polynomial.** Let $\mathbf{e}_1=[1,0,\dots,0]^\top$ be the first standard basis vector of $\mathbb{R}^m$, so that $\mathbf{q}_1=\mathbf{Q}_m\mathbf{e}_1$. We first show that<span id="eq-krylov-powers"></span><span id="eq-krylov-power-m"></span>
 
 $$
-\mathbf{A}^k\mathbf{q}_1=\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1\quad\text{for }0\le k\le m-1,
-\qquad
-\mathbf{A}^m\mathbf{q}_1=\mathbf{Q}_m\mathbf{H}_m^m\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .
+\begin{align*}
+\mathbf{A}^k\mathbf{q}_1&=\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1\quad\text{for }0\le k\le m-1,\tag{2}\\
+\mathbf{A}^m\mathbf{q}_1&=\mathbf{Q}_m\mathbf{H}_m^m\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .\tag{3}
+\end{align*}
 $$
 
-Because $\mathbf{H}_m$ is upper Hessenberg, $h_{il}=0$ for $i>l+1$, so $(\mathbf{H}_m\mathbf{v})_i=\sum_{l\ge i-1}h_{il}v_l$ for every vector $\mathbf{v}\in\mathbb{C}^m$. If the last nonzero entry of $\mathbf{v}$ is in position $p$, this sum is zero for $i\ge p+2$, and for $i=p+1$ it reduces to $(\mathbf{H}_m\mathbf{v})_{p+1}=h_{p+1,p}\,v_p$: multiplying by $\mathbf{H}_m$ moves the last nonzero entry down by one position and multiplies it by a subdiagonal entry. Starting from $\mathbf{e}_1$, by induction on $k$, the vector $\mathbf{H}_m^k\mathbf{e}_1$ has nonzero entries only in its first $k+1$ positions, and its entry in position $k+1$ is the product $h_{21}h_{32}\cdots h_{k+1,k}$ of the subdiagonal entries met on the way. If $\mathbf{A}^k\mathbf{q}_1=\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1$ for some $k\le m-1$, then the identity of [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) gives
+Because $\mathbf{H}_m$ is upper Hessenberg, $h_{il}=0$ for $i>l+1$, so $(\mathbf{H}_m\mathbf{v})_i=\sum_{l=1}^m h_{il}v_l=\sum_{l=i-1}^m h_{il}v_l$ for every vector $\mathbf{v}\in\mathbb{C}^m$. If the last nonzero entry of $\mathbf{v}$ is in position $p$, that is, $v_p\neq0$ and $v_l=0$ for all $l>p$, this sum is zero for $i> p+1$, since it then runs over $l\ge i-1\ge p+1$ only, and for $i=p+1$ it reduces to $(\mathbf{H}_m\mathbf{v})_{p+1}=h_{p+1,p}\,v_p$, which is nonzero because $h_{p+1,p}>0$ for $p<m$ when the run has reached iteration $m$. The entries in positions $1$ to $p$ can be any numbers and play no role. So, for $p<m$, multiplying by $\mathbf{H}_m$ moves the last nonzero entry down by one position and multiplies it by a subdiagonal entry. Applying this twice, $\mathbf{H}_m^2\mathbf{v}=\mathbf{H}_m(\mathbf{H}_m\mathbf{v})$ has its last nonzero entry in position $p+2$, equal to $h_{p+2,p+1}\,h_{p+1,p}\,v_p$, if $p+2\le m$. By induction on $k$, for $p+k\le m$, the vector $\mathbf{H}_m^k\mathbf{v}$ has nonzero entries only in its first $p+k$ positions, and its last nonzero entry is
 
 $$
-\mathbf{A}^{k+1}\mathbf{q}_1=\mathbf{A}\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1=\mathbf{Q}_m\mathbf{H}_m^{k+1}\mathbf{e}_1+\mathbf{r}_m\,\bigl(\mathbf{e}_m^\top\mathbf{H}_m^k\mathbf{e}_1\bigr).
+(\mathbf{H}_m^k\mathbf{v})_{p+k}=h_{p+k,p+k-1}\cdots h_{p+2,p+1}\,h_{p+1,p}\,v_p .
 $$
 
-The last factor is the entry of $\mathbf{H}_m^k\mathbf{e}_1$ in position $m$. It vanishes for $k\le m-2$ and equals $h_{21}h_{32}\cdots h_{m,m-1}$ for $k=m-1$, which proves both identities by induction from $k=0$.
+Applying this to $\mathbf{v}=\mathbf{e}_1$, for which $p=1$ and $v_p=1$, shows that for $k\le m-1$ the vector $\mathbf{H}_m^k\mathbf{e}_1$ has nonzero entries only in its first $k+1$ positions, and its entry in position $k+1$ is the product $h_{21}h_{32}\cdots h_{k+1,k}$ of the subdiagonal entries met on the way. 
 
-Now let $\pi(t)=t^m+\sum_{k=0}^{m-1}c_kt^k$ be a monic polynomial of degree $m$. Applying the two identities to each power gives
+We now prove [equations (2)](#eq-krylov-powers) and [(3)](#eq-krylov-power-m) by induction on $k$. For $k=0$, [equation (2)](#eq-krylov-powers) holds, since $\mathbf{A}^0\mathbf{q}_1=\mathbf{q}_1=\mathbf{Q}_m\mathbf{e}_1=\mathbf{Q}_m\mathbf{H}_m^0\mathbf{e}_1$. Suppose, as induction hypothesis, that $\mathbf{A}^k\mathbf{q}_1=\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1$ for some $k\le m-1$. Multiplying by $\mathbf{A}$ and using the identity $\mathbf{A}\mathbf{Q}_m=\mathbf{Q}_m\mathbf{H}_m+\mathbf{r}_m\mathbf{e}_m^\top$ of [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) gives<span id="eq-krylov-power-step"></span>
+
+$$
+\mathbf{A}^{k+1}\mathbf{q}_1
+=\mathbf{A}\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1
+%=\bigl(\mathbf{Q}_m\mathbf{H}_m+\mathbf{r}_m\mathbf{e}_m^\top\bigr)\mathbf{H}_m^k\mathbf{e}_1
+=\mathbf{Q}_m\mathbf{H}_m^{k+1}\mathbf{e}_1+\mathbf{r}_m\,\bigl(\mathbf{e}_m^\top\mathbf{H}_m^k\mathbf{e}_1\bigr)
+=\mathbf{Q}_m\mathbf{H}_m^{k+1}\mathbf{e}_1+\bigl(\mathbf{H}_m^k\mathbf{e}_1\bigr)_m \mathbf{r}_m.
+\tag{4}
+$$
+
+The last factor $\bigl(\mathbf{H}_m^k\mathbf{e}_1\bigr)_m$ is given by the previous paragraph. For $k\le m-2$, i.e. $m>k+1$, we have $\bigl(\mathbf{H}_m^k\mathbf{e}_1\bigr)_m=0$ since position $m$ lies beyond position $k+1$, and [equation (4)](#eq-krylov-power-step) is [equation (2)](#eq-krylov-powers) for $k+1$. This completes the induction, so [equation (2)](#eq-krylov-powers) holds for $0\le k\le m-1$. For $k=m-1$, i.e. $m=k+1$, $\bigl(\mathbf{H}_m^k\mathbf{e}_1\bigr)_m = h_{21}h_{32}\cdots h_{m,m-1}$, and [equation (4)](#eq-krylov-power-step) is [equation (3)](#eq-krylov-power-m).
+
+Now let $\pi(t)=t^m+\sum_{k=0}^{m-1}c_kt^k$ be a monic polynomial of degree $m$. Applying [equation (3)](#eq-krylov-power-m) to $\mathbf{A}^m\mathbf{q}_1$ and [equation (2)](#eq-krylov-powers) to the lower powers gives
 
 $$
 \begin{aligned}
 \pi(\mathbf{A})\mathbf{q}_1
-&=\mathbf{A}^m\mathbf{q}_1+\sum_{k=0}^{m-1}c_k\mathbf{A}^k\mathbf{q}_1
-=\mathbf{Q}_m\mathbf{H}_m^m\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m+\sum_{k=0}^{m-1}c_k\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1\\
+&=\mathbf{A}^m\mathbf{q}_1+\sum_{k=0}^{m-1}c_k\mathbf{A}^k\mathbf{q}_1\\
+&=\mathbf{Q}_m\mathbf{H}_m^m\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m+\sum_{k=0}^{m-1}c_k\mathbf{Q}_m\mathbf{H}_m^k\mathbf{e}_1\\
 &=\mathbf{Q}_m\,\pi(\mathbf{H}_m)\,\mathbf{e}_1+h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .
 \end{aligned}
 $$
 
-For $\pi=\pi_m$, the Cayley–Hamilton theorem gives $\pi_m(\mathbf{H}_m)=0$, hence $\pi_m(\mathbf{A})\mathbf{q}_1=h_{21}\cdots h_{m,m-1}\,\mathbf{r}_m$, which is orthogonal to $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ by [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection). For any monic $\pi$ of degree $m$, the difference $\pi-\pi_m$ has degree at most $m-1$, so $(\pi-\pi_m)(\mathbf{A})\mathbf{q}_1$ lies in $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, and Pythagoras' theorem gives
+For $\pi=\pi_m=\det(t\,\mathbb{I}_m-\mathbf{H}_m)$, the Cayley–Hamilton theorem gives $\pi_m(\mathbf{H}_m)=0$, hence the identity of item 2:
+
+$$
+\pi_m(\mathbf{A})\mathbf{q}_1=h_{21}h_{32}\cdots h_{m,m-1}\,\mathbf{r}_m .
+$$
+
+By [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection), the vectors $\mathbf{q}_1,\dots,\mathbf{q}_m$ span $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$ and $\mathbf{Q}_m^\top\mathbf{r}_m=0$, so this vector $\pi_m(\mathbf{A})\mathbf{q}_1$ is orthogonal to $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$. Now let $\pi$ be any monic polynomial of degree $m$. The leading terms $t^m$ cancel in $\pi-\pi_m$, so $\pi-\pi_m=\sum_{k=0}^{m-1}b_kt^k$ for some numbers $b_k$, and $(\pi-\pi_m)(\mathbf{A})\mathbf{q}_1=\sum_{k=0}^{m-1}b_k\mathbf{A}^k\mathbf{q}_1$ lies in $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$. Hence $\pi(\mathbf{A})\mathbf{q}_1=\pi_m(\mathbf{A})\mathbf{q}_1+(\pi-\pi_m)(\mathbf{A})\mathbf{q}_1$ is a sum of two orthogonal vectors, and Pythagoras' theorem gives<span id="eq-minimizing-pythagoras"></span>
 
 $$
 \|\pi(\mathbf{A})\mathbf{q}_1\|^2=\|\pi_m(\mathbf{A})\mathbf{q}_1\|^2+\|(\pi-\pi_m)(\mathbf{A})\mathbf{q}_1\|^2\ge\|\pi_m(\mathbf{A})\mathbf{q}_1\|^2 .
+\tag{5}
 $$
 
-Equality forces $(\pi-\pi_m)(\mathbf{A})\mathbf{q}_1=0$. The vectors $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^{m-1}\mathbf{q}_1$ span the space $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, of dimension $m$ by [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection), so they are linearly independent, and the coefficients of $\pi-\pi_m$ all vanish: $\pi=\pi_m$. Finally, the Ritz values are the eigenvalues of $\mathbf{H}_m$, which are the roots of its characteristic polynomial.
+So $\pi_m$ minimizes $\|\pi(\mathbf{A})\mathbf{q}_1\|$ over all monic polynomials $\pi$ of degree $m$. It is the only minimizer. Indeed, if $\|\pi(\mathbf{A})\mathbf{q}_1\|=\|\pi_m(\mathbf{A})\mathbf{q}_1\|$, [equation (5)](#eq-minimizing-pythagoras) gives $(\pi-\pi_m)(\mathbf{A})\mathbf{q}_1=0$, that is, $\sum_{k=0}^{m-1}b_k\mathbf{A}^k\mathbf{q}_1=0$. The $m$ vectors $\mathbf{q}_1,\mathbf{A}\mathbf{q}_1,\dots,\mathbf{A}^{m-1}\mathbf{q}_1$ span $\mathcal{K}_m(\mathbf{A},\mathbf{q}_1)$, which has dimension $m$, since by [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) it is spanned by the $m$ orthonormal vectors $\mathbf{q}_1,\dots,\mathbf{q}_m$. They are therefore linearly independent, so $b_0=\dots=b_{m-1}=0$, that is, $\pi=\pi_m$. Finally, the Ritz values are the eigenvalues of $\mathbf{H}_m$, which are the roots of its characteristic polynomial $\pi_m$.
 
-**Exact termination.** For $j<s$, no monic polynomial of degree $j$ annihilates $\mathbf{q}_1$, by the minimality of $s$. If the run has reached iteration $j<s$, item 2 at step $j$ therefore gives
-
-$$
-h_{21}h_{32}\cdots h_{j,j-1}\,h_{j+1,j}=\|\pi_j(\mathbf{A})\mathbf{q}_1\|>0,
-$$
-
-hence $h_{j+1,j}>0$, and the run reaches iteration $j+1$. Starting from $j=1$, this shows that the run reaches iteration $s$. There, the monic polynomial $\mu$ of degree $s$ gives $\|\mu(\mathbf{A})\mathbf{q}_1\|=0$, so the minimum in item 2 is zero. By uniqueness, $\pi_s=\mu$, and $h_{21}\cdots h_{s,s-1}\,h_{s+1,s}=\|\mu(\mathbf{A})\mathbf{q}_1\|=0$ forces $h_{s+1,s}=0$. With $\mathbf{r}_s=0$, the identity of [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) becomes $\mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{H}_s$. If $\mathbf{H}_s\mathbf{y}=\vartheta\mathbf{y}$ with $\mathbf{y}\neq0$, then $\mathbf{A}(\mathbf{Q}_s\mathbf{y})=\vartheta\,\mathbf{Q}_s\mathbf{y}$ with $\mathbf{Q}_s\mathbf{y}\neq0$, so every Ritz value at termination is an eigenvalue of $\mathbf{A}$.
+**Exact termination.** For $j<s$, no monic polynomial of degree $j$ annihilates $\mathbf{q}_1$, by the minimality of $s$, so $\pi_j(\mathbf{A})\mathbf{q}_1\neq0$. If the run has reached iteration $j<s$, item 2 at step $j$ gives $\pi_j(\mathbf{A})\mathbf{q}_1=h_{21}h_{32}\cdots h_{j,j-1}\,\mathbf{r}_j$, where the factors $h_{21},\dots,h_{j,j-1}$ are positive and $\|\mathbf{r}_j\|=h_{j+1,j}$ by [Definition 3](#53-definition-3-arnoldi-recurrence-and-exact-breakdown). Taking norms,
+$0<\|\pi_j(\mathbf{A})\mathbf{q}_1\|=h_{21}h_{32}\cdots h_{j,j-1}\,\|\mathbf{r}_j\|=h_{21}h_{32}\cdots h_{j,j-1}\,h_{j+1,j}$,
+hence $h_{j+1,j}>0$, and the run reaches iteration $j+1$. Starting from $j=1$, this shows that the run reaches iteration $s$. There, item 2 at step $s$ says that $\pi_s$ is the unique monic polynomial of degree $s$ that minimizes $\|\pi(\mathbf{A})\mathbf{q}_1\|$. The polynomial $\mu$ is monic of degree $s$ and gives $\|\mu(\mathbf{A})\mathbf{q}_1\|=0$, the smallest value a norm can take, so $\mu$ is a minimizer, and by uniqueness $\pi_s=\mu$. The same computation at step $s$ gives $h_{21}\cdots h_{s,s-1}\,h_{s+1,s}=\|\pi_s(\mathbf{A})\mathbf{q}_1\|=\|\mu(\mathbf{A})\mathbf{q}_1\|=0$, which forces $0=h_{s+1,s}=\|\mathbf{r}_s\|$, since the other factors are positive. So $\mathbf{r}_s=0$, and the identity of [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) becomes $\mathbf{A}\mathbf{Q}_s=\mathbf{Q}_s\mathbf{H}_s$. If $\mathbf{H}_s\mathbf{y}=\vartheta\mathbf{y}$ with $\mathbf{y}\neq0$, then $\mathbf{A}(\mathbf{Q}_s\mathbf{y})=\vartheta\,\mathbf{Q}_s\mathbf{y}$ with $\mathbf{Q}_s\mathbf{y}\neq0$, so every Ritz value at termination is an eigenvalue of $\mathbf{A}$.
 
 **The case of a basis of eigenvectors.** If $\mathbf{q}_1=\sum_\lambda\mathbf{q}_\lambda$ with $\mathbf{A}\mathbf{q}_\lambda=\lambda\mathbf{q}_\lambda$, then $p(\mathbf{A})\mathbf{q}_1=\sum_{\lambda\in\Lambda_1}p(\lambda)\,\mathbf{q}_\lambda$ for every polynomial $p$. Nonzero eigenvectors of distinct eigenvalues are linearly independent, so $p(\mathbf{A})\mathbf{q}_1=0$ exactly when $p(\lambda)=0$ for every $\lambda\in\Lambda_1$. The monic polynomial of smallest degree with this property is $\prod_{\lambda\in\Lambda_1}(t-\lambda)$, of degree $|\Lambda_1|$.
 
@@ -2382,20 +2401,42 @@ Item 2 also proves, for the Lanczos method, the statement of [Section 4.3](#43-h
 
 ### 5.6 Lemma 7 [Residual certificate without symmetry]
 
-Suppose that $\mathbf{A}=\mathbf{V}\mathbf{D}\mathbf{V}^{-1}$ for an invertible matrix $\mathbf{V}\in\mathbb{C}^{d\times d}$, whose columns are eigenvectors, and a diagonal matrix $\mathbf{D}$, which holds the eigenvalues. Let
-
-$$
-\kappa(\mathbf{V})=\|\mathbf{V}\|\,\|\mathbf{V}^{-1}\|,
-\qquad\text{where }\|\mathbf{M}\|=\max_{\|\mathbf{z}\|=1}\|\mathbf{M}\mathbf{z}\| .
-$$
-
+Suppose that $\mathbf{A}$ is diagonalizable, that is, $\mathbb{C}^d$ has a basis of eigenvectors of $\mathbf{A}$, and write $\mathbf{A}=\mathbf{V}\mathbf{D}\mathbf{V}^{-1}$, where the columns of the invertible matrix $\mathbf{V}\in\mathbb{C}^{d\times d}$ are these eigenvectors and the diagonal matrix $\mathbf{D}$ holds the eigenvalues. Let $\kappa(\mathbf{V})=\|\mathbf{V}\|\,\|\mathbf{V}^{-1}\|$, where $\|\mathbf{M}\|=\max_{\|\mathbf{z}\|=1}\|\mathbf{M}\mathbf{z}\|$.
 Then, for every unit vector $\mathbf{x}\in\mathbb{C}^d$ and every $z\in\mathbb{C}$,
 
 $$
 \min_{\lambda\in\Lambda(\mathbf{A})}|z-\lambda|\le\kappa(\mathbf{V})\,\|\mathbf{A}\mathbf{x}-z\mathbf{x}\| .
 $$
 
-This is the theorem of [Bauer and Fike (1960)](#ref-bauer1960), written for a residual.
+#### Proof
+
+If $z$ is an eigenvalue of $\mathbf{A}$, the left-hand side is zero and there is nothing to prove. Otherwise, let $\delta=\min_{\lambda\in\Lambda(\mathbf{A})}|\lambda-z|>0$. The diagonal entries of $\mathbf{D}-z\mathbb{I}_d$ are the numbers $\lambda-z$, all nonzero, so this matrix is invertible, and so is $\mathbf{A}-z\mathbb{I}_d=\mathbf{V}(\mathbf{D}-z\mathbb{I}_d)\mathbf{V}^{-1}$, with inverse $\mathbf{V}(\mathbf{D}-z\mathbb{I}_d)^{-1}\mathbf{V}^{-1}$. We have $\|(\mathbf{D}-z\mathbb{I}_d)^{-1}\|=\max_{\lambda\in\Lambda(\mathbf{A})}1/|\lambda-z|=1/\delta$, so
+$$
+\begin{aligned}
+1=\|\mathbf{x}\|
+&=\bigl\|(\mathbf{A}-z\mathbb{I}_d)^{-1}(\mathbf{A}-z\mathbb{I}_d)\mathbf{x}\bigr\|\\
+&=\bigl\|\mathbf{V}(\mathbf{D}-z\mathbb{I}_d)^{-1}\mathbf{V}^{-1}(\mathbf{A}\mathbf{x}-z\mathbf{x})\bigr\|\\
+&\le\|\mathbf{V}\|\,\bigl\|(\mathbf{D}-z\mathbb{I}_d)^{-1}\bigr\|\,\|\mathbf{V}^{-1}\|\,\|\mathbf{A}\mathbf{x}-z\mathbf{x}\|\\
+&=\frac{\kappa(\mathbf{V})}{\delta}\,\|\mathbf{A}\mathbf{x}-z\mathbf{x}\|,
+\end{aligned}
+$$
+
+and multiplying by $\delta$ gives the claim.
+
+$$
+\begin{array}{r}
+\blacksquare\Box
+\end{array}
+$$
+
+The theorem of [Bauer and Fike (1960)](#ref-bauer1960), stated for the norm $\|\cdot\|$ of [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry), is about perturbations of the matrix $\mathbf{A}=\mathbf{V}\mathbf{D}\mathbf{V}^{-1}$ of the lemma: for every matrix $\mathbf{E}\in\mathbb{C}^{d\times d}$, every eigenvalue $\mu$ of the perturbed matrix $\mathbf{A}+\mathbf{E}$ satisfies $\min_{\lambda\in\Lambda(\mathbf{A})}|\mu-\lambda|\le\kappa(\mathbf{V})\,\|\mathbf{E}\|$. This theorem and [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) imply each other.
+
+* **From the theorem to Lemma 7.** Let $\mathbf{x}$ be a unit vector and $z$ a number, with residual $\mathbf{r}=\mathbf{A}\mathbf{x}-z\mathbf{x}\in\mathbb{C}^d$. The matrix $\mathbf{E}=-\mathbf{r}\mathbf{x}^*\in\mathbb{C}^{d\times d}$ makes $z$ an eigenvalue of $\mathbf{A}+\mathbf{E}$, since
+$(\mathbf{A}+\mathbf{E})\mathbf{x}=\mathbf{A}\mathbf{x}-\mathbf{r}\,(\mathbf{x}^*\mathbf{x})=\mathbf{A}\mathbf{x}-\mathbf{r}=z\mathbf{x}$,
+and it has the norm of the residual, since
+$\|\mathbf{E}\|=\max_{\|\mathbf{w}\|=1}\|\mathbf{E}\mathbf{w}\|=\max_{\|\mathbf{w}\|=1}\|\mathbf{r}\,(\mathbf{x}^*\mathbf{w})\|=\|\mathbf{r}\|\max_{\|\mathbf{w}\|=1}|\mathbf{x}^*\mathbf{w}|=\|\mathbf{r}\|$,
+where we use the fact that <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="rank-one-norm-maximum" aria-label="Show why the last maximum is 1">the last maximum is $1$</button><span id="rank-one-norm-maximum" class="explanation-popover" popover="auto" role="note" aria-label="Why the maximum of the absolute value of x star w over unit vectors w is 1" data-label="Derivation">For the unit vector $\mathbf{x}$ and every unit vector $\mathbf{w}$, the Cauchy–Schwarz inequality gives $|\mathbf{x}^*\mathbf{w}|\le\|\mathbf{x}\|\,\|\mathbf{w}\|=1$, and $\mathbf{w}=\mathbf{x}$ reaches this bound, since $|\mathbf{x}^*\mathbf{x}|=\|\mathbf{x}\|^2=1$. Hence $\max_{\|\mathbf{w}\|=1}|\mathbf{x}^*\mathbf{w}|=1$.</span></span>. The theorem, applied to the eigenvalue $\mu=z$ of $\mathbf{A}+\mathbf{E}$, therefore gives $\min_{\lambda\in\Lambda(\mathbf{A})}|z-\lambda|\le\kappa(\mathbf{V})\,\|\mathbf{E}\|=\kappa(\mathbf{V})\,\|\mathbf{r}\|$, the bound of [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry).
+* **From Lemma 7 to the theorem.** Given a matrix $\mathbf{E}$ and an eigenvalue $\mu$ of $\mathbf{A}+\mathbf{E}$ with a unit eigenvector $\mathbf{x}$, the residual of $(\mu,\mathbf{x})$ for $\mathbf{A}$ is $\mathbf{A}\mathbf{x}-\mu\mathbf{x}=-\mathbf{E}\mathbf{x}$, of norm at most $\|\mathbf{E}\|$. [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) with $z=\mu$ then gives the bound of the theorem.
 
 #### Remark 19 [A small residual far from the spectrum]
 
@@ -2407,36 +2448,34 @@ $$
 \mathbf{x}=\begin{bmatrix}1\\0\end{bmatrix},
 $$
 
-with a small $\delta>0$. The eigenvalues are $\pm\sqrt\delta$, the Rayleigh quotient is $\mathbf{x}^\top\mathbf{A}\mathbf{x}=0$, and the residual $\mathbf{A}\mathbf{x}-0\cdot\mathbf{x}=[0,\delta]^\top$ has norm $\delta$, whereas the distance from $0$ to the spectrum is $\sqrt\delta$. For $\delta=10^{-6}$, the residual is $10^{-6}$ and the distance $10^{-3}$, a thousand times larger. The eigenvectors $[1,\pm\sqrt\delta]^\top$ are nearly parallel, $\kappa(\mathbf{V})=1/\sqrt\delta=1000$, and the lemma holds with equality. What a small residual $\mathbf{r}=\mathbf{A}\mathbf{x}-z\mathbf{x}$ always certifies is that $(z,\mathbf{x})$ is an exact eigenpair of a nearby matrix: $(\mathbf{A}-\mathbf{r}\mathbf{x}^*)\mathbf{x}=\mathbf{A}\mathbf{x}-\mathbf{r}=z\mathbf{x}$, and the perturbation has norm $\|\mathbf{r}\mathbf{x}^*\|=\|\mathbf{r}\|$. In the example, $\mathbf{A}-\mathbf{r}\mathbf{x}^\top=\left[\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\right]$, whose eigenvalue $0$ is double. A perturbation of size $\delta$ has moved the eigenvalues by $\sqrt\delta$, and the eigenvalues of a nonsymmetric matrix can in general move much farther than the size of a perturbation. The set of numbers $z$ with $\|\mathbf{A}\mathbf{x}-z\mathbf{x}\|<\varepsilon$ for some unit vector $\mathbf{x}$ is called the $\varepsilon$-pseudospectrum of $\mathbf{A}$, and for a nonsymmetric matrix it can extend far beyond the points within $\varepsilon$ of an eigenvalue ([Trefethen and Embree, 2005](#ref-trefethen2005)).
-
-#### Proof
-
-If $z$ is an eigenvalue, the left-hand side is zero. Otherwise, the diagonal matrix $\mathbf{D}-z\mathbb{I}_d$ is invertible, and $\mathbf{A}-z\mathbb{I}_d=\mathbf{V}(\mathbf{D}-z\mathbb{I}_d)\mathbf{V}^{-1}$ gives
-
-$$
-\mathbf{x}=\mathbf{V}(\mathbf{D}-z\mathbb{I}_d)^{-1}\mathbf{V}^{-1}(\mathbf{A}\mathbf{x}-z\mathbf{x}) .
-$$
-
-The largest diagonal entry of $(\mathbf{D}-z\mathbb{I}_d)^{-1}$ in absolute value is $1/\min_{\lambda\in\Lambda(\mathbf{A})}|\lambda-z|$, and it is the norm of this diagonal matrix. Taking norms therefore gives
-
-$$
-1=\|\mathbf{x}\|\le\frac{\|\mathbf{V}\|\,\|\mathbf{V}^{-1}\|}{\min_{\lambda\in\Lambda(\mathbf{A})}|\lambda-z|}\,\|\mathbf{A}\mathbf{x}-z\mathbf{x}\|,
-$$
-
-which is the claim.
-
-$$
-\begin{array}{r}
-\blacksquare\Box
-\end{array}
-$$
+with a small $\delta>0$. The eigenvalues are $\pm\sqrt\delta$, the Rayleigh quotient is $z=\mathbf{x}^\top\mathbf{A}\mathbf{x}=0$, and the norm of the residual $\mathbf{r}=\mathbf{A}\mathbf{x}-z\mathbf{x}=[0,\delta]^\top$ is $\|\mathbf{r}\|=\delta$, whereas the distance from $z$ to the spectrum is $\sqrt\delta$. For $\delta=10^{-6}$, the norm of the residual is $10^{-6}$ and the distance $10^{-3}$, a thousand times larger. The eigenvectors $[1,\pm\sqrt\delta]^\top$ are nearly parallel, $\kappa(\mathbf{V})=1/\sqrt\delta=10^3$, and the lemma holds with equality. What a small residual $\mathbf{r}=\mathbf{A}\mathbf{x}-z\mathbf{x}$ always certifies is that $(z,\mathbf{x})$ is an exact eigenpair of a nearby matrix: $(\mathbf{A}-\mathbf{r}\mathbf{x}^*)\mathbf{x}=\mathbf{A}\mathbf{x}-\mathbf{r}=z\mathbf{x}$, and the perturbation has norm $\|\mathbf{r}\mathbf{x}^*\|=\|\mathbf{r}\|$. In the example, $\mathbf{A}-\mathbf{r}\mathbf{x}^*=\left[\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\right]$, whose eigenvalue $0$ is double. A perturbation of size $\delta$ has moved the eigenvalues by $\sqrt\delta$, and the eigenvalues of a nonsymmetric matrix can in general move much farther than the size of a perturbation. The set of numbers $z$ with $\|\mathbf{A}\mathbf{x}-z\mathbf{x}\|<\varepsilon$ for some unit vector $\mathbf{x}$ is called the $\varepsilon$-pseudospectrum of $\mathbf{A}$, and for a nonsymmetric matrix it can extend far beyond the points within $\varepsilon$ of an eigenvalue ([Trefethen and Embree, 2005](#ref-trefethen2005)).
 
 For the convection–diffusion matrix of [Section 5.1](#51-nonsymmetric-matrices-known-through-their-products), $\mathbf{A}=\mathbf{S}\widetilde{\mathbf{A}}\mathbf{S}^{-1}$ and $\widetilde{\mathbf{A}}=\mathbf{U}\mathbf{D}\mathbf{U}^\top$ with $\mathbf{U}$ orthogonal, so $\mathbf{V}=\mathbf{S}\mathbf{U}$ diagonalizes $\mathbf{A}$, with $\kappa(\mathbf{V})=\|\mathbf{S}\|\,\|\mathbf{S}^{-1}\|=s^{d-1}$. Panel (d) of [Figure 13](#figure-arnoldi) tests [Lemma 2](#37-lemma-2-residual-certificate-for-an-approximate-eigenpair) and [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) on its Ritz pairs.
 
 <figure class="article-figure article-figure-wide" id="figure-arnoldi">
-  <img src="/images/blog/matrix-vector-products/arnoldi.svg" width="1200" height="860" alt="Four panels on the Arnoldi method. Top left: Ritz values of a random walk at steps 5, 10 and 20 in the complex plane, converging to the eigenvalue 1 and to a complex pair, inside the field of values. Top right: distance to the eigenvalue against matrix-vector products, where power iteration decreases slowly and the Arnoldi Ritz values reach rounding level by 40 products. Bottom left: Ritz values of a convection-diffusion matrix with real eigenvalues, spread off the real axis inside an oval field of values. Bottom right: a log-log scatter of distance against residual, blue points of the symmetric matrix all below the diagonal, orange points of the nonsymmetric one partly above it." loading="lazy" />
-  <figcaption><strong>Figure 13.</strong> The Arnoldi method on the two nonsymmetric matrices of <a href="#51-nonsymmetric-matrices-known-through-their-products">Section 5.1</a>. (a) The random walk of <a href="#figure-directed-graph">Figure 12</a>, through products with $\mathbf P^\top$: its eigenvalues (<span style="color:#7d8783">grey</span> dots), its field of values (<span style="color:#7d8783">grey</span> line, <a href="#remark-18-ritz-values-lie-in-the-field-of-values">Remark 18</a>), the unit circle (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>), and the Ritz values of one run, from a Gaussian starting vector, at $m=5$, 10 and 20, colored from <span style="background:linear-gradient(90deg,#b0dd2f,#481d6f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent">light to dark</span>. At $m=5$, the Ritz values $0.75$ and $-0.23\pm0.51i$ already point to the eigenvalue 1 and to the pair $\lambda_2,\bar\lambda_2$. They are within $6\cdot10^{-4}$ and $3\cdot10^{-4}$ of them at $m=10$, and within $1.1\cdot10^{-8}$ and $5.7\cdot10^{-7}$ at $m=20$, while the other Ritz values lie among the remaining eigenvalues. (b) Distance to an eigenvalue against the number of products, as medians over 200 Gaussian starting vectors, with bands containing the middle half of the runs. The Rayleigh quotient of power iteration on $\mathbf P^\top$ (<span style="color:#ea580c">orange</span>) approaches 1 at the rate $|\lambda_2|=0.81$ per product (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dotted;text-decoration-thickness:0.12em;text-underline-offset:0.2em">dotted</span>), with a median error of $1.2\cdot10^{-3}$ after 20 products and $1.2\cdot10^{-5}$ after 40, and power iteration never approaches $\lambda_2$. After 20 products, the Ritz value nearest to 1 (<span style="color:#16a34a">green</span>) is within $4.4\cdot10^{-9}$ of it, and the one nearest to $\lambda_2$ (<span style="color:#16a34a">green</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>) within $4.4\cdot10^{-7}$. Both reach rounding level, about $10^{-15}$, by 40 products. (c) The convection–diffusion matrix with $d=40$ and $\gamma=0.2$, multiplied by $h^2$. Its eigenvalues are real, between 0.046 and 3.954 (<span style="color:#27322f">black</span> ticks), and its field of values (<span style="color:#7d8783">grey</span>) is an oval that reaches $\pm0.40\,i$. The Ritz values of one run, from a Gaussian starting vector, at $m=10$, 20 and 30 (<span style="background:linear-gradient(90deg,#b0dd2f,#481d6f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent">light to dark</span>) are all real at $m=10$, but 14 of them at $m=20$ and 24 at $m=30$ are not, with imaginary parts up to $0.32$. (d) Distance from each Ritz value to the spectrum against its residual $\|\mathbf A\mathbf x-\vartheta\mathbf x\|$, for all the Ritz pairs of steps $m=1,\dots,30$ from 5 Gaussian starting vectors, 2,325 pairs per matrix. For the symmetric matrix of $-u''$ ($\gamma=0$, <span style="color:#2563eb">blue</span>), every point lies below the diagonal, as <a href="#37-lemma-2-residual-certificate-for-an-approximate-eigenpair">Lemma 2</a> requires, and the largest ratio of distance to residual is 0.49. For convection–diffusion (<span style="color:#ea580c">orange</span>), 311 points lie above the diagonal, with distances up to 5.2 times the residual. <a href="#56-lemma-7-residual-certificate-without-symmetry">Lemma 7</a> holds, with $\kappa(\mathbf V)=s^{d-1}=2.7\cdot10^3$, but it overestimates every distance by a factor of at least 520. The inexpensive residual $h_{m+1,m}|y_m|$ of <a href="#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination">Proposition 5</a> agrees with the explicit one to a relative $2\cdot10^{-14}$.</figcaption>
+  <img src="/images/blog/matrix-vector-products/arnoldi.svg" width="1200" height="860" alt="Four panels on the Arnoldi method. Top left: Ritz values of a random walk at steps 5, 10 and 20 in the complex plane, converging to the eigenvalue 1 and to a complex pair, inside the field of values. Top right: distance to the eigenvalue against matrix-vector products, where power iteration decreases slowly and the Arnoldi Ritz values reach rounding level by 40 products. Bottom left: Ritz values of a convection-diffusion matrix with real eigenvalues, spread off the real axis inside an oval field of values. Bottom right: a log-log scatter of distance against the norm of the residual, blue points of the symmetric matrix all below the diagonal, orange points of the nonsymmetric one partly above it." loading="lazy" />
+  <figcaption><strong>Figure 13.</strong> The Arnoldi method on the two nonsymmetric matrices of <a href="#51-nonsymmetric-matrices-known-through-their-products">Section 5.1</a>. (a) The random walk of <a href="#figure-directed-graph">Figure 12</a>, through products with $\mathbf P^\top$: its eigenvalues (<span style="color:#7d8783">grey</span> dots), its field of values (<span style="color:#7d8783">grey</span> line, <a href="#remark-18-ritz-values-lie-in-the-field-of-values">Remark 18</a>), the unit circle (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>), and the Ritz values of one run, from a Gaussian starting vector, at $m=5$, 10 and 20, colored from <span style="background:linear-gradient(90deg,#b0dd2f,#481d6f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent">light to dark</span>. At $m=5$, the Ritz values $0.75$ and $-0.23\pm0.51i$ already point to the eigenvalue 1 and to the pair $\lambda_2,\bar\lambda_2$. They are within $6\cdot10^{-4}$ and $3\cdot10^{-4}$ of them at $m=10$, and within $1.1\cdot10^{-8}$ and $5.7\cdot10^{-7}$ at $m=20$, while the other Ritz values lie among the remaining eigenvalues. (b) Distance to an eigenvalue against the number of products, as medians over 200 Gaussian starting vectors, with bands containing the middle half of the runs. The Rayleigh quotient of power iteration on $\mathbf P^\top$ (<span style="color:#ea580c">orange</span>) approaches 1 at the rate $|\lambda_2|=0.81$ per product (<span style="color:#7d8783">grey</span>, <span style="text-decoration:underline dotted;text-decoration-thickness:0.12em;text-underline-offset:0.2em">dotted</span>), with a median error of $1.2\cdot10^{-3}$ after 20 products and $1.2\cdot10^{-5}$ after 40, and power iteration never approaches $\lambda_2$. After 20 products, the Ritz value nearest to 1 (<span style="color:#16a34a">green</span>) is within $4.4\cdot10^{-9}$ of it, and the one nearest to $\lambda_2$ (<span style="color:#16a34a">green</span>, <span style="text-decoration:underline dashed;text-underline-offset:0.2em">dashed</span>) within $4.4\cdot10^{-7}$. Both reach rounding level, about $10^{-15}$, by 40 products. (c) The convection–diffusion matrix with $d=40$ and $\gamma=0.2$, multiplied by $h^2$. Its eigenvalues are real, between 0.046 and 3.954 (<span style="color:#27322f">black</span> ticks), and its field of values (<span style="color:#7d8783">grey</span>) is an oval that reaches $\pm0.40\,i$. The Ritz values of one run, from a Gaussian starting vector, at $m=10$, 20 and 30 (<span style="background:linear-gradient(90deg,#b0dd2f,#481d6f);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent">light to dark</span>) are all real at $m=10$, but 14 of them at $m=20$ and 24 at $m=30$ are not, with imaginary parts up to $0.32$. (d) Distance from each Ritz value to the spectrum against the norm of its residual, $\|\mathbf A\mathbf x-\vartheta\mathbf x\|$, for all the Ritz pairs of steps $m=1,\dots,30$ from 5 Gaussian starting vectors, 2,325 pairs per matrix. For the symmetric matrix of $-u''$ ($\gamma=0$, <span style="color:#2563eb">blue</span>), every point lies below the diagonal, as <a href="#37-lemma-2-residual-certificate-for-an-approximate-eigenpair">Lemma 2</a> requires, and the largest ratio of the distance to the norm of the residual is 0.49. For convection–diffusion (<span style="color:#ea580c">orange</span>), 311 points lie above the diagonal, with distances up to 5.2 times the norm of the residual. <a href="#56-lemma-7-residual-certificate-without-symmetry">Lemma 7</a> holds, with $\kappa(\mathbf V)=s^{d-1}=2.7\cdot10^3$, but it overestimates every distance by a factor of at least 520. The inexpensive norm $h_{m+1,m}|y_m|$ of the residual, from <a href="#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination">Proposition 5</a>, agrees with the norm computed explicitly to a relative $2\cdot10^{-14}$.</figcaption>
 </figure>
+
+#### Remark 20 [Matrices without a basis of eigenvectors]
+
+The hypothesis of [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) is that $\mathbf{A}$ has a basis of eigenvectors, not that $\mathbf{A}$ is invertible: $\mathbf{D}$ may have zeros on its diagonal. [Lemma 6](#54-lemma-6-orthogonality-and-hessenberg-projection) and [Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination) hold for every real square matrix, apart from the formula for $\mu$ at the end of item 3 of [Proposition 5](#55-proposition-5-ritz-pairs-the-minimizing-polynomial-and-exact-termination), but [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry) fails without its hypothesis. Take the matrix $\mathbf{J}=\left[\begin{smallmatrix}0&1\\0&0\end{smallmatrix}\right]$ of [Remark 19](#remark-19-a-small-residual-far-from-the-spectrum), whose eigenvalue $0$ is double but whose eigenvectors are only the multiples of $[1,0]^\top$. For $z=\varepsilon>0$ and the unit vector $\mathbf{x}=[1,\varepsilon]^\top/\sqrt{1+\varepsilon^2}$,
+
+$$
+\mathbf{J}\mathbf{x}-\varepsilon\mathbf{x}
+=\frac{1}{\sqrt{1+\varepsilon^2}}\left(\begin{bmatrix}\varepsilon\\0\end{bmatrix}-\begin{bmatrix}\varepsilon\\\varepsilon^2\end{bmatrix}\right)
+=\frac{1}{\sqrt{1+\varepsilon^2}}\begin{bmatrix}0\\-\varepsilon^2\end{bmatrix},
+$$
+
+so the norm of the residual is less than $\varepsilon^2$, while the distance from $z$ to the spectrum $\{0\}$ is $\varepsilon$, more than $1/\varepsilon$ times this norm. This ratio is unbounded as $\varepsilon\to0$, so no constant can play the role of $\kappa(\mathbf{V})$.
+
+What remains is a bound with a root. Every square matrix has a Jordan form $\mathbf{A}=\mathbf{V}\mathbf{J}\mathbf{V}^{-1}$, where $\mathbf{V}\in\mathbb{C}^{d\times d}$ is invertible and $\mathbf{J}$ is block diagonal, each block having one eigenvalue on its diagonal, ones just above the diagonal, and zeros elsewhere. Let $p$ be the size of the largest block, and $\eta=p\,\kappa(\mathbf{V})\,\|\mathbf{A}\mathbf{x}-z\mathbf{x}\|$. Then, for every unit vector $\mathbf{x}\in\mathbb{C}^d$ and every $z\in\mathbb{C}$, the distance from $z$ to the spectrum is <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="jordan-residual-bound" aria-label="Show why the distance is bounded by a p-th root of the norm of the residual">bounded by a $p$-th root</button><span id="jordan-residual-bound" class="explanation-popover" popover="auto" role="note" aria-label="Why the distance is bounded by a p-th root of the norm of the residual" data-label="Derivation">The setting: $\mathbf{A}=\mathbf{V}\mathbf{J}\mathbf{V}^{-1}$ with $\mathbf{V}$ invertible and $\mathbf{J}$ in Jordan form, $p$ is the size of the largest Jordan block, $\|\mathbf{x}\|=1$, $\mathbf{r}=\mathbf{A}\mathbf{x}-z\mathbf{x}$, $\eta=p\,\kappa(\mathbf{V})\|\mathbf{r}\|$ and $\delta=\min_{\lambda\in\Lambda(\mathbf{A})}|z-\lambda|$. If $\delta=0$, there is nothing to prove. Otherwise $\mathbf{J}-z\mathbb{I}_d$ is invertible and $\mathbf{x}=\mathbf{V}(\mathbf{J}-z\mathbb{I}_d)^{-1}\mathbf{V}^{-1}\mathbf{r}$, so <span class="explanation-popover__equation">$1=\|\mathbf{x}\|\le\kappa(\mathbf{V})\,\|(\mathbf{J}-z\mathbb{I}_d)^{-1}\|\,\|\mathbf{r}\|.$</span> A Jordan block of size $k\le p$ with eigenvalue $\lambda$ becomes the block $(\lambda-z)\mathbb{I}_k+\mathbf{N}$ of $\mathbf{J}-z\mathbb{I}_d$, where $\mathbf{N}$ has ones just above its diagonal, so that $\|\mathbf{N}^i\|\le1$ and $\mathbf{N}^k=0$. Because $\mathbf{N}^k=0$, multiplying by $(\lambda-z)\mathbb{I}_k+\mathbf{N}$ shows that its inverse is the finite geometric series below, and since $|\lambda-z|\ge\delta$ and $k\le p$, <span class="explanation-popover__equation">$\begin{aligned}\bigl\|\bigl((\lambda-z)\mathbb{I}_k+\mathbf{N}\bigr)^{-1}\bigr\|&=\Bigl\|\sum_{i=0}^{k-1}\frac{(-1)^i\mathbf{N}^i}{(\lambda-z)^{i+1}}\Bigr\|\\&\le\sum_{i=0}^{k-1}\frac{1}{|\lambda-z|^{i+1}}\\&\le\sum_{i=1}^{p}\frac{1}{\delta^{i}}.\end{aligned}$</span> The norm of a block diagonal matrix is the largest norm of its blocks, so <span class="explanation-popover__equation">$1\le\kappa(\mathbf{V})\,\|\mathbf{r}\|\displaystyle\sum_{i=1}^{p}\frac{1}{\delta^{i}}.$</span> If $\delta\le1$, each of the $p$ terms is at most $\delta^{-p}$, so <span class="explanation-popover__equation">$1\le p\,\kappa(\mathbf{V})\|\mathbf{r}\|\,\delta^{-p}=\eta\,\delta^{-p},\quad\text{that is,}\quad\delta\le\eta^{1/p}.$</span> If $\delta>1$, each term is at most $\delta^{-1}$, so <span class="explanation-popover__equation">$1\le p\,\kappa(\mathbf{V})\|\mathbf{r}\|\,\delta^{-1}=\eta\,\delta^{-1},\quad\text{that is,}\quad\delta\le\eta.$</span> In both cases, $\delta\le\max\{\eta,\eta^{1/p}\}$.</span></span> of $\eta$ when $\eta<1$:
+
+$$
+\min_{\lambda\in\Lambda(\mathbf{A})}|z-\lambda|\le\max\bigl\{\eta,\ \eta^{1/p}\bigr\}.
+$$
+
+When $\mathbf{A}$ has a basis of eigenvectors, all the blocks have size $p=1$, $\mathbf{J}=\mathbf{D}$, and this is [Lemma 7](#56-lemma-7-residual-certificate-without-symmetry). For the matrix $\mathbf{J}$ above, $p=2$ and $\mathbf{V}=\mathbb{I}_2$, so a residual of norm less than $\varepsilon^2$ gives $\eta<2\varepsilon^2$ and the bound $\sqrt2\,\varepsilon$, against the actual distance $\varepsilon$: the square root cannot be avoided. It is the square root of [Remark 19](#remark-19-a-small-residual-far-from-the-spectrum), where a perturbation of size $\delta$ moved the double eigenvalue $0$ of $\mathbf{J}$ to $\pm\sqrt\delta$.
 
 ### 5.7 Algorithm 3 [Arnoldi with reorthogonalization and residual checks]
 
