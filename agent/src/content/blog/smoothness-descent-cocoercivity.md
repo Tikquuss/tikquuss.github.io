@@ -28,7 +28,7 @@ Convexity specifies on which side of this tangent model the graph lies, while sm
 * For a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$, we let $\sigma(\mathbf{A}) \subset [0, \infty)$ be the set of singular values of $\mathbf{A}$, and $\sigma_f(\mathbf{A}) = f\{\sigma(\mathbf{A})\}$ for any operator $f \in \{\min,\max,\ldots\}$.
 Similarly, for a square matrix $\mathbf{A}$, we define $\lambda(\mathbf{A}) \subset \mathbb{R}$ to be its set of eigenvalues.
 
-* For a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$, the induced $p \rightarrow q$ norm of $\mathbf{A}$ is $\|\mathbf{A}\|_{p \rightarrow q} = \sup_{\mathbf{x} \ne 0 }  \frac{\|\mathbf{A}\mathbf{x}\|_q}{\|\mathbf{x}\|_p} = \sup_{\|\mathbf{x}\|_p = 1}  \|\mathbf{A}\mathbf{x}\|_q$. We have $\|\mathbf{A}\|_{2 \rightarrow 2} = \sigma_{\max}(\mathbf{A})$, the <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="operator-spectral-norm" aria-label="Explain the operator or spectral norm">operator norm, spectral norm, or induced $2$-norm</button><span id="operator-spectral-norm" class="explanation-popover" popover="auto" role="note" aria-label="Operator and spectral norm" data-label="Notation">These are three names for the same quantity here: the largest factor by which $\mathbf A$ can stretch a Euclidean unit vector. It equals the largest singular value $\sigma_{\max}(\mathbf A)$.</span></span>.
+* For a matrix $\mathbf{A} \in \mathbb{R}^{m \times n}$, the induced $p \rightarrow q$ norm of $\mathbf{A}$ is $\|\mathbf{A}\|_{p \rightarrow q} = \sup_{\mathbf{x} \ne 0 }  \frac{\|\mathbf{A}\mathbf{x}\|_q}{\|\mathbf{x}\|_p} = \sup_{\|\mathbf{x}\|_p = 1}  \|\mathbf{A}\mathbf{x}\|_q$. We have $\|\mathbf{A}\|_{2 \rightarrow 2} = \sigma_{\max}(\mathbf{A})$, the <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="operator-spectral-norm" aria-label="Explain the operator or spectral norm">operator norm</button><span id="operator-spectral-norm" class="explanation-popover" popover="auto" role="note" aria-label="Operator and spectral norm" data-label="Notation">These are three names for the same quantity here: the largest factor by which $\mathbf A$ can stretch a Euclidean unit vector. It equals the largest singular value $\sigma_{\max}(\mathbf A)$.</span></span>, spectral norm, or induced $2$-norm.
 
 ## Definition 1 [Subdifferentiability]
 A function $\varphi : \mathbb{R}^n \to \mathbb{R}$ is said to be subdifferentiable at $\mathbf{x} \in \mathbb{R}^n$ if and only if
@@ -83,11 +83,11 @@ $$
 \end{array}
 $$
 
-The defining inequality says that the graph of a convex function lies below every chord joining two points of its graph. When the function is differentiable, the equivalent first-order picture is that every tangent hyperplane lies below the graph. When it is twice differentiable, the nonnegative eigenvalues of the Hessian say that the function bends upward in every direction.
+The defining inequality says that the graph of a convex function lies below every chord joining two points of its graph. When the function is differentiable, the equivalent first-order picture is that every tangent hyperplane lies below the graph. When it is twice differentiable, the nonnegative eigenvalues of the Hessian say that the function bends upward in every direction. [Figure 1](#figure-convexity-supporting-line) draws a chord and a supporting line in one dimension.
 
-<figure class="article-figure">
+<figure class="article-figure" id="figure-convexity-supporting-line">
   <img src="/images/blog/convexity-supporting-line.svg" width="1200" height="620" alt="A convex curve lying below a chord and above a supporting line at x" loading="lazy" />
-  <figcaption>For a convex function, chords lie above the graph, whereas supporting lines and tangent hyperplanes lie below it. Definition 1 describes the supporting slopes; Definition 2 describes the global shape.</figcaption>
+  <figcaption><strong>Figure 1.</strong> For a convex function, chords lie above the graph, whereas supporting lines and tangent hyperplanes lie below it. <a href="#definition-1-subdifferentiability">Definition 1</a> describes the supporting slopes; <a href="#definition-2-convexity">Definition 2</a> describes the global shape.</figcaption>
 </figure>
 
 ## Definition 3 [Lipschitz Continuity]
@@ -118,7 +118,7 @@ $$
 \langle \Phi(\mathbf{x})-\Phi(\mathbf{y}),\mathbf{x}-\mathbf{y}\rangle \ge \frac{1}{L}\|\Phi(\mathbf{x})-\Phi(\mathbf{y})\|_2^2 \quad \forall \mathbf{x},\mathbf{y}\in\mathbb{R}^n
 $$
 
-Cocoercivity is also often called the <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="dunn-property" aria-label="Explain the Dunn property and inverse strong monotonicity">Dunn property or inverse strong monotonicity</button><span id="dunn-property" class="explanation-popover" popover="auto" role="note" aria-label="Dunn property" data-label="Terminology">The names emphasize two equivalent viewpoints: cocoercivity is historically associated with Dunn, and it can be read as strong monotonicity of the inverse relation when that inverse is well defined.</span></span>. When $L=1$, this means that $\Phi$ is <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="firmly-nonexpansive" aria-label="Define firmly nonexpansive">firmly nonexpansive</button><span id="firmly-nonexpansive" class="explanation-popover" popover="auto" role="note" aria-label="Firmly nonexpansive map" data-label="Definition">A map is firmly nonexpansive when $\|\Phi(\mathbf x)-\Phi(\mathbf y)\|_2^2\le\langle\Phi(\mathbf x)-\Phi(\mathbf y),\mathbf x-\mathbf y\rangle$. This is stronger than ordinary nonexpansiveness.</span></span>.
+Cocoercivity is also often called the <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="dunn-property" aria-label="Explain the Dunn property and inverse strong monotonicity">Dunn property</button><span id="dunn-property" class="explanation-popover" popover="auto" role="note" aria-label="Dunn property" data-label="Terminology">The names emphasize two equivalent viewpoints: cocoercivity is historically associated with Dunn, and it can be read as strong monotonicity of the inverse relation when that inverse is well defined.</span></span> or inverse strong monotonicity. When $L=1$, this means that $\Phi$ is <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="firmly-nonexpansive" aria-label="Define firmly nonexpansive">firmly nonexpansive</button><span id="firmly-nonexpansive" class="explanation-popover" popover="auto" role="note" aria-label="Firmly nonexpansive map" data-label="Definition">A map is firmly nonexpansive when $\|\Phi(\mathbf x)-\Phi(\mathbf y)\|_2^2\le\langle\Phi(\mathbf x)-\Phi(\mathbf y),\mathbf x-\mathbf y\rangle$. This is stronger than ordinary nonexpansiveness.</span></span>.
 
 $$
 \begin{array}{r}
@@ -202,7 +202,7 @@ R_\varphi(\mathbf{y};\mathbf{x})
 \Big[\varphi(\mathbf{x})+(\mathbf{y}-\mathbf{x})^\top\nabla\varphi(\mathbf{x})\Big].
 $$
 
-This is the vertical error made when the tangent model at $\mathbf{x}$ is used to predict the value at $\mathbf{y}$.
+This is the vertical error made when the tangent model at $\mathbf{x}$ is used to predict the value at $\mathbf{y}$. [Figure 2](#figure-quadratic-inequalities) draws the three bounds below in one dimension.
 
 * **$L$-UQI** literally means that this error is bounded **from above** by $(L/2)\|\mathbf{y}-\mathbf{x}\|_2^2$. Geometrically, the graph cannot rise above the upward quadratic model centered at $\mathbf{x}$. It may, however, fall arbitrarily far below that model.
 
@@ -212,9 +212,9 @@ This is the vertical error made when the tangent model at $\mathbf{x}$ is used t
 
 These inequalities do not, by themselves, assert convexity. Convexity would additionally require $R_\varphi(\mathbf{y};\mathbf{x})\ge0$, whereas concavity would require $R_\varphi(\mathbf{y};\mathbf{x})\le0$.
 
-<figure class="article-figure article-figure-wide">
+<figure class="article-figure article-figure-wide" id="figure-quadratic-inequalities">
   <img src="/images/blog/quadratic-inequalities.svg" width="1500" height="560" alt="Three panels illustrating upper, lower, and two-sided quadratic bounds around a tangent line" loading="lazy" />
-  <figcaption>In one dimension, the L-UQI supplies only the upper quadratic envelope, the L-LQI supplies only the lower envelope, and the L-QI traps the function between both. Each envelope touches the tangent model at the base point.</figcaption>
+  <figcaption><strong>Figure 2.</strong> In one dimension, the L-UQI supplies only the upper quadratic envelope, the L-LQI supplies only the lower envelope, and the L-QI traps the function between both. Each envelope touches the tangent model at the base point.</figcaption>
 </figure>
 
 ## Definition 7 [$L$-GLB and $L$-GUB]
@@ -427,13 +427,13 @@ Then $\varphi$ is $L$-smooth if and only if it is $L$-QI.
 
 ### Remark 3
 
-The standard descent lemma in the optimization literature usually focuses on only one side of the result: the upper quadratic inequality and the descent obtained with a positive learning rate. Here, we state the two-sided $L$-QI and thus generalize the usual presentation to include ascent as well. Indeed, for any learning rate $\alpha\in[0,2/L]$, moving from $\mathbf{x}$ to $\mathbf{x}-\alpha\nabla\varphi(\mathbf{x})$ cannot increase $\varphi$. Symmetrically, for $\alpha\in[-2/L,0]$, the same update moves in the gradient direction and cannot decrease $\varphi$. Corollary 1 quantifies both the descent and the ascent, while Corollary 2 gives the corresponding gradient bounds when $\varphi$ is bounded below or bounded above.
+The standard descent lemma in the optimization literature usually focuses on only one side of the result: the upper quadratic inequality and the descent obtained with a positive learning rate. Here, we state the two-sided $L$-QI and thus generalize the usual presentation to include ascent as well. Indeed, for any learning rate $\alpha\in[0,2/L]$, moving from $\mathbf{x}$ to $\mathbf{x}-\alpha\nabla\varphi(\mathbf{x})$ cannot increase $\varphi$. Symmetrically, for $\alpha\in[-2/L,0]$, the same update moves in the gradient direction and cannot decrease $\varphi$ ([Figure 3](#figure-descent-ascent)). Corollary 1 quantifies both the descent and the ascent, while Corollary 2 gives the corresponding gradient bounds when $\varphi$ is bounded below or bounded above.
 
 The equivalence is important: $L$-smoothness is a statement about the variation of the gradient, whereas the $L$-QI is a statement about function values and tangent models. Lemma 2 says that these are two descriptions of exactly the same regularity.
 
-<figure class="article-figure">
+<figure class="article-figure" id="figure-descent-ascent">
   <img src="/images/blog/descent-ascent.svg" width="1200" height="610" alt="A positive gradient step moving downhill and a negative gradient step moving uphill" loading="lazy" />
-  <figcaption>On a one-dimensional slice of the function, a positive learning rate moves against the gradient and produces descent, whereas a negative learning rate moves with the gradient and produces ascent. Smoothness determines the interval of learning rates for which these changes are guaranteed.</figcaption>
+  <figcaption><strong>Figure 3.</strong> On a one-dimensional slice of the function, a positive learning rate moves against the gradient and produces descent, whereas a negative learning rate moves with the gradient and produces ascent. Smoothness determines the interval of learning rates for which these changes are guaranteed.</figcaption>
 </figure>
 
 ### Proof
@@ -862,7 +862,7 @@ $$
 \end{equation}
 $$
 
-The <span style="color:#7c3aed">purple step</span> uses $\left\|\nabla^2\varphi(\cdot)\right\|_{2 \to 2}=\sigma_{\max}\left(\nabla^2\varphi(\cdot)\right)\le L$. Indeed, since $\varphi\in C^2(\mathbb{R}^n)$, its Hessian is symmetric, so <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="symmetric-spectral-norm" aria-label="Explain the spectral norm of a symmetric Hessian">its spectral norm equals the largest absolute eigenvalue</button><span id="symmetric-spectral-norm" class="explanation-popover" popover="auto" role="note" aria-label="Spectral norm of a symmetric matrix" data-label="Linear algebra">A real symmetric matrix has an orthonormal eigenbasis and singular values equal to the absolute values of its eigenvalues. Hence $\|\mathbf H\|_{2\to2}=\max_i|\lambda_i(\mathbf H)|$.</span></span>, which is at most $L$ by assumption.
+The <span style="color:#7c3aed">purple step</span> uses $\left\|\nabla^2\varphi(\cdot)\right\|_{2 \to 2}=\sigma_{\max}\left(\nabla^2\varphi(\cdot)\right)\le L$. Indeed, since $\varphi\in C^2(\mathbb{R}^n)$, its Hessian is symmetric, so its spectral norm equals the <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="symmetric-spectral-norm" aria-label="Explain the spectral norm of a symmetric Hessian">largest absolute eigenvalue</button><span id="symmetric-spectral-norm" class="explanation-popover" popover="auto" role="note" aria-label="Spectral norm of a symmetric matrix" data-label="Linear algebra">A real symmetric matrix has an orthonormal eigenbasis and singular values equal to the absolute values of its eigenvalues. Hence $\|\mathbf H\|_{2\to2}=\max_i|\lambda_i(\mathbf H)|$.</span></span>, which is at most $L$ by assumption.
 
 $$
 \begin{array}{r}
@@ -901,11 +901,11 @@ $$
 {L\|\boldsymbol{\Delta}_x\|_2}.
 $$
 
-Lipschitz continuity provides only the bound on the ratio appearing on the right. Cocoercivity additionally says that the change in the gradient is aligned strongly enough with the change in position. Convexity supplies this directional structure; the Baillon–Haddad theorem shows that, for a convex gradient field, the Lipschitz bound automatically upgrades to cocoercivity.
+Lipschitz continuity provides only the bound on the ratio appearing on the right. Cocoercivity additionally says that the change in the gradient is aligned strongly enough with the change in position ([Figure 4](#figure-cocoercivity-geometry)). Convexity supplies this directional structure; the Baillon–Haddad theorem shows that, for a convex gradient field, the Lipschitz bound automatically upgrades to cocoercivity.
 
-<figure class="article-figure">
+<figure class="article-figure" id="figure-cocoercivity-geometry">
   <img src="/images/blog/cocoercivity-geometry.svg" width="1200" height="590" alt="The position difference and gradient difference forming an acute angle, with the projection of the gradient difference onto the position difference" loading="lazy" />
-  <figcaption>Lipschitz continuity limits the length of the field variation. Cocoercivity also requires a sufficiently large projection onto the input displacement, so the two variations cannot point in opposing directions.</figcaption>
+  <figcaption><strong>Figure 4.</strong> Lipschitz continuity limits the length of the field variation. Cocoercivity also requires a sufficiently large projection onto the input displacement, so the two variations cannot point in opposing directions.</figcaption>
 </figure>
 
 ### Proof
@@ -927,7 +927,7 @@ $$
 
 Dividing both sides by $\|\nabla\varphi(\mathbf{x})-\nabla\varphi(\mathbf{y})\|_2\ne0$ gives $\|\nabla\varphi(\mathbf{x})-\nabla\varphi(\mathbf{y})\|_2\le L\|\mathbf{x}-\mathbf{y}\|_2$. Hence, $\varphi$ is $L$-smooth.
 
-The converse is false in general. The <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="smooth-not-cocoercive" aria-label="Summarize the smooth but non-cocoercive counterexample">concave quadratic counterexample</button><span id="smooth-not-cocoercive" class="explanation-popover" popover="auto" role="note" aria-label="Smooth but not cocoercive" data-label="Counterexample">For $\varphi(\mathbf x)=-\|\mathbf x\|_2^2/2$, the gradient is $1$-Lipschitz but points opposite the displacement, making the monotonicity inner product negative. Cocoercivity is therefore impossible.</span></span> is $\varphi(\mathbf{x})=-\frac{1}{2}\|\mathbf{x}\|_2^2$. We have $\nabla\varphi(\mathbf{x})=-\mathbf{x}$ and $\nabla^2\varphi(\mathbf{x})=-\mathbb{I}$, so $\varphi$ is $L$-smooth if and only if $L\ge1$. However, for every $L>0$, $\nabla\varphi$ is not $1/L$-cocoercive, since
+The converse is false in general. The concave quadratic <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="smooth-not-cocoercive" aria-label="Summarize the smooth but non-cocoercive counterexample">counterexample</button><span id="smooth-not-cocoercive" class="explanation-popover" popover="auto" role="note" aria-label="Smooth but not cocoercive" data-label="Counterexample">For $\varphi(\mathbf x)=-\|\mathbf x\|_2^2/2$, the gradient is $1$-Lipschitz but points opposite the displacement, making the monotonicity inner product negative. Cocoercivity is therefore impossible.</span></span> is $\varphi(\mathbf{x})=-\frac{1}{2}\|\mathbf{x}\|_2^2$. We have $\nabla\varphi(\mathbf{x})=-\mathbf{x}$ and $\nabla^2\varphi(\mathbf{x})=-\mathbb{I}$, so $\varphi$ is $L$-smooth if and only if $L\ge1$. However, for every $L>0$, $\nabla\varphi$ is not $1/L$-cocoercive, since
 
 $$
 \begin{equation}

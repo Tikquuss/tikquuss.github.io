@@ -76,6 +76,14 @@ concentration near t = 1, the largest inner product between two of them, and κ(
 python -m checks.convection_eigenvectors     # writes summaries/convection-eigenvectors.json
 ```
 
+The numbers that Section 5.1 quotes for the circulation of the random walk of Figure 12 (the group sums of the
+term of the complex pair, their phases, and the deviations of the group probabilities after one and two steps)
+come from
+
+```bash
+python -m checks.walk_circulation            # writes summaries/walk-circulation.json
+```
+
 All random draws are seeded, so the outputs are deterministic for a given software stack. The fifteen
 figures take about three minutes on a laptop CPU, most of it for the network Hessian; the schematics and
 execution diagrams take a second each.

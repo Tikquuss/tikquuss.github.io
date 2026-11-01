@@ -1,0 +1,42 @@
+{
+  "smallest_gap_between_eigenvalues": 0.00464553,
+  "coefficient_of_pi": 1.0,
+  "conjugate_coefficient_is_conjugate": true,
+  "lambda_2_modulus": 0.807111,
+  "lambda_2_angle_degrees": 119.192,
+  "max_modulus_other_57": 0.444754,
+  "group_sum_moduli": [
+    0.318329,
+    0.329448,
+    0.32889
+  ],
+  "group_sum_phases_degrees": [
+    -0.983276,
+    -119.988,
+    117.845
+  ],
+  "group_deviations_steps_1_2": [
+    [
+      -0.255468,
+      0.539105,
+      -0.283637
+    ],
+    [
+      -0.227468,
+      -0.202895,
+      0.430363
+    ]
+  ],
+  "pair_part_steps_1_2": [
+    [
+      -0.242893,
+      0.53175,
+      -0.288857
+    ],
+    [
+      -0.223441,
+      -0.204129,
+      0.42757
+    ]
+  ]
+}

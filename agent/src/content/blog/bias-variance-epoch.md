@@ -45,7 +45,7 @@ Since training-set size is an important parameter of a learning problem, we assu
 
 <span class="article-kicker article-kicker--definition">Definition 3</span> **Optimal prediction.**
 
-Let $x$ be random and let $t=t(x)$ be either deterministic or random conditional on $x$. The <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="joint-conditional-factorization" aria-label="Explain the joint and conditional factorization">factorization $p(x,t)=p(x)p(t\mid x)$</button><span id="joint-conditional-factorization" class="explanation-popover" popover="auto" role="note" aria-label="Joint and conditional factorization" data-label="Probability">The joint distribution of an input and label equals the marginal distribution of the input multiplied by the conditional distribution of the label given that input.</span></span> gives the optimal prediction at $x$ as
+Let $x$ be random and let $t=t(x)$ be either deterministic or random conditional on $x$. The <span class="explanation-note"><button type="button" class="explanation-trigger" popovertarget="joint-conditional-factorization" aria-label="Explain the joint and conditional factorization">factorization</button><span id="joint-conditional-factorization" class="explanation-popover" popover="auto" role="note" aria-label="Joint and conditional factorization" data-label="Probability">The joint distribution of an input and label equals the marginal distribution of the input multiplied by the conditional distribution of the label given that input.</span></span> $p(x,t)=p(x)p(t\mid x)$ gives the optimal prediction at $x$ as
 
 $$
 y^*(x)=\arg\min_y \mathbb E_{t\sim p(t\mid x)}[\ell(t,y)].

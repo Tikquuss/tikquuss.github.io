@@ -1,0 +1,258 @@
+---
+// Keeps a figure of a page in view while the text that refers to it is read:
+// a link to a figure opens it here instead of jumping away, and every figure
+// gets a button that keeps it here. On wide screens the panel sits in the right
+// margin, on smaller ones it is a sheet along the bottom of the screen. Pages
+// without figures are left untouched.
+---
+
+<aside class="figure-dock" aria-labelledby="figure-dock-label" hidden>
+  <div class="figure-dock__header">
+    <span class="figure-dock__label" id="figure-dock-label" tabindex="-1"></span>
+    <span class="figure-dock__actions">
+      <a class="figure-dock__goto" href="#">Go to figure</a>
+      <button type="button" class="figure-dock__size" aria-pressed="false">Larger</button>
+      <button type="button" class="figure-dock__close explanation-popover__close" aria-label="Close">×</button>
+    </span>
+  </div>
+  <a class="figure-dock__image" target="_blank" rel="noopener" title="Open the image at full size"></a>
+  <details class="figure-dock__caption">
+    <summary>Caption</summary>
+    <div class="figure-dock__caption-text"></div>
+  </details>
+</aside>
+
+<script>
+  const dock = document.querySelector<HTMLElement>('.figure-dock');
+  const figures = Array.from(document.querySelectorAll<HTMLElement>('.prose .article-figure')).filter(
+    figure => figure.querySelector('img'),
+  );
+  // Links reach the figures that have an id.
+  const figuresById = new Map(figures.filter(figure => figure.id).map(figure => [figure.id, figure]));
+
+  if (dock && figures.length > 0) {
+    const label = dock.querySelector<HTMLElement>('.figure-dock__label')!;
+    const goto = dock.querySelector<HTMLAnchorElement>('.figure-dock__goto')!;
+    const sizeButton = dock.querySelector<HTMLButtonElement>('.figure-dock__size')!;
+    const closeButton = dock.querySelector<HTMLButtonElement>('.figure-dock__close')!;
+    const imageLink = dock.querySelector<HTMLAnchorElement>('.figure-dock__image')!;
+    const caption = dock.querySelector<HTMLDetailsElement>('.figure-dock__caption')!;
+    const captionText = dock.querySelector<HTMLElement>('.figure-dock__caption-text')!;
+
+    // Beside the text from this width on, as a bottom sheet below it.
+    const sideLayout = window.matchMedia('(min-width: 1024px)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const edge = 16; // between the panel and the edge of the screen
+    const gap = 24; // between the text and the panel
+    const narrowestText = 560;
+
+    let current: HTMLElement | null = null;
+    let opener: HTMLElement | null = null;
+    let enlarged = false;
+
+    const pins = new Map<HTMLElement, HTMLButtonElement>();
+    const pinIcon =
+      '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>';
+
+    function figureName(figure: HTMLElement) {
+      return figure.querySelector('figcaption strong')?.textContent?.trim().replace(/\.$/, '') || 'Figure';
+    }
+
+    function syncPins() {
+      pins.forEach((pin, figure) => {
+        const kept = current === figure;
+        pin.setAttribute('aria-pressed', String(kept));
+        pin.querySelector('span')!.textContent = kept ? 'Kept in view' : 'Keep in view while reading';
+      });
+    }
+
+    // The width of the text column is kept when the margin can hold the panel.
+    // Otherwise the page gives up just enough room on its right for it.
+    function layoutDock() {
+      const body = document.body;
+      if (!current) {
+        delete body.dataset.figureDock;
+        body.style.paddingRight = '';
+        body.style.paddingBottom = '';
+        return;
+      }
+      if (sideLayout.matches) {
+        const viewport = document.documentElement.clientWidth;
+        const main = document.querySelector('main');
+        const mainWidth = main ? parseFloat(getComputedStyle(main).maxWidth) || 880 : 880;
+        const mainPadding = main ? parseFloat(getComputedStyle(main).paddingRight) || 24 : 24;
+        const margin = (viewport - mainWidth) / 2 + mainPadding - edge - gap;
+        const width = enlarged
+          ? Math.min(900, viewport - edge - gap + mainPadding - narrowestText)
+          : Math.min(560, Math.max(360, margin));
+        // The widest page whose text ends `gap` before the panel.
+        const room = viewport - edge - width - gap + mainPadding;
+        const centered = 2 * room - mainWidth;
+        const page = centered >= mainWidth ? Math.min(viewport, centered) : room;
+        body.dataset.figureDock = 'side';
+        dock!.style.width = `${width}px`;
+        body.style.paddingRight = `${viewport - page}px`;
+        body.style.paddingBottom = '';
+      } else {
+        body.dataset.figureDock = 'sheet';
+        dock!.style.width = '';
+        body.style.paddingRight = '';
+        body.style.paddingBottom = `${dock!.offsetHeight}px`;
+      }
+    }
+
+    // When the page makes room for the panel, the text may reflow. Scroll so that
+    // the element the reader acted on stays where it was on the screen.
+    function keepInPlace(element: HTMLElement | null, change: () => void) {
+      const before = element && !dock!.contains(element) ? element.getBoundingClientRect().top : null;
+      change();
+      if (before !== null) window.scrollBy(0, element!.getBoundingClientRect().top - before);
+    }
+
+    function visibleBounds() {
+      const nav = document.querySelector('.site-nav');
+      const top = nav ? Math.max(0, nav.getBoundingClientRect().bottom) : 0;
+      const bottom =
+        current && !sideLayout.matches ? dock!.getBoundingClientRect().top : window.innerHeight;
+      return { top, bottom };
+    }
+
+    function inView(figure: HTMLElement) {
+      const rect = figure.querySelector('img')!.getBoundingClientRect();
+      const { top, bottom } = visibleBounds();
+      return Math.min(rect.bottom, bottom) - Math.max(rect.top, top) >= 0.75 * rect.height;
+    }
+
+    function flash(element: HTMLElement) {
+      element.classList.remove('is-flashing');
+      void element.offsetWidth;
+      element.classList.add('is-flashing');
+    }
+
+    // On a bottom sheet, scroll the page so that the link stays visible above it.
+    function revealAboveSheet(element: HTMLElement | null) {
+      if (!element || sideLayout.matches || dock!.contains(element)) return;
+      const overlap = element.getBoundingClientRect().bottom + 12 - dock!.getBoundingClientRect().top;
+      if (overlap > 0) window.scrollBy({ top: overlap, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+    }
+
+    function openDock(figure: HTMLElement, from: HTMLElement | null, byKeyboard: boolean) {
+      if (figure === current) {
+        flash(dock!);
+        return;
+      }
+      // The image, with the drawing laid over it when there is one.
+      const source = figure.querySelector('img')!;
+      const media = (source.closest('.figure-image-overlay') ?? source).cloneNode(true) as HTMLElement;
+      [media, ...media.querySelectorAll('img')].forEach(element => element.removeAttribute('loading'));
+      imageLink.replaceChildren(media);
+      imageLink.href = source.currentSrc || source.src;
+      label.textContent = figureName(figure);
+      captionText.innerHTML = figure.querySelector('figcaption')?.innerHTML ?? '';
+      caption.hidden = captionText.innerHTML === '';
+      caption.open = sideLayout.matches;
+      goto.href = figure.id ? `#${figure.id}` : '#';
+
+      current?.classList.remove('is-docked');
+      current = figure;
+      opener = from;
+      figure.classList.add('is-docked');
+      dock!.hidden = false;
+      syncPins();
+      keepInPlace(from, layoutDock);
+      flash(dock!);
+      revealAboveSheet(from);
+      if (byKeyboard) label.focus({ preventScroll: true });
+    }
+
+    function closeDock(returnFocus: boolean) {
+      if (!current) return;
+      current.classList.remove('is-docked');
+      current = null;
+      dock!.hidden = true;
+      syncPins();
+      keepInPlace(opener, layoutDock);
+      if (returnFocus) opener?.focus({ preventScroll: true });
+    }
+
+    figures.forEach(figure => {
+      const tools = document.createElement('div');
+      tools.className = 'figure-tools';
+      const pin = document.createElement('button');
+      pin.type = 'button';
+      pin.className = 'figure-tools__pin';
+      pin.innerHTML = `${pinIcon}<span></span>`;
+      pin.setAttribute('aria-label', `Keep ${figureName(figure)} in view while reading`);
+      pin.addEventListener('click', event => {
+        if (current === figure) closeDock(false);
+        else openDock(figure, pin, event.detail === 0);
+      });
+      tools.append(pin);
+      figure.insertBefore(tools, figure.querySelector('figcaption'));
+      pins.set(figure, pin);
+    });
+    syncPins();
+
+    // A link to a figure opens it in the panel, unless the figure is already on
+    // screen, in which case it is highlighted where it is.
+    document.addEventListener('click', event => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (!(event.target instanceof Element)) return;
+      const link = event.target.closest<HTMLAnchorElement>('a[href^="#figure-"]');
+      if (!link || link === goto) return;
+      const figure = figuresById.get(decodeURIComponent(link.hash.slice(1)));
+      if (!figure) return;
+      event.preventDefault();
+      if (figure !== current && inView(figure)) {
+        flash(figure);
+        return;
+      }
+      // A popover would cover the sheet, so it gives way to the figure.
+      const popover = link.closest<HTMLElement>('.explanation-popover');
+      if (popover && !sideLayout.matches) {
+        if ('hidePopover' in popover && popover.matches(':popover-open')) popover.hidePopover();
+        popover.classList.remove('is-open');
+      }
+      openDock(figure, link, event.detail === 0);
+    });
+
+    goto.addEventListener('click', event => {
+      event.preventDefault();
+      const figure = current;
+      if (!figure) return;
+      closeDock(false);
+      figure.scrollIntoView({ block: 'center', behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+      if (figure.id) history.replaceState(null, '', `#${figure.id}`);
+      flash(figure);
+      figure.querySelector<HTMLElement>('.figure-tools__pin')?.focus({ preventScroll: true });
+    });
+
+    sizeButton.addEventListener('click', () => {
+      enlarged = !enlarged;
+      sizeButton.setAttribute('aria-pressed', String(enlarged));
+      sizeButton.textContent = enlarged ? 'Smaller' : 'Larger';
+      dock.dataset.size = enlarged ? 'large' : 'compact';
+      keepInPlace(opener, layoutDock);
+    });
+
+    closeButton.addEventListener('click', () => closeDock(true));
+
+    dock.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeDock(true);
+    });
+
+    dock.addEventListener('animationend', () => dock.classList.remove('is-flashing'));
+    figures.forEach(figure =>
+      figure.addEventListener('animationend', () => figure.classList.remove('is-flashing')),
+    );
+
+    // The sheet changes height when its caption opens or its image loads.
+    new ResizeObserver(() => {
+      if (current && !sideLayout.matches) layoutDock();
+    }).observe(dock);
+
+    window.addEventListener('resize', layoutDock);
+    sideLayout.addEventListener('change', layoutDock);
+  }
+</script>
