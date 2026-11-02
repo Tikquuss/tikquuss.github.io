@@ -16,6 +16,7 @@
     </span>
   </div>
   <a class="figure-dock__image" target="_blank" rel="noopener" title="Open the image at full size"></a>
+  <div class="figure-dock__image figure-dock__image--stepped" hidden></div>
   <details class="figure-dock__caption">
     <summary>Caption</summary>
     <div class="figure-dock__caption-text"></div>
@@ -35,7 +36,8 @@
     const goto = dock.querySelector<HTMLAnchorElement>('.figure-dock__goto')!;
     const sizeButton = dock.querySelector<HTMLButtonElement>('.figure-dock__size')!;
     const closeButton = dock.querySelector<HTMLButtonElement>('.figure-dock__close')!;
-    const imageLink = dock.querySelector<HTMLAnchorElement>('.figure-dock__image')!;
+    const imageLink = dock.querySelector<HTMLAnchorElement>('a.figure-dock__image')!;
+    const steppedBox = dock.querySelector<HTMLElement>('.figure-dock__image--stepped')!;
     const caption = dock.querySelector<HTMLDetailsElement>('.figure-dock__caption')!;
     const captionText = dock.querySelector<HTMLElement>('.figure-dock__caption-text')!;
 
@@ -141,11 +143,17 @@
         flash(dock!);
         return;
       }
-      // The image, with the drawing laid over it when there is one.
+      // The image, with the drawing laid over it when there is one. A figure with a
+      // slider is copied whole, outside the link, and its copy runs on its own.
       const source = figure.querySelector('img')!;
-      const media = (source.closest('.figure-image-overlay') ?? source).cloneNode(true) as HTMLElement;
+      const stepped = source.closest<HTMLElement>('figure-steps');
+      const media = (stepped ?? source.closest('.figure-image-overlay') ?? source).cloneNode(true) as HTMLElement;
       [media, ...media.querySelectorAll('img')].forEach(element => element.removeAttribute('loading'));
-      imageLink.replaceChildren(media);
+      const [holder, other] = stepped ? [steppedBox, imageLink] : [imageLink, steppedBox];
+      holder.replaceChildren(media);
+      holder.hidden = false;
+      other.replaceChildren();
+      other.hidden = true;
       imageLink.href = source.currentSrc || source.src;
       label.textContent = figureName(figure);
       captionText.innerHTML = figure.querySelector('figcaption')?.innerHTML ?? '';
@@ -170,6 +178,7 @@
       current.classList.remove('is-docked');
       current = null;
       dock!.hidden = true;
+      steppedBox.replaceChildren(); // stops a copy that is playing
       syncPins();
       keepInPlace(opener, layoutDock);
       if (returnFocus) opener?.focus({ preventScroll: true });

@@ -6,6 +6,11 @@
 (c) The distribution of the walker, started in group 1: the mass of each group
     rotates through the cycle while it settles.
 (d) The eigenvalues of P in the complex plane.
+
+directed-graph-steps.json holds, for every step k = 0..30, the probability of
+each node, drawn by the page as a disc of proportional area on panel (a), and
+the masses of the groups, marked on panel (c) at the step chosen with a slider
+(figures.common.write_steps).
 """
 
 import matplotlib.pyplot as plt
@@ -15,13 +20,38 @@ from matplotlib.patches import FancyArrowPatch
 from mvp import directed_community_walk
 
 from .bipartite_graph import GOLD, TEAL
-from .common import BACKGROUND, DASHED, GREY, INK, LIGHT_GREY, finish, save
+from .common import BACKGROUND, DASHED, GREY, INK, LIGHT_GREY, finish, save, write_steps
 
 NAME = "directed-graph"
+STEPS_NAME = "directed-graph-steps"
 ROSE = "#db2777"
 GROUP_COLORS = [TEAL, GOLD, ROSE]
 N, GROUPS, FORWARD, OTHER, SEED = 60, 3, 4, 1, 0
 STEPS = 30
+DISC = 11.0  # radius in pt of the disc of the most probable node over all steps
+
+
+def stepped_walk(fig, graph_axis, mass_axis, positions, group, distributions, masses, out_dir):
+    """The frames of the slider over k: the probability of each node on panel (a), the masses on panel (c)."""
+    peak = max(p.max() for p in distributions)
+    styles = {f"node{g}": {"fill": color, "fill-opacity": 0.5} for g, color in enumerate(GROUP_COLORS)}
+    styles.update({f"mass{g}": {"fill": color, "stroke": "#ffffff", "stroke-width": 1.2, "r": 4.6}
+                   for g, color in enumerate(GROUP_COLORS)})
+    styles["step"] = {"stroke": INK, "stroke-width": 1.0, "stroke-dasharray": "3 2.5"}
+    steps = []
+    for k, p in enumerate(distributions):
+        # The area of a disc is proportional to the probability of its node.
+        marks = [{"panel": "a", "style": f"node{g}",
+                  "points": [[round(float(positions[i, 0]), 4), round(float(positions[i, 1]), 4),
+                              round(DISC * float(np.sqrt(p[i] / peak)), 3)] for i in np.flatnonzero(group == g)]}
+                 for g in range(GROUPS)]
+        marks.append({"panel": "c", "style": "step", "vline": k})
+        marks += [{"panel": "c", "style": f"mass{g}", "points": [[k, round(float(masses[k, g]), 5)]]}
+                  for g in range(GROUPS)]
+        readout = (f"groups 1, 2 and 3 hold {masses[k, 0]:.3f}, {masses[k, 1]:.3f} and {masses[k, 2]:.3f} "
+                   "of the probability")
+        steps.append({"value": k, "readout": readout, "marks": marks})
+    write_steps(out_dir, STEPS_NAME, fig, {"a": graph_axis, "c": mass_axis}, styles, "k", "a", 0, steps)
 
 
 def walk():
@@ -109,11 +139,10 @@ def make(out_dir, preview=None) -> dict:
     # (c) The distribution of the walker.
     axis = axes[1, 0]
     p = (group == 0).astype(float) / size
-    masses = [np.bincount(group, weights=p, minlength=GROUPS)]
+    distributions = [p]
     for _ in range(STEPS):
-        p = apply_pt(p)
-        masses.append(np.bincount(group, weights=p, minlength=GROUPS))
-    masses = np.array(masses)
+        distributions.append(apply_pt(distributions[-1]))
+    masses = np.array([np.bincount(group, weights=p, minlength=GROUPS) for p in distributions])
     eigenvalues, vectors = np.linalg.eig(dense.T)
     stationary = np.real(vectors[:, np.argmin(np.abs(eigenvalues - 1))])
     stationary /= stationary.sum()
@@ -156,7 +185,9 @@ def make(out_dir, preview=None) -> dict:
     axis.set_title(r"(d) Eigenvalues of $\mathbf{P}$", pad=8)
     finish(axis)
 
-    save(fig, NAME, out_dir, preview)
+    save(fig, NAME, out_dir, preview, close=False)
+    stepped_walk(fig, axes[0, 0], axes[1, 0], positions, group, distributions, masses, out_dir)
+    plt.close(fig)
 
     deviation = np.abs(masses - stationary_masses).max(axis=1)
     bulk = np.abs(eigenvalues[order[3:]])

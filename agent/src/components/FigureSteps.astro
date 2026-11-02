@@ -1,0 +1,195 @@
+---
+// A figure stepped through with a slider. The <figure-steps> element wraps the
+// image of the figure; when its frames load, it can swap in another version of
+// the image (data-image), draws the marks of the chosen step over the panels,
+// and adds a slider and a play button above the image. The frames come from a
+// JSON file written by the figure script (figures/common.py, write_steps): the
+// plot rectangle of each panel in the coordinates of the image with its data
+// limits, named styles, and for each step a readout and marks, which are
+// circles at data points or vertical lines. Without JavaScript, or if the frames
+// cannot be loaded, the static image stays.
+---
+
+<script>
+  type Panel = {
+    plot: { left: number; right: number; top: number; bottom: number };
+    xlim: [number, number];
+    ylim: [number, number];
+  };
+  type Mark = { panel: string; style: string; points?: number[][]; vline?: number };
+  type Step = { value: number; readout: string; marks: Mark[] };
+  type Frames = {
+    viewBox: [number, number];
+    panels: Record<string, Panel>;
+    styles: Record<string, Record<string, string | number>>;
+    variable: string;
+    label: string;
+    start: number;
+    steps: Step[];
+  };
+
+  const SVG = 'http://www.w3.org/2000/svg';
+  const STEP_MS = 700;
+  const requests = new Map<string, Promise<Frames>>();
+
+  function load(url: string) {
+    let request = requests.get(url);
+    if (!request) {
+      request = fetch(url).then(response => {
+        if (!response.ok) throw new Error(`${url}: ${response.status}`);
+        return response.json() as Promise<Frames>;
+      });
+      requests.set(url, request);
+    }
+    return request;
+  }
+
+  function svgElement(name: string, attributes: Record<string, string | number>) {
+    const element = document.createElementNS(SVG, name);
+    Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, String(value)));
+    return element;
+  }
+
+  function variableName(name: string) {
+    return Object.assign(document.createElement('i'), { textContent: name });
+  }
+
+  class FigureSteps extends HTMLElement {
+    private timer: number | undefined;
+    private onPause: (() => void) | undefined;
+
+    connectedCallback() {
+      const url = this.dataset.frames;
+      const image = this.querySelector('img');
+      if (!url || !image) return;
+      // On failure the static image stays.
+      load(url)
+        .then(frames => this.build(frames, image))
+        .catch(() => {});
+    }
+
+    disconnectedCallback() {
+      this.pause();
+    }
+
+    private build(frames: Frames, image: HTMLImageElement) {
+      if (!this.isConnected) return;
+      // A copy made by the figure dock arrives with the parts built for the original.
+      this.querySelectorAll('.figure-steps__layer, .figure-steps__controls').forEach(part => part.remove());
+      let frame = image.parentElement!;
+      if (!frame.classList.contains('figure-steps__image')) {
+        frame = document.createElement('div');
+        frame.className = 'figure-steps__image figure-image-overlay';
+        image.replaceWith(frame);
+        frame.append(image);
+      }
+      if (this.dataset.image) image.src = this.dataset.image;
+      if (this.dataset.imageAlt) image.alt = this.dataset.imageAlt;
+
+      const [width, height] = frames.viewBox;
+      const layer = svgElement('svg', {
+        class: 'figure-steps__layer',
+        viewBox: `0 0 ${width} ${height}`,
+        preserveAspectRatio: 'none',
+        'aria-hidden': 'true',
+      });
+      const marks = svgElement('g', {});
+      const labelPanel = frames.panels[frames.label].plot;
+      const label = svgElement('text', {
+        x: labelPanel.right - 8,
+        y: labelPanel.top + 17,
+        'text-anchor': 'end',
+        class: 'figure-steps__label',
+      });
+      layer.append(marks, label);
+      frame.append(layer);
+
+      const draw = (mark: Mark) => {
+        const { plot, xlim, ylim } = frames.panels[mark.panel];
+        const x = (value: number) => plot.left + ((value - xlim[0]) / (xlim[1] - xlim[0])) * (plot.right - plot.left);
+        const y = (value: number) => plot.bottom - ((value - ylim[0]) / (ylim[1] - ylim[0])) * (plot.bottom - plot.top);
+        const { r = 3, ...attributes } = frames.styles[mark.style];
+        const group = svgElement('g', attributes);
+        if (mark.vline !== undefined) {
+          group.append(svgElement('line', { x1: x(mark.vline), x2: x(mark.vline), y1: plot.top, y2: plot.bottom }));
+        }
+        (mark.points ?? []).forEach(([px, py, pr]) =>
+          group.append(svgElement('circle', { cx: x(px), cy: y(py), r: pr ?? r })),
+        );
+        return group;
+      };
+
+      const controls = document.createElement('div');
+      controls.className = 'figure-steps__controls';
+      const play = document.createElement('button');
+      play.type = 'button';
+      play.className = 'figure-steps__play';
+      const slider = document.createElement('input');
+      slider.type = 'range';
+      slider.min = String(frames.steps[0].value);
+      slider.max = String(frames.steps[frames.steps.length - 1].value);
+      slider.step = '1';
+      const sliderLabel = document.createElement('label');
+      sliderLabel.className = 'figure-steps__slider';
+      sliderLabel.append('Step ', variableName(frames.variable), slider);
+      const readout = document.createElement('output');
+      readout.className = 'figure-steps__readout';
+      controls.append(play, sliderLabel, readout);
+      // Above the image, next to the top panels that it drives.
+      this.prepend(controls);
+
+      const show = (value: number) => {
+        const step = frames.steps.find(candidate => candidate.value === value) ?? frames.steps[0];
+        marks.replaceChildren(...step.marks.map(draw));
+        label.replaceChildren(
+          Object.assign(svgElement('tspan', { 'font-style': 'italic' }), { textContent: frames.variable }),
+          ` = ${step.value}`,
+        );
+        slider.value = String(step.value);
+        slider.setAttribute('aria-valuetext', `step ${step.value}`);
+        readout.replaceChildren(variableName(frames.variable), ` = ${step.value}: ${step.readout}`);
+        this.dataset.step = String(step.value);
+      };
+
+      const setPlaying = (playing: boolean) => {
+        play.textContent = playing ? 'Pause' : 'Play';
+        play.setAttribute('aria-label', playing ? 'Pause the steps' : 'Play the steps');
+        // Announce the step only when the reader moves the slider, not at every frame.
+        readout.setAttribute('aria-live', playing ? 'off' : 'polite');
+      };
+      this.onPause = () => setPlaying(false);
+
+      play.addEventListener('click', () => {
+        if (this.timer !== undefined) {
+          this.pause();
+          return;
+        }
+        const last = Number(slider.max);
+        if (Number(slider.value) >= last) show(Number(slider.min));
+        setPlaying(true);
+        this.timer = window.setInterval(() => {
+          const next = Number(slider.value) + 1;
+          show(next);
+          if (next >= last) this.pause();
+        }, STEP_MS);
+      });
+
+      slider.addEventListener('input', () => {
+        this.pause();
+        show(Number(slider.value));
+      });
+
+      setPlaying(false);
+      const kept = this.dataset.step;
+      show(kept !== undefined ? Number(kept) : frames.start);
+    }
+
+    private pause() {
+      window.clearInterval(this.timer);
+      this.timer = undefined;
+      this.onPause?.();
+    }
+  }
+
+  if (!customElements.get('figure-steps')) customElements.define('figure-steps', FigureSteps);
+</script>

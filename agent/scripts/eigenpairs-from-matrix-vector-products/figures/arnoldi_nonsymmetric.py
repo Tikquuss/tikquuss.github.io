@@ -8,20 +8,29 @@
     real: its Ritz values leave the real axis but stay in the field of values.
 (d) Distance from each Ritz value to the spectrum against its residual, for
     the symmetric operator -u'' and for the convection-diffusion operator.
+
+arnoldi-steps.svg is the same figure with panel (a) left without Ritz values,
+and arnoldi-steps.json holds the Ritz values of panel (a) at every step
+m = 1..20, so that the page can draw those of the step chosen with a slider
+(figures.common.write_steps).
 """
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.colors import to_hex
+from matplotlib.lines import Line2D
 
 from mvp import arnoldi, convection_diffusion
 from mvp.arnoldi import field_of_values, ritz_pairs
 
 from .common import (BACKGROUND, BLUE, DASHED, DOTTED, GREEN, GREY, INK, LIGHT_GREY, ORANGE, band, finish, save,
-                     stage_colors, unit_gaussian)
+                     scientific, stage_colors, unit_gaussian, write_steps)
 from .directed_graph import walk
 
 NAME = "arnoldi"
+STEPS_NAME = "arnoldi-steps"
 WALK_STEPS = (5, 10, 20)
+RITZ_MARKER = 30  # scatter size in pt^2, also the size drawn by the page
 PRODUCTS, STARTS = 40, 200
 D, GAMMA, STEPS = 40, 0.2, 30
 SHOWN = (10, 20, 30)
@@ -45,12 +54,46 @@ def ritz_statistics(apply_a, dense, exact, steps, rng):
 
 def complex_plane(axis, exact, values_by_m, shown, fov):
     axis.plot(fov.real, fov.imag, color=GREY, linewidth=1.1, zorder=1, label="field of values")
+    snapshots = []
     for color, m in zip(stage_colors(len(shown)), shown):
         values = values_by_m[m]
-        axis.scatter(values.real, values.imag, s=30, facecolors="none", edgecolors=[color], linewidths=1.3,
-                     label=rf"Ritz values, $m={m}$", zorder=3)
+        snapshots.append(axis.scatter(values.real, values.imag, s=RITZ_MARKER, facecolors="none", edgecolors=[color],
+                                      linewidths=1.3, label=rf"Ritz values, $m={m}$", zorder=3))
     axis.set_xlabel("real part")
     axis.set_ylabel("imaginary part")
+    return snapshots
+
+
+def stepped_walk_panel(fig, axis, snapshots, values_by_m, pair, out_dir, preview):
+    """arnoldi-steps.svg, panel (a) without Ritz values, and the Ritz values of every step for the page."""
+    for snapshot in snapshots:
+        snapshot.remove()
+    previous, current = (to_hex(color) for color in stage_colors(2))
+    handles, _ = axis.get_legend_handles_labels()
+    diameter = np.sqrt(RITZ_MARKER)  # in pt
+    for color, label in ((current, r"Ritz values at step $m$"), (previous, r"Ritz values at step $m-1$")):
+        handles.append(Line2D([], [], linestyle="none", marker="o", markersize=diameter, markerfacecolor="none",
+                              markeredgecolor=color, markeredgewidth=1.3, label=label))
+    axis.legend(handles=handles, loc="upper left", bbox_to_anchor=(1.01, 1.0), fontsize=8.5, framealpha=0.95,
+                borderaxespad=0)
+    save(fig, STEPS_NAME, out_dir, preview, close=False)
+
+    ring = {"fill": "none", "stroke-width": 1.3, "r": round(diameter / 2, 3)}
+    styles = {"current": {**ring, "stroke": current}, "previous": {**ring, "stroke": previous}}
+
+    def points(values):
+        return [[round(float(v.real), 5), round(float(v.imag), 5)] for v in values]
+
+    steps = []
+    for m, values in sorted(values_by_m.items()):
+        marks = [{"panel": "a", "style": "current", "points": points(values)}]
+        if m - 1 in values_by_m:
+            marks.insert(0, {"panel": "a", "style": "previous", "points": points(values_by_m[m - 1])})
+        readout = (f"nearest Ritz value to 1 at {scientific(np.abs(values - 1).min())}, "
+                   f"to λ₂ at {scientific(np.abs(values - pair).min())}")
+        steps.append({"value": m, "readout": readout, "marks": marks})
+    write_steps(out_dir, STEPS_NAME, fig, {"a": axis}, styles, "m", "a", WALK_STEPS[0], steps)
+    plt.close(fig)
 
 
 def make(out_dir, preview=None) -> dict:
@@ -65,14 +108,15 @@ def make(out_dir, preview=None) -> dict:
     order = np.argsort(-np.abs(exact_p))
     pair = exact_p[order[1]] if exact_p[order[1]].imag > 0 else exact_p[order[2]]
     hessenberg, _ = arnoldi(apply_pt, np.random.default_rng(1).standard_normal(a.shape[0]), max(WALK_STEPS))
-    values_by_m = {m: ritz_pairs(hessenberg, m)[0] for m in WALK_STEPS}
+    walk_by_m = {m: ritz_pairs(hessenberg, m)[0] for m in range(1, max(WALK_STEPS) + 1)}
+    values_by_m = {m: walk_by_m[m] for m in WALK_STEPS}
     axis = axes[0, 0]
     t = np.linspace(0, 2 * np.pi, 400)
     axis.plot(np.cos(t), np.sin(t), color=LIGHT_GREY, linewidth=1.0, linestyle=DASHED, zorder=1)
     axis.scatter(exact_p.real, exact_p.imag, s=14, color=GREY, alpha=0.75, linewidths=0, zorder=2,
                  label="eigenvalues")
     fov_p = field_of_values(a)
-    complex_plane(axis, exact_p, values_by_m, WALK_STEPS, fov_p)
+    walk_snapshots = complex_plane(axis, exact_p, values_by_m, WALK_STEPS, fov_p)
     axis.set_aspect("equal")
     axis.set_xlim(-1.12, 1.12)
     axis.set_ylim(-1.12, 1.12)
@@ -161,13 +205,14 @@ def make(out_dir, preview=None) -> dict:
     axis.set_yscale("log")
     axis.set_xlim(1e-3, 5)
     axis.set_ylim(1e-5, 5)
-    axis.set_xlabel(r"residual $\|\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}\|$")
+    axis.set_xlabel(r"norm of the residual $\|\mathbf{A}\mathbf{x}-\vartheta\mathbf{x}\|$")
     axis.set_ylabel(r"distance from $\vartheta$ to the spectrum")
     axis.set_title("(d) The residual certificate without symmetry", pad=8)
     axis.legend(loc="lower right", fontsize=8.5, framealpha=0.95)
 
     finish(axes.ravel())
-    save(fig, NAME, out_dir, preview)
+    save(fig, NAME, out_dir, preview, close=False)
+    stepped_walk_panel(fig, axes[0, 0], walk_snapshots, walk_by_m, pair, out_dir, preview)
 
     ratio_sym = rows_sym[:, 1] / rows_sym[:, 0]
     ratio_ns = rows_ns[:, 1] / rows_ns[:, 0]

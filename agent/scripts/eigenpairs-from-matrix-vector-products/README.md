@@ -41,13 +41,21 @@ Every solver accesses the matrix only through a function `apply_a(x)` that retur
 | Figure 9 | `lanczos-continuation.svg` | Proposition 4: the basis built by successive runs and the block-tridiagonal matrix T_d | schematic, d = 9 | `figures/lanczos_continuation.py` |
 | Figure 10 | `algorithm-2-flow.svg` | Algorithm 2: execution diagram, with the iteration loop and the cases of step 6 | flowchart | `figures/algorithm2_flow.py` |
 | Figure 11 | `lanczos-vs-deflation.svg` | Algorithm 2 against Algorithm 1, Proposition 4 | network Hessian and bipartite graph | `figures/lanczos_vs_deflation.py` |
-| Figure 12 | `directed-graph.svg` | the random walk of Section 5 that Figure 13 analyzes: drawing, transition matrix, the walker's distribution, complex spectrum | transition matrix of a random walk on a directed graph | `figures/directed_graph.py` |
-| Figure 13 | `arnoldi.svg` | Proposition 5, Remark 18 and Lemma 7 (Arnoldi method), against power iteration | random walk on a directed graph, convection–diffusion operator | `figures/arnoldi_nonsymmetric.py` |
+| Figure 12 | `directed-graph.svg`, with `directed-graph-steps.json` for its slider | the random walk of Section 5 that Figure 13 analyzes: drawing, transition matrix, the walker's distribution, complex spectrum | transition matrix of a random walk on a directed graph | `figures/directed_graph.py` |
+| Figure 13 | `arnoldi.svg`, with `arnoldi-steps.svg` and `arnoldi-steps.json` for the slider of panel (a) | Proposition 5, Remark 18 and Lemma 7 (Arnoldi method), against power iteration | random walk on a directed graph, convection–diffusion operator | `figures/arnoldi_nonsymmetric.py` |
 | Figure 14 | `algorithm-3-flow.svg` | Algorithm 3: execution diagram, with the restart case of step 6 | flowchart | `figures/algorithm3_flow.py` |
 | popover of Theorem 1 | `angle-to-eigenspace.svg` | Theorem 1 (the angle between the starting vector and the dominant eigenspace) | schematic | `figures/angle_diagram.py` |
 
 The execution diagrams share the drawing helpers of `figures/flowchart.py`, and the diagram of Algorithm 3 reuses the
 layout of `figures/algorithm2_flow.py`.
+
+Figures 12 and 13 have a slider above them, over the step k = 0, …, 30 of the random walk and over the Arnoldi step
+m = 1, …, 20. For each step, `directed-graph-steps.json` holds the probability of every node, which the page draws on
+panel (a) as a disc of proportional area, and the masses of the groups, which it marks on panel (c);
+`arnoldi-steps.json` holds the Ritz values of panel (a) at that step and the one before. Each file also holds the
+plot rectangle of its panels in the coordinates of the SVG (`write_steps` in `figures/common.py`). For Figure 13, the
+page swaps in `arnoldi-steps.svg`, the same figure with panel (a) left without Ritz values. The element that draws the
+steps is `src/components/FigureSteps.astro` of the site; without JavaScript, the static figures stay.
 
 ## Reproducing the figures
 

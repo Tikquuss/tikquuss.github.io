@@ -1439,7 +1439,8 @@ main.wide {
 
 .prose .figure-tools__pin,
 .figure-dock__goto,
-.figure-dock__size {
+.figure-dock__size,
+.figure-steps__play {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -1464,7 +1465,9 @@ main.wide {
 .figure-dock__goto:focus-visible,
 .figure-dock__size:hover,
 .figure-dock__size:focus-visible,
-.figure-dock__size[aria-pressed='true'] {
+.figure-dock__size[aria-pressed='true'],
+.figure-steps__play:hover,
+.figure-steps__play:focus-visible {
   border-color: #6f9e92;
   background: #dfeee9;
   color: var(--accent-dark);
@@ -1551,6 +1554,10 @@ body[data-figure-dock='side'] .prose .article-figure-wide {
 .figure-dock__image {
   display: block;
   padding: 0 0.95rem;
+}
+
+.figure-dock__image[hidden] {
+  display: none;
 }
 
 .figure-dock__image img {
@@ -1782,6 +1789,68 @@ body[data-figure-dock='sheet'] .figure-dock[data-size='large'] .figure-dock__ima
 .figure-dock .figure-image-overlay .legend-fraction-line {
   stroke: #000;
   stroke-width: 2.5px;
+}
+
+/* A figure with a panel stepped through by a slider (components/FigureSteps.astro). */
+figure-steps {
+  display: block;
+}
+
+.figure-steps__label {
+  fill: #27322f;
+  font-family: var(--font-serif);
+  font-size: 11px;
+  font-variant-numeric: lining-nums;
+}
+
+.figure-steps__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.9rem;
+  margin-bottom: 0.55rem;
+  color: var(--muted);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.figure-dock .figure-steps__controls {
+  justify-content: center;
+}
+
+.figure-steps__play {
+  min-width: 4.4rem;
+  justify-content: center;
+}
+
+.figure-steps__slider {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.figure-steps__slider i,
+.figure-steps__readout i {
+  font-family: var(--font-serif);
+  font-weight: 400;
+}
+
+.figure-steps__slider input {
+  width: min(15rem, 42vw);
+  accent-color: var(--accent);
+}
+
+.figure-steps__readout {
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  .figure-steps__controls {
+    display: none;
+  }
 }
 
 .prose .article-figure figcaption {

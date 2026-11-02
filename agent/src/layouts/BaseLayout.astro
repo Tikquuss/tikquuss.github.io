@@ -2,6 +2,7 @@
 import NavBar from '../components/NavBar.astro';
 import Footer from '../components/Footer.astro';
 import FigureDock from '../components/FigureDock.astro';
+import FigureSteps from '../components/FigureSteps.astro';
 import { SITE, withBase } from '../lib/site';
 import '../styles/global.css';
 
@@ -44,6 +45,7 @@ const pageTitle = title === 'Home' ? SITE.title : `${title} - ${SITE.shortName}`
   </main>
   <Footer />
   <FigureDock />
+  <FigureSteps />
 
   <script>
     const hamburger = document.querySelector('.nav-hamburger');
