@@ -9,6 +9,9 @@ import rehypeMathInHtml from './src/lib/rehypeMathInHtml.mjs';
 
 export default defineConfig({
   site: 'https://tikquuss.github.io',
+  // Astro 7 defaults to 'jsx', which deletes line breaks between text and tags
+  // ("at⏎<a>Mila</a>" renders as "atMila"); true keeps a space, as in Astro 4.
+  compressHTML: true,
   integrations: [mdx()],
   markdown: {
     processor: unified({
