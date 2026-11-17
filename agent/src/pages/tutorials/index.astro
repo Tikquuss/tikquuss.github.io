@@ -21,7 +21,7 @@ const sorted = tutorials.sort((a, b) =>
   <div class="stack">
     {sorted.map((tutorial) => (
       <PostCard
-        href={withBase(`/tutorials/${tutorial.slug}`)}
+        href={withBase(`/tutorials/${tutorial.id}`)}
         title={tutorial.data.title}
         date={tutorial.data.date}
         excerpt={tutorial.data.excerpt}

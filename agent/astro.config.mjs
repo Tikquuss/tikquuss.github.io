@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import { unified } from '@astrojs/markdown-remark';
 import rehypeRaw from 'rehype-raw';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -10,12 +11,14 @@ export default defineConfig({
   site: 'https://tikquuss.github.io',
   integrations: [mdx()],
   markdown: {
-    remarkPlugins: [remarkMath],
-    rehypePlugins: [
-      rehypeRaw,
-      rehypeMathInHtml,
-      rehypeKatex,
-      [rehypeExternalLinks, { siteOrigin: 'https://tikquuss.github.io' }],
-    ],
+    processor: unified({
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [
+        rehypeRaw,
+        rehypeMathInHtml,
+        rehypeKatex,
+        [rehypeExternalLinks, { siteOrigin: 'https://tikquuss.github.io' }],
+      ],
+    }),
   },
 });

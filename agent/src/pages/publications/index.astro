@@ -32,7 +32,7 @@ const years = [...new Set(sorted.map(pub => new Date(pub.data.date).getFullYear(
         <div class="stack">
           {sorted.filter(pub => new Date(pub.data.date).getFullYear() === year).map((pub) => (
             <PublicationCard
-              href={withBase(`/publications/${pub.slug}`)}
+              href={withBase(`/publications/${pub.id}`)}
               title={pub.data.title}
               authors={pub.data.authors}
               authorContributions={pub.data.authorContributions}

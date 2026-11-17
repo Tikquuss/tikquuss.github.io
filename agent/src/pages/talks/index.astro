@@ -21,7 +21,7 @@ const sorted = talks.sort((a, b) =>
   <div class="stack">
     {sorted.map((talk) => (
       <TalkCard
-        href={withBase(`/talks/${talk.slug}`)}
+        href={withBase(`/talks/${talk.id}`)}
         title={talk.data.title}
         type={talk.data.type}
         venue={talk.data.venue}

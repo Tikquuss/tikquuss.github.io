@@ -80,7 +80,7 @@ const teachingAreas = [
     <div class="stack">
       {sortedTutorials.map((tutorial) => (
         <PostCard
-          href={withBase(`/tutorials/${tutorial.slug}`)}
+          href={withBase(`/tutorials/${tutorial.id}`)}
           title={tutorial.data.title}
           date={tutorial.data.date}
           excerpt={tutorial.data.excerpt}

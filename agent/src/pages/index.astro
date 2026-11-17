@@ -92,7 +92,7 @@ const news = [
     <div class="stack">
       {sortedPubs.map((pub) => (
         <PublicationCard
-          href={withBase(`/publications/${pub.slug}`)}
+          href={withBase(`/publications/${pub.id}`)}
           title={pub.data.title}
           authors={pub.data.authors}
           authorContributions={pub.data.authorContributions}

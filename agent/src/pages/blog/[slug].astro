@@ -1,19 +1,19 @@
 ---
 import PostLayout from '../../layouts/PostLayout.astro';
 import BibTeXCitation from '../../components/BibTeXCitation.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { withBase } from '../../lib/site';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map(post => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content } = await render(post);
 ---
 
 <PostLayout
@@ -25,5 +25,5 @@ const { Content } = await post.render();
   description={post.data.excerpt}
 >
   <Content />
-  <BibTeXCitation title={post.data.title} date={post.data.date} slug={post.slug} />
+  <BibTeXCitation title={post.data.title} date={post.data.date} slug={post.id} />
 </PostLayout>

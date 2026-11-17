@@ -21,7 +21,7 @@ const sorted = posts.sort((a, b) =>
   <div class="stack">
     {sorted.map((post) => (
       <PostCard
-        href={withBase(`/blog/${post.slug}`)}
+        href={withBase(`/blog/${post.id}`)}
         title={post.data.title}
         date={post.data.date}
         excerpt={post.data.excerpt}

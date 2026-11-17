@@ -1,7 +1,9 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
+import { glob } from 'astro/loaders';
 
 const publications = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/publications' }),
   schema: z.object({
     title: z.string(),
     authors: z.string(),
@@ -22,7 +24,7 @@ const publications = defineCollection({
 });
 
 const blog = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
   schema: z.object({
     title: z.string(),
     date: z.string(),
@@ -34,7 +36,7 @@ const blog = defineCollection({
 });
 
 const tutorials = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/tutorials' }),
   schema: z.object({
     title: z.string(),
     date: z.string(),
@@ -46,7 +48,7 @@ const tutorials = defineCollection({
 });
 
 const talks = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/talks' }),
   schema: z.object({
     title: z.string(),
     type: z.enum(['Talk', 'Poster', 'Tutorial']),
@@ -60,7 +62,7 @@ const talks = defineCollection({
 });
 
 const teaching = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/teaching' }),
   schema: z.object({
     title: z.string(),
     type: z.string(),

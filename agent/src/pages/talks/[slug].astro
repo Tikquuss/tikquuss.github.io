@@ -1,18 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { formatMonthYear, resolveUrl, withBase } from '../../lib/site';
 
 export async function getStaticPaths() {
   const talks = await getCollection('talks');
   return talks.map(talk => ({
-    params: { slug: talk.slug },
+    params: { slug: talk.id },
     props: { talk },
   }));
 }
 
 const { talk } = Astro.props;
-const { Content } = await talk.render();
+const { Content } = await render(talk);
 
 const date = formatMonthYear(talk.data.date);
 ---
