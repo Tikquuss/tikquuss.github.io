@@ -10,14 +10,16 @@ interface Props {
   title: string;
   description?: string;
   wide?: boolean;
+  /** Leave out the site nav bar, as on the page of a single post, tutorial, publication or talk. */
+  hideNav?: boolean;
 }
 
-const { title, description = SITE.description, wide = false } = Astro.props;
+const { title, description = SITE.description, wide = false, hideNav = false } = Astro.props;
 const pageTitle = title === 'Home' ? SITE.title : `${title} - ${SITE.shortName}`;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class={hideNav ? 'no-site-nav' : undefined}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -39,7 +41,7 @@ const pageTitle = title === 'Home' ? SITE.title : `${title} - ${SITE.shortName}`
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <NavBar />
+  {!hideNav && <NavBar />}
   <main id="main-content" tabindex="-1" class={wide ? 'wide' : ''}>
     <slot />
   </main>

@@ -17,7 +17,7 @@ const { Content } = await render(talk);
 const date = formatMonthYear(talk.data.date);
 ---
 
-<BaseLayout title={talk.data.title}>
+<BaseLayout title={talk.data.title} hideNav>
   <a href={withBase('/talks')} class="back-link">← Talks</a>
 
   <article>

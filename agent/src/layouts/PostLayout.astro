@@ -17,7 +17,7 @@ const { title, date, tags = [], backHref, backLabel, description } = Astro.props
 const formattedDate = formatDate(date);
 ---
 
-<BaseLayout title={title} description={description ?? title}>
+<BaseLayout title={title} description={description ?? title} hideNav>
   <a href={backHref} class="back-link">← {backLabel}</a>
 
   <article>

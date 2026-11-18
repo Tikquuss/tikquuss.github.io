@@ -38,6 +38,13 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Pages without the nav bar (BaseLayout's hideNav: the page of a single post,
+   tutorial, publication or talk) have nothing at the top to leave room for. The unit matters: calc(0 + 1.5rem)
+   is invalid. */
+html.no-site-nav {
+  --nav-height: 0px;
+}
+
 body {
   min-height: 100vh;
   display: flex;

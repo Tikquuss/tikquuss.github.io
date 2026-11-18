@@ -39,7 +39,7 @@ const {
 const year = new Date(date).getFullYear();
 ---
 
-<BaseLayout title={title} description={description ?? title}>
+<BaseLayout title={title} description={description ?? title} hideNav>
   <a href={withBase('/publications')} class="back-link">← Publications</a>
 
   <article class="publication-detail">
