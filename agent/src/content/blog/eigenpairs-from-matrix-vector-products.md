@@ -26,6 +26,12 @@ $$
 
 Started from $\mathbf{v}$, power iteration keeps the last vector of the sequence $\mathbf{v},\mathbf{A}\mathbf{v},\mathbf{A}^2\mathbf{v},\dots$ and lets the factors $\lambda^k$ select the eigenvalue of largest magnitude. The Lanczos method keeps the whole sequence and optimizes over its span. Every proof of Sections [3](#3-power-iteration) and [4](#4-the-lanczos-method) follows the components $\Pi_\lambda\mathbf{v}$ through these operations, and [Section 5](#5-the-arnoldi-method) shows what changes when the eigenspaces are no longer orthogonal.
 
+> <span class="article-kicker article-kicker--paper">How this post was written</span> The first draft dates from winter 2024 and was mainly about power iteration. It came from Guillaume Rabusseau's course *Matrix and Tensor Factorization Techniques for ML* (IFT6166) at UdeM/Mila, where an assignment asked how fast power iteration converges to the eigenvalue of largest absolute value of a matrix, when that eigenvalue is positive. 
+Out of curiosity, I extended the method to recover all the eigenvalues, using two of its variants, shifting and deflation, and proved they work. 
+At the time, I was obsessed with the loss landscape of neural networks, whose local curvature is described by the eigenvalues of the Hessian of the loss. 
+Recently (late summer 2026), I found the draft about the assignment in my notes, added the Lanczos method and published the first version of this post. I wrote the proofs for the Lanczos method with the help of AI (Claude/Fable and Codex/Astra). While looking for a way to extend these methods to nonsymmetric matrices, I asked GPT-6 Astra (Ultra) to redo the steps and proofs of the Lanczos method without assuming that the matrix is symmetric. It rederived the Arnoldi method, and I then rewrote what it proposed (to make it less sloppy). 
+OpenAI's Codex (GPT-6 Astra, Ultra) wrote all the code and produced all the figures & diagrams.
+
 ## 1. Notation and preliminaries
 
 ### Notation
